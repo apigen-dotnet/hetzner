@@ -27,5 +27,5 @@ namespace Apigen.Hetzner.Robot.Models;
 public partial class FailoverGetAllResponse
 {
   [System.Text.Json.Serialization.JsonPropertyName("failover")]
-  public FailoverGetAllResponseFailover? Failover { get; set; }
+  public Failover2? Failover { get; set; }
 }

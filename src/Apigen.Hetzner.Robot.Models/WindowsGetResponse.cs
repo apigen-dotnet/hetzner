@@ -27,5 +27,5 @@ namespace Apigen.Hetzner.Robot.Models;
 public partial class WindowsGetResponse
 {
   [System.Text.Json.Serialization.JsonPropertyName("windows")]
-  public WindowsGetResponseWindows? Windows { get; set; }
+  public Windows2? Windows { get; set; }
 }

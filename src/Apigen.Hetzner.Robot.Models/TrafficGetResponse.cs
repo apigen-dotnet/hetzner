@@ -27,5 +27,5 @@ namespace Apigen.Hetzner.Robot.Models;
 public partial class TrafficGetResponse
 {
   [System.Text.Json.Serialization.JsonPropertyName("traffic")]
-  public TrafficGetResponseTraffic? Traffic { get; set; }
+  public Traffic? Traffic { get; set; }
 }

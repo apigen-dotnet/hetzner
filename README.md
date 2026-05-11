@@ -1,22 +1,21 @@
 # Apigen.Hetzner
 
-Generated C# clients for Hetzner's public REST APIs.
+Single NuGet package with three generated C# clients for Hetzner's public REST APIs.
 
-| Package | API | Base URL | Auth |
+```bash
+dotnet add package Apigen.Hetzner
+```
+
+## What's inside
+
+| Client | API | Base URL | Auth |
 |---|---|---|---|
 | `Apigen.Hetzner.Cloud` | Hetzner Cloud | `https://api.hetzner.cloud/v1` | Bearer token |
 | `Apigen.Hetzner.Api` | Hetzner (DNS etc.) | `https://api.hetzner.com/v1` | Bearer token |
 | `Apigen.Hetzner.Robot` | Robot Webservice | `https://robot-ws.your-server.de` | HTTP Basic |
-| `Apigen.Hetzner` | umbrella meta-package | — | — |
 
-## Installation
-
-```bash
-dotnet add package Apigen.Hetzner            # all three
-dotnet add package Apigen.Hetzner.Cloud      # just Cloud
-dotnet add package Apigen.Hetzner.Api        # just unified API
-dotnet add package Apigen.Hetzner.Robot      # just Robot
-```
+One `.nupkg`, no transitive package dependencies. All three client DLLs plus their
+model DLLs are bundled inside.
 
 ## Usage
 
@@ -31,24 +30,24 @@ var robot = HetznerRobotClient.WithBasic(
     user:     Environment.GetEnvironmentVariable("ROBOT_WS_USER")!,
     password: Environment.GetEnvironmentVariable("ROBOT_WS_PASSWORD")!);
 
-var cloudServers     = await cloud.Servers.GetAllAsync();
+var cloudServers     = await cloud.Servers.ListServersAsync();
 var dnsZones         = await api.Zones.ListAsync();
 var dedicatedServers = await robot.Server.GetAllAsync();
+var serverDetail     = (await robot.Server.GetAsync("321")).Server;
 ```
 
 Each client is independent — they don't share state, configuration, or tokens.
 
-## Why three clients?
+## Why three clients in one package?
 
-Hetzner has three distinct public REST APIs, hosted on three different domains,
-authenticated with three different credential systems, and documented in three
-different places. Mixing them into a single client would force users to manage
-three tokens behind one façade with no real benefit, so each is its own
-strongly-typed surface and the `Apigen.Hetzner` package simply bundles them as
-a convenience.
+Hetzner exposes three distinct public REST APIs, hosted on three different
+domains, authenticated with three different credential systems, and documented
+in three different places. They are not interchangeable, so each gets its own
+strongly-typed C# surface. They are shipped together as one package for
+convenience: `dotnet add package Apigen.Hetzner` and you have all three.
 
-There is also a Hetzner Domain Registration interface, but it is **email-only**
-and not exposed via any HTTP API; it is not part of this package.
+A fourth Hetzner interface — Domain Registration — is **email-only** with no
+public HTTP API, so it is not part of this package.
 
 ## Source specs
 
@@ -56,28 +55,26 @@ and not exposed via any HTTP API; it is not part of this package.
 |---|---|
 | `specs/cloud.spec.json` | Downloaded from <https://docs.hetzner.cloud/cloud.spec.json>. Official OpenAPI 3.0.3. |
 | `specs/api.spec.json` | Downloaded from <https://docs.hetzner.cloud/hetzner.spec.json>. Official OpenAPI 3.0.3. |
-| `specs/robot.spec.yaml` | **Generated** by `tools/build_robot_spec.py` from Hetzner's official [PHP reference client](https://robot.your-server.de/downloads/robot-client.zip) (paths, HTTP verbs, path/query/body params) enriched with response schemas extracted from the [community.hrobot Ansible collection](https://github.com/ansible-collections/community.hrobot). |
+| `specs/robot.spec.yaml` | **Generated** by `tools/build_robot_spec.py` from Hetzner's official [PHP reference client](https://robot.your-server.de/downloads/robot-client.zip) (paths, HTTP verbs, path/query/body params) and Hetzner's official [HTML documentation](https://robot.hetzner.com/doc/webservice/en.html) (response schemas inferred from JSON examples, plus human-readable descriptions). 95 operations, 76 with typed response schemas. |
 
 The Robot spec is reverse-engineered because Hetzner does not publish an
 OpenAPI document for the Robot Webservice. The script is deterministic and
-re-runnable; see `tools/build_robot_spec.py` for details.
+re-runnable.
 
 ## Regeneration
 
 From the repo root:
 
 ```bash
-# Regenerate the Robot spec from the latest PHP client and Ansible modules:
-python3 hetzner/tools/build_robot_spec.py
+# Regenerate the Robot spec from the latest PHP client and HTML docs:
+python3 tools/build_robot_spec.py --refresh
 
-# Then regenerate all three .NET clients via the project-wide generator:
-./generate-all.sh hetzner
+# Then regenerate all three .NET clients:
+dotnet run --project ../generator/src/Apigen.Generator -- --config specs/cloud.toml
+dotnet run --project ../generator/src/Apigen.Generator -- --config specs/api.toml
+dotnet run --project ../generator/src/Apigen.Generator -- --config specs/robot.toml
 ```
 
 ## License
 
 MIT — see [LICENSE](LICENSE).
-
-The community.hrobot Ansible collection is GPL-3.0; only its YAML schema
-metadata is read at spec-build time. No GPL-licensed code is shipped in any
-NuGet package.

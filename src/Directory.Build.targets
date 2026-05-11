@@ -1,28 +1,19 @@
 <Project>
-  <!-- Bundle the paired Models DLL into each Client package output. -->
-  <PropertyGroup Condition="'$(MSBuildProjectName)' == 'Apigen.Hetzner.Cloud'">
-    <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);IncludeCloudModelsInPackage</TargetsForTfmSpecificBuildOutput>
+  <!-- Bundle every sub-project's DLL into the umbrella Apigen.Hetzner .nupkg
+       so the consumer installs a single package and gets all three clients
+       plus their models. PrivateAssets="all" on the ProjectReferences in
+       Apigen.Hetzner.csproj keeps these from becoming public NuGet deps. -->
+  <PropertyGroup Condition="'$(MSBuildProjectName)' == 'Apigen.Hetzner'">
+    <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);IncludeSubClientDllsInPackage</TargetsForTfmSpecificBuildOutput>
   </PropertyGroup>
-  <Target Name="IncludeCloudModelsInPackage">
+
+  <Target Name="IncludeSubClientDllsInPackage">
     <ItemGroup>
+      <BuildOutputInPackage Include="$(OutputPath)Apigen.Hetzner.Cloud.dll" />
       <BuildOutputInPackage Include="$(OutputPath)Apigen.Hetzner.Cloud.Models.dll" />
-    </ItemGroup>
-  </Target>
-
-  <PropertyGroup Condition="'$(MSBuildProjectName)' == 'Apigen.Hetzner.Api'">
-    <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);IncludeApiModelsInPackage</TargetsForTfmSpecificBuildOutput>
-  </PropertyGroup>
-  <Target Name="IncludeApiModelsInPackage">
-    <ItemGroup>
+      <BuildOutputInPackage Include="$(OutputPath)Apigen.Hetzner.Api.dll" />
       <BuildOutputInPackage Include="$(OutputPath)Apigen.Hetzner.Api.Models.dll" />
-    </ItemGroup>
-  </Target>
-
-  <PropertyGroup Condition="'$(MSBuildProjectName)' == 'Apigen.Hetzner.Robot'">
-    <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);IncludeRobotModelsInPackage</TargetsForTfmSpecificBuildOutput>
-  </PropertyGroup>
-  <Target Name="IncludeRobotModelsInPackage">
-    <ItemGroup>
+      <BuildOutputInPackage Include="$(OutputPath)Apigen.Hetzner.Robot.dll" />
       <BuildOutputInPackage Include="$(OutputPath)Apigen.Hetzner.Robot.Models.dll" />
     </ItemGroup>
   </Target>

@@ -27,5 +27,5 @@ namespace Apigen.Hetzner.Robot.Models;
 public partial class WolGetResponse
 {
   [System.Text.Json.Serialization.JsonPropertyName("wol")]
-  public WolGetResponseWol? Wol { get; set; }
+  public Wol? Wol { get; set; }
 }

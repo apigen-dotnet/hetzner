@@ -27,5 +27,5 @@ namespace Apigen.Hetzner.Robot.Models;
 public partial class IpGetAllResponse
 {
   [System.Text.Json.Serialization.JsonPropertyName("ip")]
-  public IpGetAllResponseIp? Ip { get; set; }
+  public Ip? Ip { get; set; }
 }

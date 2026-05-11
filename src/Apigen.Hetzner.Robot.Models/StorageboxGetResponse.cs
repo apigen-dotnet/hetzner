@@ -27,5 +27,5 @@ namespace Apigen.Hetzner.Robot.Models;
 public partial class StorageboxGetResponse
 {
   [System.Text.Json.Serialization.JsonPropertyName("storagebox")]
-  public StorageboxGetResponseStoragebox? Storagebox { get; set; }
+  public Storagebox? Storagebox { get; set; }
 }

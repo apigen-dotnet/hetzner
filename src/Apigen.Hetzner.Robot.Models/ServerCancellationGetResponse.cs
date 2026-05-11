@@ -27,5 +27,5 @@ namespace Apigen.Hetzner.Robot.Models;
 public partial class ServerCancellationGetResponse
 {
   [System.Text.Json.Serialization.JsonPropertyName("cancellation")]
-  public ServerCancellationGetResponseCancellation? Cancellation { get; set; }
+  public Cancellation? Cancellation { get; set; }
 }

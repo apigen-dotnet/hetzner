@@ -4,21 +4,22 @@
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <!-- Meta-package: no compiled output of its own. -->
-    <IncludeBuildOutput>false</IncludeBuildOutput>
-    <NoWarn>$(NoWarn);NU5128</NoWarn>
   </PropertyGroup>
 
   <!--
-    Umbrella package. Installing Apigen.Hetzner pulls in all three sub-clients;
-    each sub-client retains its own auth context (Bearer or Basic). Auth tokens
-    are NOT shared across Cloud / Api / Robot — they come from different
-    Hetzner consoles entirely.
+    Umbrella package. Installs all three Hetzner sub-clients as a single
+    NuGet (Apigen.Hetzner). Each sub-client retains its own auth context
+    (Bearer for Cloud and Api, HTTP Basic for Robot). Auth tokens are NOT
+    shared across them — they come from different Hetzner consoles.
+
+    PrivateAssets="all" keeps the sub-projects from leaking out as transitive
+    NuGet dependencies; their DLLs are bundled into Apigen.Hetzner.nupkg
+    via the BuildOutputInPackage trick in ../Directory.Build.targets.
   -->
   <ItemGroup>
-    <ProjectReference Include="../Apigen.Hetzner.Cloud/Apigen.Hetzner.Cloud.csproj" />
-    <ProjectReference Include="../Apigen.Hetzner.Api/Apigen.Hetzner.Api.csproj" />
-    <ProjectReference Include="../Apigen.Hetzner.Robot/Apigen.Hetzner.Robot.csproj" />
+    <ProjectReference Include="../Apigen.Hetzner.Cloud/Apigen.Hetzner.Cloud.csproj" PrivateAssets="all" />
+    <ProjectReference Include="../Apigen.Hetzner.Api/Apigen.Hetzner.Api.csproj" PrivateAssets="all" />
+    <ProjectReference Include="../Apigen.Hetzner.Robot/Apigen.Hetzner.Robot.csproj" PrivateAssets="all" />
   </ItemGroup>
 
 </Project>

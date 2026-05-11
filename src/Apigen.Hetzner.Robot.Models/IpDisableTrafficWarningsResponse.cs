@@ -27,5 +27,5 @@ namespace Apigen.Hetzner.Robot.Models;
 public partial class IpDisableTrafficWarningsResponse
 {
   [System.Text.Json.Serialization.JsonPropertyName("ip")]
-  public IpDisableTrafficWarningsResponseIp? Ip { get; set; }
+  public Ip2? Ip { get; set; }
 }

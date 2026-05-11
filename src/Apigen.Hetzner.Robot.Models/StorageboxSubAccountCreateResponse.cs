@@ -27,5 +27,5 @@ namespace Apigen.Hetzner.Robot.Models;
 public partial class StorageboxSubAccountCreateResponse
 {
   [System.Text.Json.Serialization.JsonPropertyName("subaccount")]
-  public StorageboxSubAccountCreateResponseSubaccount? Subaccount { get; set; }
+  public Subaccount2? Subaccount { get; set; }
 }

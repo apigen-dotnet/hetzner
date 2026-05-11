@@ -714,6 +714,74 @@ def _operation_to_class_name(op_id: str, suffix: str = "Response") -> str:
     return pascal + suffix
 
 
+def _register_schema(
+    preferred_name: str,
+    op_id: str,
+    schema: dict[str, Any],
+    components: dict[str, dict[str, Any]],
+) -> str:
+    """Register `schema` in `components` and return the chosen name.
+
+    If `preferred_name` is already in use with the same shape, reuse it.
+    If it's in use with a different shape, fall back to an operation-scoped
+    name `<OpId><PreferredName>` to disambiguate. Numeric suffixes are
+    avoided because they're meaningless to consumers.
+    """
+    if preferred_name not in components:
+        components[preferred_name] = schema
+        return preferred_name
+    if components[preferred_name] == schema:
+        return preferred_name
+    # Conflict — disambiguate by prefixing with the operation name.
+    scoped = _operation_to_class_name(op_id, suffix="") + _pascal(preferred_name)
+    if scoped not in components:
+        components[scoped] = schema
+    elif components[scoped] != schema:
+        # Last-resort numeric suffix — should be rare.
+        n = 2
+        while f"{scoped}{n}" in components and components[f"{scoped}{n}"] != schema:
+            n += 1
+        scoped = f"{scoped}{n}"
+        components.setdefault(scoped, schema)
+    return scoped
+
+
+def _unwrap_response(
+    schema: dict[str, Any],
+    op_id: str,
+) -> tuple[dict[str, Any], str | None]:
+    """If `schema` is a single-property wrapper that Hetzner conventionally
+    uses around its real payload (e.g. `{"server": {...}}` or
+    `{"servers": [{...}]}`), unwrap it.
+
+    Returns `(inner_schema, preferred_name)`. `preferred_name` is the
+    PascalCase form of the wrapper key (singularised for arrays), suitable
+    for naming the inner type. If no unwrap applies, returns the input
+    unchanged and `preferred_name=None`.
+    """
+    if (
+        schema.get("type") != "object"
+        or not isinstance(schema.get("properties"), dict)
+        or len(schema["properties"]) != 1
+    ):
+        return schema, None
+    key, inner = next(iter(schema["properties"].items()))
+    if not isinstance(inner, dict):
+        return schema, None
+
+    if inner.get("type") == "object" and isinstance(inner.get("properties"), dict):
+        return inner, _pascal(key)
+
+    if inner.get("type") == "array" and isinstance(inner.get("items"), dict):
+        items = inner["items"]
+        if items.get("type") == "object" and isinstance(items.get("properties"), dict):
+            # Array wrapper: return the array schema with items renamed via the
+            # singularised key.
+            return inner, _singular(_pascal(key))
+
+    return schema, None
+
+
 def _pascal(name: str) -> str:
     parts = re.split(r"[_\-\s]+", name)
     return "".join(p[:1].upper() + p[1:] for p in parts if p)
@@ -723,11 +791,22 @@ def _extract_nested_schemas(
     schema: dict[str, Any],
     base_name: str,
     component_schemas: dict[str, dict[str, Any]],
+    *,
+    prefer_property_name: bool = False,
 ) -> dict[str, Any]:
     """Walk a schema tree. Each object-with-properties gets extracted into
-    components.schemas under a derived name and replaced in-place with a $ref.
-    Arrays-of-objects are flattened: the item object is named after the
-    parent (singular form), the array stays a $ref-pointing array.
+    components.schemas and replaced in-place with a $ref.
+
+    Naming strategy:
+    - Top-level call uses `base_name` (e.g. `ServerGetResponse`).
+    - Nested object properties get named after the property itself
+      (`{server: {...}}` → inner schema is `Server`, not
+      `ServerGetResponseServer`). This matches Hetzner's response-wrapping
+      convention where every response is `{singular_key: object}` or
+      `{plural_key: [object]}`.
+    - Array items are singularised forms of their parent's property name.
+    - Identical shapes deduplicate to a single component; differing shapes
+      collide and get numeric suffixes (`Server`, `Server2`, ...).
     """
     if not isinstance(schema, dict):
         return schema
@@ -738,7 +817,8 @@ def _extract_nested_schemas(
         items = schema["items"]
         if items.get("type") == "object" and items.get("properties"):
             item_name = _singular(base_name) or base_name + "Item"
-            schema["items"] = _extract_nested_schemas(items, item_name, component_schemas)
+            schema["items"] = _extract_nested_schemas(items, item_name, component_schemas,
+                                                     prefer_property_name=False)
         else:
             schema["items"] = _extract_nested_schemas(items, base_name, component_schemas)
         return schema
@@ -746,13 +826,18 @@ def _extract_nested_schemas(
     if t == "object" and isinstance(schema.get("properties"), dict):
         new_props: dict[str, Any] = {}
         for prop_name, prop_schema in schema["properties"].items():
-            nested_name = base_name + _pascal(prop_name)
-            new_props[prop_name] = _extract_nested_schemas(prop_schema, nested_name, component_schemas)
+            # Nested property objects/arrays use the property's own name as
+            # their type name (e.g. `server`, `cancellation_reason`).
+            nested_base = _pascal(prop_name)
+            if not nested_base:
+                nested_base = base_name + _pascal(prop_name)
+            new_props[prop_name] = _extract_nested_schemas(
+                prop_schema, nested_base, component_schemas, prefer_property_name=True,
+            )
         schema["properties"] = new_props
 
-        # Register under base_name and return a $ref.
-        # If a schema with that name already exists, append a numeric suffix
-        # to avoid collisions while still extracting.
+        # Use property-name-derived schema name for nested objects; fall back
+        # to the prefixed name on collision with a different shape.
         unique_name = base_name
         n = 2
         while unique_name in component_schemas and component_schemas[unique_name] != schema:

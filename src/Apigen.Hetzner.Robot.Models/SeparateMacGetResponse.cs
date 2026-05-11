@@ -27,5 +27,5 @@ namespace Apigen.Hetzner.Robot.Models;
 public partial class SeparateMacGetResponse
 {
   [System.Text.Json.Serialization.JsonPropertyName("mac")]
-  public SeparateMacGetResponseMac? Mac { get; set; }
+  public Mac? Mac { get; set; }
 }

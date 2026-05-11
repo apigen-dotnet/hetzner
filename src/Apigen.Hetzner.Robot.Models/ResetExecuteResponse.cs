@@ -27,5 +27,5 @@ namespace Apigen.Hetzner.Robot.Models;
 public partial class ResetExecuteResponse
 {
   [System.Text.Json.Serialization.JsonPropertyName("reset")]
-  public ResetExecuteResponseReset? Reset { get; set; }
+  public Reset3? Reset { get; set; }
 }

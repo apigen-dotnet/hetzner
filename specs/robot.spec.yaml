@@ -2545,7 +2545,7 @@ components:
               items:
                 type: string
               nullable: true
-    FailoverGetResponseFailover:
+    Failover:
       type: object
       properties:
         ip:
@@ -2569,8 +2569,8 @@ components:
       type: object
       properties:
         failover:
-          $ref: '#/components/schemas/FailoverGetResponseFailover'
-    FailoverGetAllResponseFailover:
+          $ref: '#/components/schemas/Failover'
+    Failover2:
       type: object
       properties:
         ip:
@@ -2591,33 +2591,13 @@ components:
       type: object
       properties:
         failover:
-          $ref: '#/components/schemas/FailoverGetAllResponseFailover'
-    FailoverRouteResponseFailover:
-      type: object
-      properties:
-        ip:
-          type: string
-          format: ipv4
-        netmask:
-          type: string
-          format: ipv4
-        server_ip:
-          type: string
-          format: ipv4
-        server_ipv6_net:
-          type: string
-          format: ipv6
-        server_number:
-          type: integer
-        active_server_ip:
-          type: string
-          format: ipv4
+          $ref: '#/components/schemas/Failover2'
     FailoverRouteResponse:
       type: object
       properties:
         failover:
-          $ref: '#/components/schemas/FailoverRouteResponseFailover'
-    FailoverDeleteResponseFailover:
+          $ref: '#/components/schemas/Failover'
+    Failover3:
       type: object
       properties:
         ip:
@@ -2640,8 +2620,8 @@ components:
       type: object
       properties:
         failover:
-          $ref: '#/components/schemas/FailoverDeleteResponseFailover'
-    ResetGetResponseReset:
+          $ref: '#/components/schemas/Failover3'
+    Reset:
       type: object
       properties:
         server_ip:
@@ -2662,8 +2642,8 @@ components:
       type: object
       properties:
         reset:
-          $ref: '#/components/schemas/ResetGetResponseReset'
-    ResetGetAllResponseReset:
+          $ref: '#/components/schemas/Reset'
+    Reset2:
       type: object
       properties:
         server_ip:
@@ -2682,8 +2662,8 @@ components:
       type: object
       properties:
         reset:
-          $ref: '#/components/schemas/ResetGetAllResponseReset'
-    ResetExecuteResponseReset:
+          $ref: '#/components/schemas/Reset2'
+    Reset3:
       type: object
       properties:
         server_ip:
@@ -2698,8 +2678,8 @@ components:
       type: object
       properties:
         reset:
-          $ref: '#/components/schemas/ResetExecuteResponseReset'
-    BootGetResponseBootWindows:
+          $ref: '#/components/schemas/Reset3'
+    Windows:
       type: object
       properties:
         server_ip:
@@ -2722,7 +2702,7 @@ components:
           type: boolean
         password:
           nullable: true
-    BootGetResponseBoot:
+    Boot:
       type: object
       properties:
         rescue:
@@ -2738,12 +2718,12 @@ components:
           additionalProperties:
             nullable: true
         windows:
-          $ref: '#/components/schemas/BootGetResponseBootWindows'
+          $ref: '#/components/schemas/Windows'
     BootGetResponse:
       type: object
       properties:
         boot:
-          $ref: '#/components/schemas/BootGetResponseBoot'
+          $ref: '#/components/schemas/Boot'
     RescueGetResponse:
       type: object
       properties:
@@ -2805,7 +2785,7 @@ components:
           type: object
           additionalProperties:
             nullable: true
-    WindowsGetResponseWindows:
+    Windows2:
       type: object
       properties:
         server_ip:
@@ -2816,11 +2796,11 @@ components:
           format: ipv6
         server_number:
           type: integer
-        dist:
+        os:
           type: array
           items:
             type: string
-        os:
+        dist:
           type: array
           items:
             type: string
@@ -2836,8 +2816,8 @@ components:
       type: object
       properties:
         windows:
-          $ref: '#/components/schemas/WindowsGetResponseWindows'
-    WindowsActivateResponseWindows:
+          $ref: '#/components/schemas/Windows2'
+    Windows3:
       type: object
       properties:
         server_ip:
@@ -2862,40 +2842,13 @@ components:
       type: object
       properties:
         windows:
-          $ref: '#/components/schemas/WindowsActivateResponseWindows'
-    WindowsDeactivateResponseWindows:
-      type: object
-      properties:
-        server_ip:
-          type: string
-          format: ipv4
-        server_ipv6_net:
-          type: string
-          format: ipv6
-        server_number:
-          type: integer
-        os:
-          type: array
-          items:
-            type: string
-        dist:
-          type: array
-          items:
-            type: string
-        lang:
-          type: array
-          items:
-            type: string
-        active:
-          type: boolean
-        password:
-          nullable: true
+          $ref: '#/components/schemas/Windows3'
     WindowsDeactivateResponse:
       type: object
       properties:
         windows:
-          $ref: '#/components/schemas/WindowsDeactivateResponseWindows'
-    WolGetResponseWol:
+          $ref: '#/components/schemas/Windows2'
+    Wol:
       type: object
       properties:
         server_ip:
@@ -2910,24 +2863,13 @@ components:
       type: object
       properties:
         wol:
-          $ref: '#/components/schemas/WolGetResponseWol'
-    WolSendResponseWol:
-      type: object
-      properties:
-        server_ip:
-          type: string
-          format: ipv4
-        server_ipv6_net:
-          type: string
-          format: ipv6
-        server_number:
-          type: integer
+          $ref: '#/components/schemas/Wol'
     WolSendResponse:
       type: object
       properties:
         wol:
-          $ref: '#/components/schemas/WolSendResponseWol'
-    RdnsGetResponseRdns:
+          $ref: '#/components/schemas/Wol'
+    Rdns:
       type: object
       properties:
         ip:
@@ -2939,34 +2881,18 @@ components:
       type: object
       properties:
         rdns:
-          $ref: '#/components/schemas/RdnsGetResponseRdns'
-    RdnsCreateResponseRdns:
-      type: object
-      properties:
-        ip:
-          type: string
-          format: ipv4
-        ptr:
-          type: string
+          $ref: '#/components/schemas/Rdns'
     RdnsCreateResponse:
       type: object
       properties:
         rdns:
-          $ref: '#/components/schemas/RdnsCreateResponseRdns'
-    RdnsUpdateResponseRdns:
-      type: object
-      properties:
-        ip:
-          type: string
-          format: ipv4
-        ptr:
-          type: string
+          $ref: '#/components/schemas/Rdns'
     RdnsUpdateResponse:
       type: object
       properties:
         rdns:
-          $ref: '#/components/schemas/RdnsUpdateResponseRdns'
-    ServerGetAllResponseServerSubnet:
+          $ref: '#/components/schemas/Rdns'
+    Subnet:
       type: object
       properties:
         ip:
@@ -2974,7 +2900,7 @@ components:
           format: ipv6
         mask:
           type: string
-    ServerGetAllResponseServer:
+    Server:
       type: object
       properties:
         server_ip:
@@ -3008,22 +2934,14 @@ components:
         subnet:
           type: array
           items:
-            $ref: '#/components/schemas/ServerGetAllResponseServerSubnet'
+            $ref: '#/components/schemas/Subnet'
           nullable: true
     ServerGetAllResponse:
       type: object
       properties:
         server:
-          $ref: '#/components/schemas/ServerGetAllResponseServer'
-    ServerGetResponseServerSubnet:
-      type: object
-      properties:
-        ip:
-          type: string
-          format: ipv6
-        mask:
-          type: string
-    ServerGetResponseServer:
+          $ref: '#/components/schemas/Server'
+    Server2:
       type: object
       properties:
         server_ip:
@@ -3057,7 +2975,7 @@ components:
         subnet:
           type: array
           items:
-            $ref: '#/components/schemas/ServerGetResponseServerSubnet'
+            $ref: '#/components/schemas/Subnet'
         reset:
           type: boolean
         rescue:
@@ -3080,16 +2998,8 @@ components:
       type: object
       properties:
         server:
-          $ref: '#/components/schemas/ServerGetResponseServer'
-    ServernameUpdateResponseServerSubnet:
-      type: object
-      properties:
-        ip:
-          type: string
-          format: ipv6
-        mask:
-          type: string
-    ServernameUpdateResponseServer:
+          $ref: '#/components/schemas/Server2'
+    Server3:
       type: object
       properties:
         server_ip:
@@ -3123,7 +3033,7 @@ components:
         subnet:
           type: array
           items:
-            $ref: '#/components/schemas/ServernameUpdateResponseServerSubnet'
+            $ref: '#/components/schemas/Subnet'
         reset:
           type: boolean
         rescue:
@@ -3144,8 +3054,8 @@ components:
       type: object
       properties:
         server:
-          $ref: '#/components/schemas/ServernameUpdateResponseServer'
-    ServerCancellationGetResponseCancellation:
+          $ref: '#/components/schemas/Server3'
+    Cancellation:
       type: object
       properties:
         server_ip:
@@ -3177,8 +3087,8 @@ components:
       type: object
       properties:
         cancellation:
-          $ref: '#/components/schemas/ServerCancellationGetResponseCancellation'
-    ServerCancelResponseCancellation:
+          $ref: '#/components/schemas/Cancellation'
+    Cancellation2:
       type: object
       properties:
         server_ip:
@@ -3209,8 +3119,8 @@ components:
       type: object
       properties:
         cancellation:
-          $ref: '#/components/schemas/ServerCancelResponseCancellation'
-    IpGetAllResponseIp:
+          $ref: '#/components/schemas/Cancellation2'
+    Ip:
       type: object
       properties:
         ip:
@@ -3237,36 +3147,13 @@ components:
       type: object
       properties:
         ip:
-          $ref: '#/components/schemas/IpGetAllResponseIp'
-    IpGetByServerIpResponseIp:
-      type: object
-      properties:
-        ip:
-          type: string
-          format: ipv4
-        server_ip:
-          type: string
-          format: ipv4
-        server_number:
-          type: integer
-        locked:
-          type: boolean
-        separate_mac:
-          nullable: true
-        traffic_warnings:
-          type: boolean
-        traffic_hourly:
-          type: integer
-        traffic_daily:
-          type: integer
-        traffic_monthly:
-          type: integer
+          $ref: '#/components/schemas/Ip'
     IpGetByServerIpResponse:
       type: object
       properties:
         ip:
-          $ref: '#/components/schemas/IpGetByServerIpResponseIp'
-    IpGetResponseIp:
+          $ref: '#/components/schemas/Ip'
+    Ip2:
       type: object
       properties:
         ip:
@@ -3301,116 +3188,23 @@ components:
       type: object
       properties:
         ip:
-          $ref: '#/components/schemas/IpGetResponseIp'
-    IpEnableTrafficWarningsResponseIp:
-      type: object
-      properties:
-        ip:
-          type: string
-          format: ipv4
-        gateway:
-          type: string
-          format: ipv4
-        mask:
-          type: integer
-        broadcast:
-          type: string
-          format: ipv4
-        server_ip:
-          type: string
-          format: ipv4
-        server_number:
-          type: integer
-        locked:
-          type: boolean
-        separate_mac:
-          nullable: true
-        traffic_warnings:
-          type: boolean
-        traffic_hourly:
-          type: integer
-        traffic_daily:
-          type: integer
-        traffic_monthly:
-          type: integer
+          $ref: '#/components/schemas/Ip2'
     IpEnableTrafficWarningsResponse:
       type: object
       properties:
         ip:
-          $ref: '#/components/schemas/IpEnableTrafficWarningsResponseIp'
-    IpDisableTrafficWarningsResponseIp:
-      type: object
-      properties:
-        ip:
-          type: string
-          format: ipv4
-        gateway:
-          type: string
-          format: ipv4
-        mask:
-          type: integer
-        broadcast:
-          type: string
-          format: ipv4
-        server_ip:
-          type: string
-          format: ipv4
-        server_number:
-          type: integer
-        locked:
-          type: boolean
-        separate_mac:
-          nullable: true
-        traffic_warnings:
-          type: boolean
-        traffic_hourly:
-          type: integer
-        traffic_daily:
-          type: integer
-        traffic_monthly:
-          type: integer
+          $ref: '#/components/schemas/Ip2'
     IpDisableTrafficWarningsResponse:
       type: object
       properties:
         ip:
-          $ref: '#/components/schemas/IpDisableTrafficWarningsResponseIp'
-    IpSetTrafficWarningLimitsResponseIp:
-      type: object
-      properties:
-        ip:
-          type: string
-          format: ipv4
-        gateway:
-          type: string
-          format: ipv4
-        mask:
-          type: integer
-        broadcast:
-          type: string
-          format: ipv4
-        server_ip:
-          type: string
-          format: ipv4
-        server_number:
-          type: integer
-        locked:
-          type: boolean
-        separate_mac:
-          nullable: true
-        traffic_warnings:
-          type: boolean
-        traffic_hourly:
-          type: integer
-        traffic_daily:
-          type: integer
-        traffic_monthly:
-          type: integer
+          $ref: '#/components/schemas/Ip2'
     IpSetTrafficWarningLimitsResponse:
       type: object
       properties:
         ip:
-          $ref: '#/components/schemas/IpSetTrafficWarningLimitsResponseIp'
-    SubnetGetAllResponseSubnet:
+          $ref: '#/components/schemas/Ip2'
+    Subnet2:
       type: object
       properties:
         ip:
@@ -3443,42 +3237,13 @@ components:
       type: object
       properties:
         subnet:
-          $ref: '#/components/schemas/SubnetGetAllResponseSubnet'
-    SubnetGetByServerIpResponseSubnet:
-      type: object
-      properties:
-        ip:
-          type: string
-          format: ipv4
-        mask:
-          type: integer
-        gateway:
-          type: string
-          format: ipv4
-        server_ip:
-          type: string
-          nullable: true
-          format: ipv4
-        server_number:
-          type: integer
-        failover:
-          type: boolean
-        locked:
-          type: boolean
-        traffic_warnings:
-          type: boolean
-        traffic_hourly:
-          type: integer
-        traffic_daily:
-          type: integer
-        traffic_monthly:
-          type: integer
+          $ref: '#/components/schemas/Subnet2'
     SubnetGetByServerIpResponse:
       type: object
       properties:
         subnet:
-          $ref: '#/components/schemas/SubnetGetByServerIpResponseSubnet'
-    SubnetGetResponseSubnet:
+          $ref: '#/components/schemas/Subnet2'
+    Subnet3:
       type: object
       properties:
         ip:
@@ -3510,107 +3275,23 @@ components:
       type: object
       properties:
         subnet:
-          $ref: '#/components/schemas/SubnetGetResponseSubnet'
-    SubnetEnableTrafficWarningsResponseSubnet:
-      type: object
-      properties:
-        ip:
-          type: string
-          format: ipv4
-        mask:
-          type: integer
-        gateway:
-          type: string
-          format: ipv4
-        server_ip:
-          type: string
-          format: ipv4
-        server_number:
-          type: integer
-        failover:
-          type: boolean
-        locked:
-          type: boolean
-        traffic_warnings:
-          type: boolean
-        traffic_hourly:
-          type: integer
-        traffic_daily:
-          type: integer
-        traffic_monthly:
-          type: integer
+          $ref: '#/components/schemas/Subnet3'
     SubnetEnableTrafficWarningsResponse:
       type: object
       properties:
         subnet:
-          $ref: '#/components/schemas/SubnetEnableTrafficWarningsResponseSubnet'
-    SubnetDisableTrafficWarningsResponseSubnet:
-      type: object
-      properties:
-        ip:
-          type: string
-          format: ipv4
-        mask:
-          type: integer
-        gateway:
-          type: string
-          format: ipv4
-        server_ip:
-          type: string
-          format: ipv4
-        server_number:
-          type: integer
-        failover:
-          type: boolean
-        locked:
-          type: boolean
-        traffic_warnings:
-          type: boolean
-        traffic_hourly:
-          type: integer
-        traffic_daily:
-          type: integer
-        traffic_monthly:
-          type: integer
+          $ref: '#/components/schemas/Subnet3'
     SubnetDisableTrafficWarningsResponse:
       type: object
       properties:
         subnet:
-          $ref: '#/components/schemas/SubnetDisableTrafficWarningsResponseSubnet'
-    SubnetSetTrafficWarningLimitsResponseSubnet:
-      type: object
-      properties:
-        ip:
-          type: string
-          format: ipv4
-        mask:
-          type: integer
-        gateway:
-          type: string
-          format: ipv4
-        server_ip:
-          type: string
-          format: ipv4
-        server_number:
-          type: integer
-        failover:
-          type: boolean
-        locked:
-          type: boolean
-        traffic_warnings:
-          type: boolean
-        traffic_hourly:
-          type: integer
-        traffic_daily:
-          type: integer
-        traffic_monthly:
-          type: integer
+          $ref: '#/components/schemas/Subnet3'
     SubnetSetTrafficWarningLimitsResponse:
       type: object
       properties:
         subnet:
-          $ref: '#/components/schemas/SubnetSetTrafficWarningLimitsResponseSubnet'
-    TrafficGetResponseTraffic:
+          $ref: '#/components/schemas/Subnet3'
+    Traffic:
       type: object
       properties:
         type:
@@ -3636,8 +3317,8 @@ components:
       type: object
       properties:
         traffic:
-          $ref: '#/components/schemas/TrafficGetResponseTraffic'
-    SeparateMacGetResponseMac:
+          $ref: '#/components/schemas/Traffic'
+    Mac:
       type: object
       properties:
         ip:
@@ -3649,21 +3330,13 @@ components:
       type: object
       properties:
         mac:
-          $ref: '#/components/schemas/SeparateMacGetResponseMac'
-    SeparateMacCreateResponseMac:
-      type: object
-      properties:
-        ip:
-          type: string
-          format: ipv4
-        mac:
-          type: string
+          $ref: '#/components/schemas/Mac'
     SeparateMacCreateResponse:
       type: object
       properties:
         mac:
-          $ref: '#/components/schemas/SeparateMacCreateResponseMac'
-    SeparateMacDeleteResponseMac:
+          $ref: '#/components/schemas/Mac'
+    Mac2:
       type: object
       properties:
         ip:
@@ -3675,8 +3348,8 @@ components:
       type: object
       properties:
         mac:
-          $ref: '#/components/schemas/SeparateMacDeleteResponseMac'
-    SubnetMacGetResponseMac:
+          $ref: '#/components/schemas/Mac2'
+    Mac3:
       type: object
       properties:
         ip:
@@ -3694,46 +3367,18 @@ components:
       type: object
       properties:
         mac:
-          $ref: '#/components/schemas/SubnetMacGetResponseMac'
-    SubnetMacSetResponseMac:
-      type: object
-      properties:
-        ip:
-          type: string
-          format: ipv6
-        mask:
-          type: string
-        mac:
-          type: string
-        possible_mac:
-          type: object
-          additionalProperties:
-            type: string
+          $ref: '#/components/schemas/Mac3'
     SubnetMacSetResponse:
       type: object
       properties:
         mac:
-          $ref: '#/components/schemas/SubnetMacSetResponseMac'
-    SubnetMacResetResponseMac:
-      type: object
-      properties:
-        ip:
-          type: string
-          format: ipv6
-        mask:
-          type: string
-        mac:
-          type: string
-        possible_mac:
-          type: object
-          additionalProperties:
-            type: string
+          $ref: '#/components/schemas/Mac3'
     SubnetMacResetResponse:
       type: object
       properties:
         mac:
-          $ref: '#/components/schemas/SubnetMacResetResponseMac'
-    KeyGetResponseKey:
+          $ref: '#/components/schemas/Mac3'
+    Key:
       type: object
       properties:
         name:
@@ -3753,64 +3398,32 @@ components:
       type: object
       properties:
         key:
-          $ref: '#/components/schemas/KeyGetResponseKey'
-    KeyCreateResponseKey:
-      type: object
-      properties:
-        name:
-          type: string
-        fingerprint:
-          type: string
-        type:
-          type: string
-        size:
-          type: integer
-        data:
-          type: string
-        created_at:
-          type: string
-          format: date-time
+          $ref: '#/components/schemas/Key'
     KeyCreateResponse:
       type: object
       properties:
         key:
-          $ref: '#/components/schemas/KeyCreateResponseKey'
-    KeyUpdateResponseKey:
-      type: object
-      properties:
-        name:
-          type: string
-        fingerprint:
-          type: string
-        type:
-          type: string
-        size:
-          type: integer
-        data:
-          type: string
-        created_at:
-          type: string
-          format: date-time
+          $ref: '#/components/schemas/Key'
     KeyUpdateResponse:
       type: object
       properties:
         key:
-          $ref: '#/components/schemas/KeyUpdateResponseKey'
-    OrderServerProductGetAllResponseProduct:
+          $ref: '#/components/schemas/Key'
+    Product:
       type: object
       properties: {}
     OrderServerProductGetAllResponse:
       type: object
       properties:
         product:
-          $ref: '#/components/schemas/OrderServerProductGetAllResponseProduct'
+          $ref: '#/components/schemas/Product'
     OrderServerProductGetResponse:
       type: object
       properties:
         product:
           type: object
           additionalProperties: true
-    OrderServerTransactionGetAllResponseTransactionAuthorizedKeyKey:
+    Key2:
       type: object
       properties:
         name:
@@ -3821,12 +3434,12 @@ components:
           type: string
         size:
           type: integer
-    OrderServerTransactionGetAllResponseTransactionAuthorizedKey:
+    AuthorizedKey:
       type: object
       properties:
         key:
-          $ref: '#/components/schemas/OrderServerTransactionGetAllResponseTransactionAuthorizedKeyKey'
-    OrderServerTransactionGetAllResponseTransactionHostKeyKey:
+          $ref: '#/components/schemas/Key2'
+    Key3:
       type: object
       properties:
         fingerprint:
@@ -3835,15 +3448,12 @@ components:
           type: string
         size:
           type: integer
-    OrderServerTransactionGetAllResponseTransactionHostKey:
+    HostKey:
       type: object
       properties:
         key:
-          $ref: '#/components/schemas/OrderServerTransactionGetAllResponseTransactionHostKeyKey'
-    OrderServerTransactionGetAllResponseTransactionProduct:
-      type: object
-      properties: {}
-    OrderServerTransactionGetAllResponseTransaction:
+          $ref: '#/components/schemas/Key3'
+    Transaction:
       type: object
       properties:
         id:
@@ -3863,15 +3473,15 @@ components:
         authorized_key:
           type: array
           items:
-            $ref: '#/components/schemas/OrderServerTransactionGetAllResponseTransactionAuthorizedKey'
+            $ref: '#/components/schemas/AuthorizedKey'
         host_key:
           type: array
           items:
-            $ref: '#/components/schemas/OrderServerTransactionGetAllResponseTransactionHostKey'
+            $ref: '#/components/schemas/HostKey'
         comment:
           nullable: true
         product:
-          $ref: '#/components/schemas/OrderServerTransactionGetAllResponseTransactionProduct'
+          $ref: '#/components/schemas/Product'
         addons:
           type: array
           items:
@@ -3880,38 +3490,8 @@ components:
       type: object
       properties:
         transaction:
-          $ref: '#/components/schemas/OrderServerTransactionGetAllResponseTransaction'
-    OrderServerTransactionGetResponseTransactionAuthorizedKeyKey:
-      type: object
-      properties:
-        name:
-          type: string
-        fingerprint:
-          type: string
-        type:
-          type: string
-        size:
-          type: integer
-    OrderServerTransactionGetResponseTransactionAuthorizedKey:
-      type: object
-      properties:
-        key:
-          $ref: '#/components/schemas/OrderServerTransactionGetResponseTransactionAuthorizedKeyKey'
-    OrderServerTransactionGetResponseTransactionHostKeyKey:
-      type: object
-      properties:
-        fingerprint:
-          type: string
-        type:
-          type: string
-        size:
-          type: integer
-    OrderServerTransactionGetResponseTransactionHostKey:
-      type: object
-      properties:
-        key:
-          $ref: '#/components/schemas/OrderServerTransactionGetResponseTransactionHostKeyKey'
-    OrderServerTransactionGetResponseTransaction:
+          $ref: '#/components/schemas/Transaction'
+    Transaction2:
       type: object
       properties:
         id:
@@ -3929,11 +3509,11 @@ components:
         authorized_key:
           type: array
           items:
-            $ref: '#/components/schemas/OrderServerTransactionGetResponseTransactionAuthorizedKey'
+            $ref: '#/components/schemas/AuthorizedKey'
         host_key:
           type: array
           items:
-            $ref: '#/components/schemas/OrderServerTransactionGetResponseTransactionHostKey'
+            $ref: '#/components/schemas/HostKey'
         comment:
           nullable: true
         product:
@@ -3947,55 +3527,19 @@ components:
       type: object
       properties:
         transaction:
-          $ref: '#/components/schemas/OrderServerTransactionGetResponseTransaction'
-    OrderServerMarketProductGetAllResponseProduct:
-      type: object
-      properties: {}
+          $ref: '#/components/schemas/Transaction2'
     OrderServerMarketProductGetAllResponse:
       type: object
       properties:
         product:
-          $ref: '#/components/schemas/OrderServerMarketProductGetAllResponseProduct'
+          $ref: '#/components/schemas/Product'
     OrderServerMarketProductGetResponse:
       type: object
       properties:
         product:
           type: object
           additionalProperties: true
-    OrderServerMarketTransactionGetAllResponseTransactionAuthorizedKeyKey:
-      type: object
-      properties:
-        name:
-          type: string
-        fingerprint:
-          type: string
-        type:
-          type: string
-        size:
-          type: integer
-    OrderServerMarketTransactionGetAllResponseTransactionAuthorizedKey:
-      type: object
-      properties:
-        key:
-          $ref: '#/components/schemas/OrderServerMarketTransactionGetAllResponseTransactionAuthorizedKeyKey'
-    OrderServerMarketTransactionGetAllResponseTransactionHostKeyKey:
-      type: object
-      properties:
-        fingerprint:
-          type: string
-        type:
-          type: string
-        size:
-          type: integer
-    OrderServerMarketTransactionGetAllResponseTransactionHostKey:
-      type: object
-      properties:
-        key:
-          $ref: '#/components/schemas/OrderServerMarketTransactionGetAllResponseTransactionHostKeyKey'
-    OrderServerMarketTransactionGetAllResponseTransactionProduct:
-      type: object
-      properties: {}
-    OrderServerMarketTransactionGetAllResponseTransaction:
+    Transaction3:
       type: object
       properties:
         id:
@@ -4015,37 +3559,21 @@ components:
         authorized_key:
           type: array
           items:
-            $ref: '#/components/schemas/OrderServerMarketTransactionGetAllResponseTransactionAuthorizedKey'
+            $ref: '#/components/schemas/AuthorizedKey'
         host_key:
           type: array
           items:
-            $ref: '#/components/schemas/OrderServerMarketTransactionGetAllResponseTransactionHostKey'
+            $ref: '#/components/schemas/HostKey'
         comment:
           nullable: true
         product:
-          $ref: '#/components/schemas/OrderServerMarketTransactionGetAllResponseTransactionProduct'
+          $ref: '#/components/schemas/Product'
     OrderServerMarketTransactionGetAllResponse:
       type: object
       properties:
         transaction:
-          $ref: '#/components/schemas/OrderServerMarketTransactionGetAllResponseTransaction'
-    OrderServerMarketTransactionGetResponseTransactionAuthorizedKeyKey:
-      type: object
-      properties:
-        name:
-          type: string
-        fingerprint:
-          type: string
-        type:
-          type: string
-        size:
-          type: integer
-    OrderServerMarketTransactionGetResponseTransactionAuthorizedKey:
-      type: object
-      properties:
-        key:
-          $ref: '#/components/schemas/OrderServerMarketTransactionGetResponseTransactionAuthorizedKeyKey'
-    OrderServerMarketTransactionGetResponseTransaction:
+          $ref: '#/components/schemas/Transaction3'
+    Transaction4:
       type: object
       properties:
         id:
@@ -4062,7 +3590,7 @@ components:
         authorized_key:
           type: array
           items:
-            $ref: '#/components/schemas/OrderServerMarketTransactionGetResponseTransactionAuthorizedKey'
+            $ref: '#/components/schemas/AuthorizedKey'
         host_key:
           type: array
           items: {}
@@ -4079,8 +3607,8 @@ components:
       type: object
       properties:
         transaction:
-          $ref: '#/components/schemas/OrderServerMarketTransactionGetResponseTransaction'
-    StorageboxSnapshotGetResponseSnapshot:
+          $ref: '#/components/schemas/Transaction4'
+    Snapshot:
       type: object
       properties:
         name:
@@ -4100,8 +3628,8 @@ components:
       type: object
       properties:
         snapshot:
-          $ref: '#/components/schemas/StorageboxSnapshotGetResponseSnapshot'
-    StorageboxSnapshotCreateResponseSnapshot:
+          $ref: '#/components/schemas/Snapshot'
+    Snapshot2:
       type: object
       properties:
         name:
@@ -4115,8 +3643,8 @@ components:
       type: object
       properties:
         snapshot:
-          $ref: '#/components/schemas/StorageboxSnapshotCreateResponseSnapshot'
-    StorageboxGetResponseStoragebox:
+          $ref: '#/components/schemas/Snapshot2'
+    Storagebox:
       type: object
       properties:
         id:
@@ -4164,8 +3692,8 @@ components:
       type: object
       properties:
         storagebox:
-          $ref: '#/components/schemas/StorageboxGetResponseStoragebox'
-    StorageboxGetAllResponseStoragebox:
+          $ref: '#/components/schemas/Storagebox'
+    Storagebox2:
       type: object
       properties:
         id:
@@ -4191,8 +3719,8 @@ components:
       type: object
       properties:
         storagebox:
-          $ref: '#/components/schemas/StorageboxGetAllResponseStoragebox'
-    StorageboxSnapshotPlanGetResponseSnapshotplan:
+          $ref: '#/components/schemas/Storagebox2'
+    Snapshotplan:
       type: object
       properties:
         status:
@@ -4213,30 +3741,13 @@ components:
       type: object
       properties:
         snapshotplan:
-          $ref: '#/components/schemas/StorageboxSnapshotPlanGetResponseSnapshotplan'
-    StorageboxSnapshotPlanEditResponseSnapshotplan:
-      type: object
-      properties:
-        status:
-          type: string
-        minute:
-          type: integer
-        hour:
-          type: integer
-        day_of_week:
-          type: integer
-        day_of_month:
-          nullable: true
-        month:
-          nullable: true
-        max_snapshots:
-          type: integer
+          $ref: '#/components/schemas/Snapshotplan'
     StorageboxSnapshotPlanEditResponse:
       type: object
       properties:
         snapshotplan:
-          $ref: '#/components/schemas/StorageboxSnapshotPlanEditResponseSnapshotplan'
-    FirewallTemplateGetAllResponseFirewallTemplate:
+          $ref: '#/components/schemas/Snapshotplan'
+    FirewallTemplate:
       type: object
       properties:
         id:
@@ -4253,8 +3764,8 @@ components:
       type: object
       properties:
         firewall_template:
-          $ref: '#/components/schemas/FirewallTemplateGetAllResponseFirewallTemplate'
-    FirewallTemplateCreateResponseFirewallTemplateRulesInput:
+          $ref: '#/components/schemas/FirewallTemplate'
+    Input:
       type: object
       properties:
         ip_version:
@@ -4277,7 +3788,7 @@ components:
           nullable: true
         action:
           type: string
-    FirewallTemplateCreateResponseFirewallTemplateRulesOutput:
+    Output:
       type: object
       properties:
         ip_version:
@@ -4298,18 +3809,18 @@ components:
           nullable: true
         action:
           type: string
-    FirewallTemplateCreateResponseFirewallTemplateRules:
+    Rules:
       type: object
       properties:
         input:
           type: array
           items:
-            $ref: '#/components/schemas/FirewallTemplateCreateResponseFirewallTemplateRulesInput'
+            $ref: '#/components/schemas/Input'
         output:
           type: array
           items:
-            $ref: '#/components/schemas/FirewallTemplateCreateResponseFirewallTemplateRulesOutput'
-    FirewallTemplateCreateResponseFirewallTemplate:
+            $ref: '#/components/schemas/Output'
+    FirewallTemplate2:
       type: object
       properties:
         id:
@@ -4321,86 +3832,18 @@ components:
         is_default:
           type: boolean
         rules:
-          $ref: '#/components/schemas/FirewallTemplateCreateResponseFirewallTemplateRules'
+          $ref: '#/components/schemas/Rules'
     FirewallTemplateCreateResponse:
       type: object
       properties:
         firewall_template:
-          $ref: '#/components/schemas/FirewallTemplateCreateResponseFirewallTemplate'
-    FirewallTemplateGetResponseFirewallTemplateRulesInput:
-      type: object
-      properties:
-        ip_version:
-          type: string
-        name:
-          type: string
-        dst_ip:
-          nullable: true
-        src_ip:
-          type: string
-          nullable: true
-          format: ipv4
-        dst_port:
-          type: string
-        src_port:
-          nullable: true
-        protocol:
-          nullable: true
-        tcp_flags:
-          nullable: true
-        action:
-          type: string
-    FirewallTemplateGetResponseFirewallTemplateRulesOutput:
-      type: object
-      properties:
-        ip_version:
-          nullable: true
-        name:
-          type: string
-        dst_ip:
-          nullable: true
-        src_ip:
-          nullable: true
-        dst_port:
-          nullable: true
-        src_port:
-          nullable: true
-        protocol:
-          nullable: true
-        tcp_flags:
-          nullable: true
-        action:
-          type: string
-    FirewallTemplateGetResponseFirewallTemplateRules:
-      type: object
-      properties:
-        input:
-          type: array
-          items:
-            $ref: '#/components/schemas/FirewallTemplateGetResponseFirewallTemplateRulesInput'
-        output:
-          type: array
-          items:
-            $ref: '#/components/schemas/FirewallTemplateGetResponseFirewallTemplateRulesOutput'
-    FirewallTemplateGetResponseFirewallTemplate:
-      type: object
-      properties:
-        id:
-          type: integer
-        filter_ipv6:
-          type: boolean
-        whitelist_hos:
-          type: boolean
-        is_default:
-          type: boolean
-        rules:
-          $ref: '#/components/schemas/FirewallTemplateGetResponseFirewallTemplateRules'
+          $ref: '#/components/schemas/FirewallTemplate2'
     FirewallTemplateGetResponse:
       type: object
       properties:
         firewall_template:
-          $ref: '#/components/schemas/FirewallTemplateGetResponseFirewallTemplate'
-    FirewallTemplateUpdateResponseFirewallTemplateRulesInput:
+          $ref: '#/components/schemas/FirewallTemplate2'
+    Input2:
       type: object
       properties:
         ip_version:
@@ -4424,39 +3867,18 @@ components:
           nullable: true
         action:
           type: string
-    FirewallTemplateUpdateResponseFirewallTemplateRulesOutput:
-      type: object
-      properties:
-        ip_version:
-          nullable: true
-        name:
-          type: string
-        dst_ip:
-          nullable: true
-        src_ip:
-          nullable: true
-        dst_port:
-          nullable: true
-        src_port:
-          nullable: true
-        protocol:
-          nullable: true
-        tcp_flags:
-          nullable: true
-        action:
-          type: string
-    FirewallTemplateUpdateResponseFirewallTemplateRules:
+    Rules2:
       type: object
       properties:
         input:
           type: array
           items:
-            $ref: '#/components/schemas/FirewallTemplateUpdateResponseFirewallTemplateRulesInput'
+            $ref: '#/components/schemas/Input2'
         output:
           type: array
           items:
-            $ref: '#/components/schemas/FirewallTemplateUpdateResponseFirewallTemplateRulesOutput'
-    FirewallTemplateUpdateResponseFirewallTemplate:
+            $ref: '#/components/schemas/Output'
+    FirewallTemplate3:
       type: object
       properties:
         id:
@@ -4468,87 +3890,18 @@ components:
         is_default:
           type: boolean
         rules:
-          $ref: '#/components/schemas/FirewallTemplateUpdateResponseFirewallTemplateRules'
+          $ref: '#/components/schemas/Rules2'
     FirewallTemplateUpdateResponse:
       type: object
       properties:
         firewall_template:
-          $ref: '#/components/schemas/FirewallTemplateUpdateResponseFirewallTemplate'
-    FirewallTemplateUpdateNameResponseFirewallTemplateRulesInput:
-      type: object
-      properties:
-        ip_version:
-          type: string
-        name:
-          type: string
-        dst_ip:
-          nullable: true
-        src_ip:
-          type: string
-          nullable: true
-          format: ipv4
-        dst_port:
-          type: string
-        src_port:
-          nullable: true
-        protocol:
-          type: string
-          nullable: true
-        tcp_flags:
-          nullable: true
-        action:
-          type: string
-    FirewallTemplateUpdateNameResponseFirewallTemplateRulesOutput:
-      type: object
-      properties:
-        ip_version:
-          nullable: true
-        name:
-          type: string
-        dst_ip:
-          nullable: true
-        src_ip:
-          nullable: true
-        dst_port:
-          nullable: true
-        src_port:
-          nullable: true
-        protocol:
-          nullable: true
-        tcp_flags:
-          nullable: true
-        action:
-          type: string
-    FirewallTemplateUpdateNameResponseFirewallTemplateRules:
-      type: object
-      properties:
-        input:
-          type: array
-          items:
-            $ref: '#/components/schemas/FirewallTemplateUpdateNameResponseFirewallTemplateRulesInput'
-        output:
-          type: array
-          items:
-            $ref: '#/components/schemas/FirewallTemplateUpdateNameResponseFirewallTemplateRulesOutput'
-    FirewallTemplateUpdateNameResponseFirewallTemplate:
-      type: object
-      properties:
-        id:
-          type: integer
-        filter_ipv6:
-          type: boolean
-        whitelist_hos:
-          type: boolean
-        is_default:
-          type: boolean
-        rules:
-          $ref: '#/components/schemas/FirewallTemplateUpdateNameResponseFirewallTemplateRules'
+          $ref: '#/components/schemas/FirewallTemplate3'
     FirewallTemplateUpdateNameResponse:
       type: object
       properties:
         firewall_template:
-          $ref: '#/components/schemas/FirewallTemplateUpdateNameResponseFirewallTemplate'
-    StorageboxSubAccountGetResponseSubaccount:
+          $ref: '#/components/schemas/FirewallTemplate3'
+    Subaccount:
       type: object
       properties:
         username:
@@ -4578,8 +3931,8 @@ components:
       type: object
       properties:
         subaccount:
-          $ref: '#/components/schemas/StorageboxSubAccountGetResponseSubaccount'
-    StorageboxSubAccountCreateResponseSubaccount:
+          $ref: '#/components/schemas/Subaccount'
+    Subaccount2:
       type: object
       properties:
         username:
@@ -4596,56 +3949,12 @@ components:
       type: object
       properties:
         subaccount:
-          $ref: '#/components/schemas/StorageboxSubAccountCreateResponseSubaccount'
-    StorageboxUpdateResponseStoragebox:
-      type: object
-      properties:
-        id:
-          type: integer
-        login:
-          type: string
-        name:
-          type: string
-        product:
-          type: string
-        cancelled:
-          type: boolean
-        locked:
-          type: boolean
-        location:
-          type: string
-        linked_server:
-          type: integer
-        paid_until:
-          type: string
-          format: date
-        disk_quota:
-          type: integer
-        disk_usage:
-          type: integer
-        disk_usage_data:
-          type: integer
-        disk_usage_snapshots:
-          type: integer
-        webdav:
-          type: boolean
-        samba:
-          type: boolean
-        ssh:
-          type: boolean
-        external_reachability:
-          type: boolean
-        zfs:
-          type: boolean
-        server:
-          type: string
-        host_system:
-          type: string
+          $ref: '#/components/schemas/Subaccount2'
     StorageboxUpdateResponse:
       type: object
       properties:
         storagebox:
-          $ref: '#/components/schemas/StorageboxUpdateResponseStoragebox'
+          $ref: '#/components/schemas/Storagebox'
     StorageboxSubAccountResetPasswordResponse:
       type: object
       properties:

@@ -27,5 +27,5 @@ namespace Apigen.Hetzner.Robot.Models;
 public partial class IpSetTrafficWarningLimitsResponse
 {
   [System.Text.Json.Serialization.JsonPropertyName("ip")]
-  public IpSetTrafficWarningLimitsResponseIp? Ip { get; set; }
+  public Ip2? Ip { get; set; }
 }

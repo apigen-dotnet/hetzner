@@ -27,5 +27,5 @@ namespace Apigen.Hetzner.Robot.Models;
 public partial class SubnetEnableTrafficWarningsResponse
 {
   [System.Text.Json.Serialization.JsonPropertyName("subnet")]
-  public SubnetEnableTrafficWarningsResponseSubnet? Subnet { get; set; }
+  public Subnet3? Subnet { get; set; }
 }

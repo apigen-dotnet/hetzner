@@ -27,5 +27,5 @@ namespace Apigen.Hetzner.Robot.Models;
 public partial class RdnsCreateResponse
 {
   [System.Text.Json.Serialization.JsonPropertyName("rdns")]
-  public RdnsCreateResponseRdns? Rdns { get; set; }
+  public Rdns? Rdns { get; set; }
 }

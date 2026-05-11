@@ -27,5 +27,5 @@ namespace Apigen.Hetzner.Robot.Models;
 public partial class SubnetGetResponse
 {
   [System.Text.Json.Serialization.JsonPropertyName("subnet")]
-  public SubnetGetResponseSubnet? Subnet { get; set; }
+  public Subnet3? Subnet { get; set; }
 }

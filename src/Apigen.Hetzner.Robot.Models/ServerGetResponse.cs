@@ -27,5 +27,5 @@ namespace Apigen.Hetzner.Robot.Models;
 public partial class ServerGetResponse
 {
   [System.Text.Json.Serialization.JsonPropertyName("server")]
-  public ServerGetResponseServer? Server { get; set; }
+  public Server2? Server { get; set; }
 }

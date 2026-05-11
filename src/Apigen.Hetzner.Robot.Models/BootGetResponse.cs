@@ -27,5 +27,5 @@ namespace Apigen.Hetzner.Robot.Models;
 public partial class BootGetResponse
 {
   [System.Text.Json.Serialization.JsonPropertyName("boot")]
-  public BootGetResponseBoot? Boot { get; set; }
+  public Boot? Boot { get; set; }
 }

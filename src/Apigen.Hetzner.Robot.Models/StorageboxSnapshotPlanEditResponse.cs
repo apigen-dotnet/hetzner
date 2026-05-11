@@ -27,5 +27,5 @@ namespace Apigen.Hetzner.Robot.Models;
 public partial class StorageboxSnapshotPlanEditResponse
 {
   [System.Text.Json.Serialization.JsonPropertyName("snapshotplan")]
-  public StorageboxSnapshotPlanEditResponseSnapshotplan? Snapshotplan { get; set; }
+  public Snapshotplan? Snapshotplan { get; set; }
 }

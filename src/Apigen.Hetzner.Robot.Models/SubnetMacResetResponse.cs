@@ -27,5 +27,5 @@ namespace Apigen.Hetzner.Robot.Models;
 public partial class SubnetMacResetResponse
 {
   [System.Text.Json.Serialization.JsonPropertyName("mac")]
-  public SubnetMacResetResponseMac? Mac { get; set; }
+  public Mac3? Mac { get; set; }
 }

@@ -27,5 +27,5 @@ namespace Apigen.Hetzner.Robot.Models;
 public partial class FirewallTemplateUpdateNameResponse
 {
   [System.Text.Json.Serialization.JsonPropertyName("firewall_template")]
-  public FirewallTemplateUpdateNameResponseFirewallTemplate? FirewallTemplate { get; set; }
+  public FirewallTemplate3? FirewallTemplate { get; set; }
 }

@@ -27,5 +27,5 @@ namespace Apigen.Hetzner.Robot.Models;
 public partial class OrderServerProductGetAllResponse
 {
   [System.Text.Json.Serialization.JsonPropertyName("product")]
-  public OrderServerProductGetAllResponseProduct? Product { get; set; }
+  public Product? Product { get; set; }
 }

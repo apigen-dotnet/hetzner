@@ -27,5 +27,5 @@ namespace Apigen.Hetzner.Robot.Models;
 public partial class KeyUpdateResponse
 {
   [System.Text.Json.Serialization.JsonPropertyName("key")]
-  public KeyUpdateResponseKey? Key { get; set; }
+  public Key? Key { get; set; }
 }
