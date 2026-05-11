@@ -1,0 +1,4673 @@
+openapi: 3.0.3
+info:
+  title: Hetzner Robot Webservice
+  version: 1.0.0
+  description: 'Reverse-engineered OpenAPI specification for the Hetzner Robot
+
+    Webservice (https://robot-ws.your-server.de).
+
+
+    Paths, HTTP verbs, path parameters, query parameters and request
+
+    bodies are derived from Hetzner''s official PHP reference client.
+
+    Response schemas and endpoint descriptions are derived from
+
+    Hetzner''s official HTML reference documentation.
+
+
+    Authentication is HTTP Basic using a Web Service user created in
+
+    the Robot panel (Settings → Web service and app settings). Note
+
+    that this is a separate user account from the main Robot login.
+
+    '
+  license:
+    name: Hetzner Robot Webservice documentation
+    url: https://robot.hetzner.com/doc/webservice/en.html
+servers:
+- url: https://robot-ws.your-server.de
+security:
+- BasicAuth: []
+paths:
+  /failover/{ip}:
+    get:
+      operationId: failoverGet
+      summary: Get failover
+      description: Query specific failover IP address data
+      tags:
+      - failover
+      parameters:
+      - name: ip
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Failover ip address
+      - name: query
+        in: query
+        required: false
+        description: Additional ad-hoc query parameters as accepted by Hetzner.
+        schema:
+          type: object
+          additionalProperties: true
+        style: form
+        explode: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FailoverGetResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: failoverRoute
+      summary: Route failover
+      description: Switch routing of failover IP address to another server
+      tags:
+      - failover
+      parameters:
+      - name: ip
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Failover ip address
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                active_server_ip:
+                  type: string
+                  description: Target server ip address
+              required:
+              - active_server_ip
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FailoverRouteResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      operationId: failoverDelete
+      summary: Delete failover routing
+      description: Delete the routing of a failover IP
+      tags:
+      - failover
+      parameters:
+      - name: ip
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Failover IP address
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FailoverDeleteResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /failover:
+    get:
+      operationId: failoverGetAll
+      summary: Get failover (collection)
+      description: Query failover data for all servers
+      tags:
+      - failover
+      parameters:
+      - name: query
+        in: query
+        required: false
+        description: Additional ad-hoc query parameters as accepted by Hetzner.
+        schema:
+          type: object
+          additionalProperties: true
+        style: form
+        explode: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FailoverGetAllResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /reset/{server_number}:
+    get:
+      operationId: resetGet
+      summary: Get server reset
+      description: Query reset options for a specific server
+      tags:
+      - reset
+      parameters:
+      - name: server_number
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResetGetResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: resetExecute
+      summary: Execute server reset
+      description: Execute reset on specific server
+      tags:
+      - reset
+      parameters:
+      - name: server_number
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                type:
+                  type: string
+                  description: Reset type
+              required:
+              - type
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResetExecuteResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /reset:
+    get:
+      operationId: resetGetAll
+      summary: Get server reset (collection)
+      description: Query reset options for all servers
+      tags:
+      - reset
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ResetGetAllResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /boot/{server_number}:
+    get:
+      operationId: bootGet
+      summary: Get current boot config
+      description: Query the current boot configuration status for a server. There can be only one configuration active at
+        any time for one server.
+      tags:
+      - boot
+      parameters:
+      - name: server_number
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BootGetResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /boot/{server_number}/rescue:
+    get:
+      operationId: rescueGet
+      summary: Get server rescue data
+      description: Query boot options for the Rescue System
+      tags:
+      - boot
+      parameters:
+      - name: server_number
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RescueGetResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      operationId: rescueDeactivate
+      summary: Deactivate rescue system for a server
+      description: Deactivate Rescue System
+      tags:
+      - boot
+      parameters:
+      - name: server_number
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RescueDeactivateResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /boot/{server_number}/rescue/last:
+    get:
+      operationId: rescueGetLast
+      summary: Get data of last rescue system activation
+      description: Show data of last rescue activation
+      tags:
+      - boot
+      parameters:
+      - name: server_number
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RescueGetLastResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /boot/{server_number}/linux:
+    get:
+      operationId: linuxGet
+      summary: Get linux data
+      description: Query boot options for the Linux installation
+      tags:
+      - boot
+      parameters:
+      - name: server_number
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LinuxGetResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      operationId: linuxDeactivate
+      summary: Deactivate linux installation
+      description: Deactivate Linux installation
+      tags:
+      - boot
+      parameters:
+      - name: server_number
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LinuxDeactivateResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /boot/{server_number}/linux/last:
+    get:
+      operationId: linuxGetLast
+      summary: Get data of last linux installation activation
+      description: Show data of last Linux installation
+      tags:
+      - boot
+      parameters:
+      - name: server_number
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LinuxGetLastResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /boot/{server_number}/vnc:
+    get:
+      operationId: vncGet
+      summary: Get vnc data
+      description: Query boot options for the VNC installation
+      tags:
+      - boot
+      parameters:
+      - name: server_number
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Server main ip
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VncGetResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: vncActivate
+      summary: Activate vnc installation
+      description: Activate VNC installation
+      tags:
+      - boot
+      parameters:
+      - name: server_number
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                dist:
+                  type: string
+                  description: Distribution identifier
+                arch:
+                  type: string
+                  description: Architecture
+                lang:
+                  type: string
+                  description: Language
+              required:
+              - dist
+              - arch
+              - lang
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VncActivateResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      operationId: vncDeactivate
+      summary: Deactivate vnc installation
+      description: Deactivate VNC installation
+      tags:
+      - boot
+      parameters:
+      - name: server_number
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VncDeactivateResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /boot/{server_number}/windows:
+    get:
+      operationId: windowsGet
+      summary: Get windows data
+      description: Query boot options for the windows installation
+      tags:
+      - boot
+      parameters:
+      - name: server_number
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WindowsGetResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: windowsActivate
+      summary: Activate windows installation
+      description: Activate Windows installation. You need to order the Windows addon for the server via the Robot webpanel
+        first. After a reboot, the installation will start, and all data on the server will be deleted.
+      tags:
+      - boot
+      parameters:
+      - name: server_number
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WindowsActivateResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      operationId: windowsDeactivate
+      summary: Deactivate windows installation
+      description: Deactivate Windows installation
+      tags:
+      - boot
+      parameters:
+      - name: server_number
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WindowsDeactivateResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /wol/{server_number}:
+    get:
+      operationId: wolGet
+      summary: Get Wake On Lan data
+      description: Query Wake On LAN data
+      tags:
+      - wol
+      parameters:
+      - name: server_number
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WolGetResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: wolSend
+      summary: Send Wake On Lan packet to server
+      description: Send Wake On LAN packet to server
+      tags:
+      - wol
+      parameters:
+      - name: server_number
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WolSendResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /rdns/{ip}:
+    get:
+      operationId: rdnsGet
+      summary: Get rdns entry for ip
+      description: Query the current reverse DNS entry for one IP address
+      tags:
+      - rdns
+      parameters:
+      - name: ip
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RdnsGetResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      operationId: rdnsCreate
+      summary: Create rdns entry for ip
+      description: Create new reverse DNS entry for one IP address. Once the reverse DNS entry is successfully created, the
+        status code 201 CREATED is returned.
+      tags:
+      - rdns
+      parameters:
+      - name: ip
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                ptr:
+                  type: string
+                  description: PTR record
+              required:
+              - ptr
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RdnsCreateResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: rdnsUpdate
+      summary: Update rdns entry for ip
+      description: Update/create a reverse DNS entry for one IP. Once the reverse DNS entry is successfully created, the status
+        code is set to 201 created. On succesfull updates, the status code is 200 OK.
+      tags:
+      - rdns
+      parameters:
+      - name: ip
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                ptr:
+                  type: string
+                  description: PTR record
+              required:
+              - ptr
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RdnsUpdateResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      operationId: rdnsDelete
+      summary: Delete rdns entry for ip
+      description: Delete reverse DNS entry for one IP
+      tags:
+      - rdns
+      parameters:
+      - name: ip
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Success
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /server:
+    get:
+      operationId: serverGetAll
+      summary: Get all servers
+      description: Query data of all servers
+      tags:
+      - server
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ServerGetAllResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /server/{server_number}:
+    get:
+      operationId: serverGet
+      summary: Get server by main ip
+      description: Query server data for a specific server
+      tags:
+      - server
+      parameters:
+      - name: server_number
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerGetResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: servernameUpdate
+      summary: Update servername
+      description: Update server name for a specific server
+      tags:
+      - server
+      parameters:
+      - name: server_number
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                server_name:
+                  type: string
+                  description: Servername
+              required:
+              - server_name
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServernameUpdateResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /server/{server_number}/cancellation:
+    get:
+      operationId: serverCancellationGet
+      summary: Get cancellation data of a server
+      description: Query cancellation data for a server
+      tags:
+      - server
+      parameters:
+      - name: server_number
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerCancellationGetResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: serverCancel
+      summary: Cancel a server
+      description: Cancel a server
+      tags:
+      - server
+      parameters:
+      - name: server_number
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerCancelResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      operationId: serverCancellationDelete
+      summary: Revoke a server cancellation
+      description: Withdraw a server cancellation
+      tags:
+      - server
+      parameters:
+      - name: server_number
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Success
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /ip:
+    get:
+      operationId: ipGetByServerIp
+      summary: Get all single ips of specific server
+      description: Query list of all single IP addresses
+      tags:
+      - ip
+      parameters:
+      - name: server_ip
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Server main ip
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IpGetByServerIpResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /ip/{ip}:
+    get:
+      operationId: ipGet
+      summary: Get ip
+      description: Query data for a specific IP address
+      tags:
+      - ip
+      parameters:
+      - name: ip
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IpGetResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: ipSetTrafficWarningLimits
+      summary: Set traffic warning limits for single ip
+      description: Update traffic warning options for an IP address
+      tags:
+      - ip
+      parameters:
+      - name: ip
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                traffic_hourly:
+                  type: integer
+                  description: Hourly traffic in megabyte
+                traffic_daily:
+                  type: integer
+                  description: Daily traffic in megabyte
+                traffic_monthly:
+                  type: integer
+                  description: Montly traffic in gigabyte
+              required:
+              - traffic_hourly
+              - traffic_daily
+              - traffic_monthly
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IpSetTrafficWarningLimitsResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /subnet:
+    get:
+      operationId: subnetGetByServerIp
+      summary: Get all subnets of specific server
+      description: Query list of all subnets
+      tags:
+      - subnet
+      parameters:
+      - name: server_ip
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Server main ip
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SubnetGetByServerIpResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /subnet/{ip}:
+    get:
+      operationId: subnetGet
+      summary: Get subnet
+      description: Query data of a specific subnet
+      tags:
+      - subnet
+      parameters:
+      - name: ip
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Net ip
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubnetGetResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: subnetSetTrafficWarningLimits
+      summary: Set traffic warning limits for subnet
+      description: Update traffic warning options for an subnet
+      tags:
+      - subnet
+      parameters:
+      - name: ip
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Net ip
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                traffic_hourly:
+                  type: integer
+                  description: Hourly traffic in megabyte
+                traffic_daily:
+                  type: integer
+                  description: Daily traffic in megabyte
+                traffic_monthly:
+                  type: integer
+                  description: Monthly traffic in gigabyte
+              required:
+              - traffic_hourly
+              - traffic_daily
+              - traffic_monthly
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubnetSetTrafficWarningLimitsResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /traffic:
+    post:
+      operationId: trafficGet
+      summary: Get traffic for single ips and subnets
+      description: "Query traffic data of IPs and subnets. There are three query types: \"day\", \"month\" and \"year\". \n\
+        With \"day\" you can query hourly aggregated traffic data within a day. With \"month\" you can query daily aggregated\
+        \ data within a month. And with \"year\" it is possible to get monthly aggregated data within a year."
+      tags:
+      - traffic
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrafficGetResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /ip/{ip}/mac:
+    get:
+      operationId: separateMacGet
+      summary: Get separate mac for a single ip
+      description: Query if it is possible to set a separate MAC address.Returns the MAC address if it is set.
+      tags:
+      - ip
+      parameters:
+      - name: ip
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SeparateMacGetResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      operationId: separateMacCreate
+      summary: Create separate mac for a single ip
+      description: Generate a separate MAC address
+      tags:
+      - ip
+      parameters:
+      - name: ip
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SeparateMacCreateResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      operationId: separateMacDelete
+      summary: Delete separate mac for a single ip
+      description: Remove a separate MAC address
+      tags:
+      - ip
+      parameters:
+      - name: ip
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SeparateMacDeleteResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /subnet/{ip}/mac:
+    get:
+      operationId: subnetMacGet
+      summary: Get the mac address of a ipv6 subnet
+      description: Query if it is possible to set a separate MAC address.
+      tags:
+      - subnet
+      parameters:
+      - name: ip
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubnetMacGetResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      operationId: subnetMacSet
+      summary: Set the mac address of a ipv6 subnet
+      description: Generate a separate MAC address
+      tags:
+      - subnet
+      parameters:
+      - name: ip
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                mac:
+                  type: string
+                  description: Target MAC address
+              required:
+              - mac
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubnetMacSetResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      operationId: subnetMacReset
+      summary: Reset the mac address of a ipv6 subnet to the
+      description: Remove a separate MAC address and set it to the default value (The MAC address of the servers main IP address).###
+        Request limit
+      tags:
+      - subnet
+      parameters:
+      - name: ip
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubnetMacResetResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /key/{fingerprint}:
+    get:
+      operationId: keyGet
+      summary: Get a specific ssh public key
+      description: Query a specific SSH key
+      tags:
+      - key
+      parameters:
+      - name: fingerprint
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KeyGetResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: keyUpdate
+      summary: Update the name of a key
+      description: Update the key name
+      tags:
+      - key
+      parameters:
+      - name: fingerprint
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The key fingerprint
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The key name
+              required:
+              - name
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KeyUpdateResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      operationId: keyDelete
+      summary: Remove a ssh public key
+      description: Remove public key
+      tags:
+      - key
+      parameters:
+      - name: fingerprint
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The key fingerprint
+      responses:
+        '204':
+          description: Success
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /key:
+    post:
+      operationId: keyCreate
+      summary: Save a new ssh public key
+      description: Add a new SSH key. Once the key is successfully added, the status code 201 CREATED is returned.
+      tags:
+      - key
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Key name
+                data:
+                  type: string
+                  description: Key data in OpenSSH or SSH2 (RFC4716) format
+              required:
+              - name
+              - data
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KeyCreateResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /order/server/product:
+    get:
+      operationId: orderServerProductGetAll
+      summary: Get all currently offered standard server products
+      description: Product overview of currently offered standard server products
+      tags:
+      - order
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderServerProductGetAllResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /order/server/product/{product_id}:
+    get:
+      operationId: orderServerProductGet
+      summary: Get data of a specific standard server product
+      description: Query a specific server product
+      tags:
+      - order
+      parameters:
+      - name: product_id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The product id
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderServerProductGetResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /order/server/transaction:
+    get:
+      operationId: orderServerTransactionGetAll
+      summary: Get all standard server orders of the last 30 days
+      description: Overview of all server orders within the last 30 days
+      tags:
+      - order
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderServerTransactionGetAllResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /order/server/transaction/{transaction_id}:
+    get:
+      operationId: orderServerTransactionGet
+      summary: Query the status of a specific server order
+      description: Query a specific order transaction
+      tags:
+      - order
+      parameters:
+      - name: transaction_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderServerTransactionGetResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /order/server_market/product:
+    get:
+      operationId: orderServerMarketProductGetAll
+      summary: Get all currently offered server market products
+      description: Product overview of currently offered server market products
+      tags:
+      - order
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderServerMarketProductGetAllResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /order/server_market/product/{product_id}:
+    get:
+      operationId: orderServerMarketProductGet
+      summary: Get data of a specifi server market product
+      description: Query a specific server market product
+      tags:
+      - order
+      parameters:
+      - name: product_id
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: The product id
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderServerMarketProductGetResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /order/server_market/transaction:
+    get:
+      operationId: orderServerMarketTransactionGetAll
+      summary: Get all server market orders of the last 30 days
+      description: Overview of all server orders within the last 30 days
+      tags:
+      - order
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderServerMarketTransactionGetAllResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /order/server_market/transaction/{transaction_id}:
+    get:
+      operationId: orderServerMarketTransactionGet
+      summary: Query the status of a specific server market order
+      description: Query a specific order transaction
+      tags:
+      - order
+      parameters:
+      - name: transaction_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderServerMarketTransactionGetResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /storagebox/{id}/snapshot:
+    get:
+      operationId: storageboxSnapshotGet
+      summary: Get all snapshots from a Storage Box
+      description: Query snapshots of a specific Storage Box
+      tags:
+      - storagebox
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StorageboxSnapshotGetResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: storageboxSnapshotCreate
+      summary: Creates a new snapshot from a Storage Box
+      description: Create new snapshot of a specific Storage Box
+      tags:
+      - storagebox
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StorageboxSnapshotCreateResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /storagebox/{id}/snapshot/{name}:
+    delete:
+      operationId: storageboxSnapshotDelete
+      summary: Deletes a snapshot from a Storage Box
+      description: Delete snapshot
+      tags:
+      - storagebox
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The snapshot name
+      responses:
+        '204':
+          description: Success
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: storageboxSnapshotRevert
+      summary: Reverts a snapshot from a Storage Box
+      description: Revert to snapshot
+      tags:
+      - storagebox
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The snapshot name
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /storagebox/{id}/snapshot/{name}/comment:
+    post:
+      operationId: storageboxSnapshotSetComment
+      summary: Set comment for a snapshot
+      description: Set comment of a specific snapshot
+      tags:
+      - storagebox
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The snapshot name
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /storagebox/{id}:
+    get:
+      operationId: storageboxGet
+      summary: Get Storage Box by id
+      description: Query data of a specific Storage Box
+      tags:
+      - storagebox
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: Storagebox id
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StorageboxGetResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: storageboxUpdate
+      summary: Updates a Storage Box
+      description: Update a specific Storage Box
+      tags:
+      - storagebox
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StorageboxUpdateResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /storagebox:
+    get:
+      operationId: storageboxGetAll
+      summary: Get all Storage Boxes
+      description: Query data of all Storage Boxes
+      tags:
+      - storagebox
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StorageboxGetAllResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /storagebox/{id}/dir:
+    get:
+      operationId: storageboxDirectoryListing
+      summary: Get directory listing of a StorageBox
+      tags:
+      - storagebox
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: Storagebox id
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /storagebox/{id}/snapshotplan:
+    get:
+      operationId: storageboxSnapshotPlanGet
+      summary: Get all snapshot plans for a Storage Box
+      description: Query data of the snapshot plan of a specific Storage Box
+      tags:
+      - storagebox
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StorageboxSnapshotPlanGetResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: storageboxSnapshotPlanEdit
+      summary: Creates a new snapshot plan for a Storage Box
+      description: Edit data of the snapshot plan of a specific Storage Box
+      tags:
+      - storagebox
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StorageboxSnapshotPlanEditResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /firewall/{server_number}/{port}:
+    get:
+      operationId: firewallGet
+      summary: Get firewall of server
+      tags:
+      - firewall
+      parameters:
+      - name: server_number
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: port
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Switch port, only needed when server has multiple ports, e.g. for KVM
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: firewallCreateOrUpdateFromTemplate
+      summary: Craete new firewall or update existing firewall from template
+      tags:
+      - firewall
+      parameters:
+      - name: server_number
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: port
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Switch port, only needed when server has multiple ports, e.g. for KVM
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                template_id:
+                  type: integer
+                  description: Firewall template ID
+              required:
+              - template_id
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      operationId: firewallDelete
+      summary: Delete firewall
+      tags:
+      - firewall
+      parameters:
+      - name: server_number
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: port
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Switch port, only needed when server has multiple ports, e.g. for KVM
+      responses:
+        '204':
+          description: Success
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /firewall/template:
+    get:
+      operationId: firewallTemplateGetAll
+      summary: Get all existing firewall templates
+      description: Get list of available firewall templates
+      tags:
+      - firewall
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FirewallTemplateGetAllResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: firewallTemplateCreate
+      summary: Create a new firewall template
+      description: Create a new firewall template
+      tags:
+      - firewall
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Name of template
+                filter_ipv6:
+                  type: boolean
+                  description: Enable or disable Ipv6 filtering
+                whitelist_hos:
+                  type: string
+                  description: Whitelist Hetzner services
+                is_default:
+                  type: string
+                  description: Use this template as default
+                rules:
+                  type: array
+                  items: {}
+                  description: Array of rules
+              required:
+              - name
+              - whitelist_hos
+              - is_default
+              - rules
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FirewallTemplateCreateResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /firewall/template/{template_id}:
+    get:
+      operationId: firewallTemplateGet
+      summary: Get a specific firewall template by ID
+      description: Get a specific firewall template
+      tags:
+      - firewall
+      parameters:
+      - name: template_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FirewallTemplateGetResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: firewallTemplateUpdateName
+      summary: Update a existing firewall template name
+      description: Update a firewall template
+      tags:
+      - firewall
+      parameters:
+      - name: template_id
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: Firewall template ID
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Name of template
+              required:
+              - name
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FirewallTemplateUpdateNameResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      operationId: firewallTemplateDelete
+      summary: Delete a firewall template
+      description: Delete a firewall template
+      tags:
+      - firewall
+      parameters:
+      - name: template_id
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: Firewall template ID
+      responses:
+        '204':
+          description: Success
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /storagebox/{id}/subaccount:
+    get:
+      operationId: storageboxSubAccountGet
+      summary: Get all sub accounts for a Storage Box
+      description: Query data of all sub-accounts of a specific Storage Box
+      tags:
+      - storagebox
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StorageboxSubAccountGetResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: storageboxSubAccountCreate
+      summary: Creates a new sub account for a Storage Box
+      description: 'Creates a sub-account.
+
+        By default, Robot generates a random password. Optionally, you may choose to provide your own password. Please make
+        sure that you pick a password that complies with our password guideline: The password must be between 12 and 128 characters
+        long The password can only contain these characters: a-z A-Z Ä Ö Ü ä ö ü ß 0-9 ^ ° ! § $ % / ( ) = ? + # - . , ; :
+        ~ * @ { } _ & The password must contain at least one upper case letter, one lower case letter, one number, and a special
+        character'
+      tags:
+      - storagebox
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StorageboxSubAccountCreateResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /storagebox/{id}/subaccount/{username}:
+    put:
+      operationId: storageboxSubAccountUpdate
+      summary: Updates a new sub account for a Storage Box
+      description: Update sub-account
+      tags:
+      - storagebox
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: username
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      operationId: storageboxSubAccountDelete
+      summary: Deletes a sub account for a Storage Box
+      description: Delete sub-account
+      tags:
+      - storagebox
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: username
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Success
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /storagebox/{id}/subaccount/{username}/password:
+    post:
+      operationId: storageboxSubAccountResetPassword
+      summary: Resets the password of a sub account
+      description: 'Reset password of sub-account.
+
+        By default, Robot generates a random password. Optionally, you may choose to provide your own password. Please make
+        sure that you pick a password that complies with our password guideline: The password must be between 12 and 128 characters
+        long The password can only contain these characters: a-z A-Z Ä Ö Ü ä ö ü ß 0-9 ^ ° ! § $ % / ( ) = ? + # - . , ; :
+        ~ * @ { } _ & The password must contain at least one upper case letter, one lower case letter, one number, and a special
+        character'
+      tags:
+      - storagebox
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: username
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StorageboxSubAccountResetPasswordResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /vswitch:
+    post:
+      operationId: vswitchCreate
+      summary: Create a new vSwitch
+      description: Create a new vSwitch
+      tags:
+      - vswitch
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VswitchCreateResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /vswitch/{vswitch_id}:
+    post:
+      operationId: vswitchChangeVlan
+      summary: Change the VLAN id of a vSwitch
+      description: Change the name or the VLAN ID of a vSwitch
+      tags:
+      - vswitch
+      parameters:
+      - name: vswitch_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                vlan:
+                  type: string
+                  description: VLAN ID
+              required:
+              - vlan
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      operationId: vswitchCancel
+      summary: Cancel a vSwitch
+      description: Cancel a vSwitch
+      tags:
+      - vswitch
+      parameters:
+      - name: vswitch_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                cancellation_date:
+                  type: string
+                  description: Date to which the vSwitch should be cancelled (format yyyy-MM-dd) or "now" to cancel immediately
+              required:
+              - cancellation_date
+      responses:
+        '204':
+          description: Success
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /vswitch/{vswitch_id}/server:
+    post:
+      operationId: vswitchAddServers
+      summary: Add servers to a vSwitch
+      description: Add one more servers to a vSwitch
+      tags:
+      - vswitch
+      parameters:
+      - name: vswitch_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                server:
+                  type: array
+                  items: {}
+                  description: Array of server numbers or main IPs
+              required:
+              - server
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      operationId: vswitchRemoveServers
+      summary: Remove servers from a vSwitch
+      description: Delete one more servers from a vSwitch
+      tags:
+      - vswitch
+      parameters:
+      - name: vswitch_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                server:
+                  type: array
+                  items: {}
+                  description: Array of server numbers or main IPs
+              required:
+              - server
+      responses:
+        '204':
+          description: Success
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            status:
+              type: integer
+            code:
+              type: string
+            message:
+              type: string
+            missing:
+              type: array
+              items:
+                type: string
+              nullable: true
+            invalid:
+              type: array
+              items:
+                type: string
+              nullable: true
+    FailoverGetResponseFailover:
+      type: object
+      properties:
+        ip:
+          type: string
+          format: ipv4
+        netmask:
+          type: string
+          format: ipv4
+        server_ip:
+          type: string
+          format: ipv4
+        server_ipv6_net:
+          type: string
+          format: ipv6
+        server_number:
+          type: integer
+        active_server_ip:
+          type: string
+          format: ipv4
+    FailoverGetResponse:
+      type: object
+      properties:
+        failover:
+          $ref: '#/components/schemas/FailoverGetResponseFailover'
+    FailoverGetAllResponseFailover:
+      type: object
+      properties:
+        ip:
+          type: string
+        netmask:
+          type: string
+        server_ip:
+          type: string
+          format: ipv4
+        server_ipv6_net:
+          type: string
+          format: ipv6
+        server_number:
+          type: integer
+        active_server_ip:
+          type: string
+    FailoverGetAllResponse:
+      type: object
+      properties:
+        failover:
+          $ref: '#/components/schemas/FailoverGetAllResponseFailover'
+    FailoverRouteResponseFailover:
+      type: object
+      properties:
+        ip:
+          type: string
+          format: ipv4
+        netmask:
+          type: string
+          format: ipv4
+        server_ip:
+          type: string
+          format: ipv4
+        server_ipv6_net:
+          type: string
+          format: ipv6
+        server_number:
+          type: integer
+        active_server_ip:
+          type: string
+          format: ipv4
+    FailoverRouteResponse:
+      type: object
+      properties:
+        failover:
+          $ref: '#/components/schemas/FailoverRouteResponseFailover'
+    FailoverDeleteResponseFailover:
+      type: object
+      properties:
+        ip:
+          type: string
+          format: ipv4
+        netmask:
+          type: string
+          format: ipv4
+        server_ip:
+          type: string
+          format: ipv4
+        server_ipv6_net:
+          type: string
+          format: ipv6
+        server_number:
+          type: integer
+        active_server_ip:
+          nullable: true
+    FailoverDeleteResponse:
+      type: object
+      properties:
+        failover:
+          $ref: '#/components/schemas/FailoverDeleteResponseFailover'
+    ResetGetResponseReset:
+      type: object
+      properties:
+        server_ip:
+          type: string
+          format: ipv4
+        server_ipv6_net:
+          type: string
+          format: ipv6
+        server_number:
+          type: integer
+        type:
+          type: array
+          items:
+            type: string
+        operating_status:
+          type: string
+    ResetGetResponse:
+      type: object
+      properties:
+        reset:
+          $ref: '#/components/schemas/ResetGetResponseReset'
+    ResetGetAllResponseReset:
+      type: object
+      properties:
+        server_ip:
+          type: string
+          format: ipv4
+        server_ipv6_net:
+          type: string
+          format: ipv6
+        server_number:
+          type: integer
+        type:
+          type: array
+          items:
+            type: string
+    ResetGetAllResponse:
+      type: object
+      properties:
+        reset:
+          $ref: '#/components/schemas/ResetGetAllResponseReset'
+    ResetExecuteResponseReset:
+      type: object
+      properties:
+        server_ip:
+          type: string
+          format: ipv4
+        server_ipv6_net:
+          type: string
+          format: ipv6
+        type:
+          type: string
+    ResetExecuteResponse:
+      type: object
+      properties:
+        reset:
+          $ref: '#/components/schemas/ResetExecuteResponseReset'
+    BootGetResponseBootWindows:
+      type: object
+      properties:
+        server_ip:
+          type: string
+          format: ipv4
+        server_ipv6_net:
+          type: string
+          format: ipv6
+        server_number:
+          type: integer
+        os:
+          type: array
+          items:
+            type: string
+        dist:
+          nullable: true
+        lang:
+          nullable: true
+        active:
+          type: boolean
+        password:
+          nullable: true
+    BootGetResponseBoot:
+      type: object
+      properties:
+        rescue:
+          type: object
+          additionalProperties:
+            nullable: true
+        linux:
+          type: object
+          additionalProperties:
+            nullable: true
+        vnc:
+          type: object
+          additionalProperties:
+            nullable: true
+        windows:
+          $ref: '#/components/schemas/BootGetResponseBootWindows'
+    BootGetResponse:
+      type: object
+      properties:
+        boot:
+          $ref: '#/components/schemas/BootGetResponseBoot'
+    RescueGetResponse:
+      type: object
+      properties:
+        rescue:
+          type: object
+          additionalProperties:
+            nullable: true
+    RescueDeactivateResponse:
+      type: object
+      properties:
+        rescue:
+          type: object
+          additionalProperties:
+            nullable: true
+    RescueGetLastResponse:
+      type: object
+      properties:
+        rescue:
+          type: object
+          additionalProperties:
+            nullable: true
+    LinuxGetResponse:
+      type: object
+      properties:
+        linux:
+          type: object
+          additionalProperties:
+            nullable: true
+    LinuxDeactivateResponse:
+      type: object
+      properties:
+        linux:
+          type: object
+          additionalProperties:
+            nullable: true
+    LinuxGetLastResponse:
+      type: object
+      properties:
+        linux:
+          type: object
+          additionalProperties: true
+    VncGetResponse:
+      type: object
+      properties:
+        vnc:
+          type: object
+          additionalProperties:
+            nullable: true
+    VncActivateResponse:
+      type: object
+      properties:
+        vnc:
+          type: object
+          additionalProperties: true
+    VncDeactivateResponse:
+      type: object
+      properties:
+        vnc:
+          type: object
+          additionalProperties:
+            nullable: true
+    WindowsGetResponseWindows:
+      type: object
+      properties:
+        server_ip:
+          type: string
+          format: ipv4
+        server_ipv6_net:
+          type: string
+          format: ipv6
+        server_number:
+          type: integer
+        dist:
+          type: array
+          items:
+            type: string
+        os:
+          type: array
+          items:
+            type: string
+        lang:
+          type: array
+          items:
+            type: string
+        active:
+          type: boolean
+        password:
+          nullable: true
+    WindowsGetResponse:
+      type: object
+      properties:
+        windows:
+          $ref: '#/components/schemas/WindowsGetResponseWindows'
+    WindowsActivateResponseWindows:
+      type: object
+      properties:
+        server_ip:
+          type: string
+          format: ipv4
+        server_ipv6_net:
+          type: string
+          format: ipv6
+        server_number:
+          type: integer
+        dist:
+          type: string
+        os:
+          type: string
+        lang:
+          type: string
+        active:
+          type: boolean
+        password:
+          type: string
+    WindowsActivateResponse:
+      type: object
+      properties:
+        windows:
+          $ref: '#/components/schemas/WindowsActivateResponseWindows'
+    WindowsDeactivateResponseWindows:
+      type: object
+      properties:
+        server_ip:
+          type: string
+          format: ipv4
+        server_ipv6_net:
+          type: string
+          format: ipv6
+        server_number:
+          type: integer
+        os:
+          type: array
+          items:
+            type: string
+        dist:
+          type: array
+          items:
+            type: string
+        lang:
+          type: array
+          items:
+            type: string
+        active:
+          type: boolean
+        password:
+          nullable: true
+    WindowsDeactivateResponse:
+      type: object
+      properties:
+        windows:
+          $ref: '#/components/schemas/WindowsDeactivateResponseWindows'
+    WolGetResponseWol:
+      type: object
+      properties:
+        server_ip:
+          type: string
+          format: ipv4
+        server_ipv6_net:
+          type: string
+          format: ipv6
+        server_number:
+          type: integer
+    WolGetResponse:
+      type: object
+      properties:
+        wol:
+          $ref: '#/components/schemas/WolGetResponseWol'
+    WolSendResponseWol:
+      type: object
+      properties:
+        server_ip:
+          type: string
+          format: ipv4
+        server_ipv6_net:
+          type: string
+          format: ipv6
+        server_number:
+          type: integer
+    WolSendResponse:
+      type: object
+      properties:
+        wol:
+          $ref: '#/components/schemas/WolSendResponseWol'
+    RdnsGetResponseRdns:
+      type: object
+      properties:
+        ip:
+          type: string
+          format: ipv4
+        ptr:
+          type: string
+    RdnsGetResponse:
+      type: object
+      properties:
+        rdns:
+          $ref: '#/components/schemas/RdnsGetResponseRdns'
+    RdnsCreateResponseRdns:
+      type: object
+      properties:
+        ip:
+          type: string
+          format: ipv4
+        ptr:
+          type: string
+    RdnsCreateResponse:
+      type: object
+      properties:
+        rdns:
+          $ref: '#/components/schemas/RdnsCreateResponseRdns'
+    RdnsUpdateResponseRdns:
+      type: object
+      properties:
+        ip:
+          type: string
+          format: ipv4
+        ptr:
+          type: string
+    RdnsUpdateResponse:
+      type: object
+      properties:
+        rdns:
+          $ref: '#/components/schemas/RdnsUpdateResponseRdns'
+    ServerGetAllResponseServerSubnet:
+      type: object
+      properties:
+        ip:
+          type: string
+          format: ipv6
+        mask:
+          type: string
+    ServerGetAllResponseServer:
+      type: object
+      properties:
+        server_ip:
+          type: string
+          format: ipv4
+        server_ipv6_net:
+          type: string
+          format: ipv6
+        server_number:
+          type: integer
+        server_name:
+          type: string
+        product:
+          type: string
+        dc:
+          type: string
+        traffic:
+          type: string
+        status:
+          type: string
+        cancelled:
+          type: boolean
+        paid_until:
+          type: string
+          format: date
+        ip:
+          type: array
+          items:
+            type: string
+            format: ipv4
+        subnet:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServerGetAllResponseServerSubnet'
+          nullable: true
+    ServerGetAllResponse:
+      type: object
+      properties:
+        server:
+          $ref: '#/components/schemas/ServerGetAllResponseServer'
+    ServerGetResponseServerSubnet:
+      type: object
+      properties:
+        ip:
+          type: string
+          format: ipv6
+        mask:
+          type: string
+    ServerGetResponseServer:
+      type: object
+      properties:
+        server_ip:
+          type: string
+          format: ipv4
+        server_ipv6_net:
+          type: string
+          format: ipv6
+        server_number:
+          type: integer
+        server_name:
+          type: string
+        product:
+          type: string
+        dc:
+          type: string
+        traffic:
+          type: string
+        status:
+          type: string
+        cancelled:
+          type: boolean
+        paid_until:
+          type: string
+          format: date
+        ip:
+          type: array
+          items:
+            type: string
+            format: ipv4
+        subnet:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServerGetResponseServerSubnet'
+        reset:
+          type: boolean
+        rescue:
+          type: boolean
+        vnc:
+          type: boolean
+        windows:
+          type: boolean
+        plesk:
+          type: boolean
+        cpanel:
+          type: boolean
+        wol:
+          type: boolean
+        hot_swap:
+          type: boolean
+        linked_storagebox:
+          type: integer
+    ServerGetResponse:
+      type: object
+      properties:
+        server:
+          $ref: '#/components/schemas/ServerGetResponseServer'
+    ServernameUpdateResponseServerSubnet:
+      type: object
+      properties:
+        ip:
+          type: string
+          format: ipv6
+        mask:
+          type: string
+    ServernameUpdateResponseServer:
+      type: object
+      properties:
+        server_ip:
+          type: string
+          format: ipv4
+        server_ipv6_net:
+          type: string
+          format: ipv6
+        server_number:
+          type: integer
+        server_name:
+          type: string
+        product:
+          type: string
+        dc:
+          type: string
+        traffic:
+          type: string
+        status:
+          type: string
+        cancelled:
+          type: boolean
+        paid_until:
+          type: string
+          format: date
+        ip:
+          type: array
+          items:
+            type: string
+            format: ipv4
+        subnet:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServernameUpdateResponseServerSubnet'
+        reset:
+          type: boolean
+        rescue:
+          type: boolean
+        vnc:
+          type: boolean
+        windows:
+          type: boolean
+        plesk:
+          type: boolean
+        cpanel:
+          type: boolean
+        wol:
+          type: boolean
+        hot_swap:
+          type: boolean
+    ServernameUpdateResponse:
+      type: object
+      properties:
+        server:
+          $ref: '#/components/schemas/ServernameUpdateResponseServer'
+    ServerCancellationGetResponseCancellation:
+      type: object
+      properties:
+        server_ip:
+          type: string
+          format: ipv4
+        server_ipv6_net:
+          type: string
+          format: ipv6
+        server_number:
+          type: integer
+        server_name:
+          type: string
+        earliest_cancellation_date:
+          type: string
+          format: date
+        cancelled:
+          type: boolean
+        reservation_possible:
+          type: boolean
+        reserved:
+          type: boolean
+        cancellation_date:
+          nullable: true
+        cancellation_reason:
+          type: array
+          items:
+            type: string
+    ServerCancellationGetResponse:
+      type: object
+      properties:
+        cancellation:
+          $ref: '#/components/schemas/ServerCancellationGetResponseCancellation'
+    ServerCancelResponseCancellation:
+      type: object
+      properties:
+        server_ip:
+          type: string
+          format: ipv4
+        server_ipv6_net:
+          type: string
+          format: ipv6
+        server_number:
+          type: integer
+        server_name:
+          type: string
+        earliest_cancellation_date:
+          type: string
+          format: date
+        cancelled:
+          type: boolean
+        reserved:
+          type: boolean
+        reservation_possible:
+          type: boolean
+        cancellation_date:
+          type: string
+          format: date
+        cancellation_reason:
+          nullable: true
+    ServerCancelResponse:
+      type: object
+      properties:
+        cancellation:
+          $ref: '#/components/schemas/ServerCancelResponseCancellation'
+    IpGetAllResponseIp:
+      type: object
+      properties:
+        ip:
+          type: string
+          format: ipv4
+        server_ip:
+          type: string
+          format: ipv4
+        server_number:
+          type: integer
+        locked:
+          type: boolean
+        separate_mac:
+          nullable: true
+        traffic_warnings:
+          type: boolean
+        traffic_hourly:
+          type: integer
+        traffic_daily:
+          type: integer
+        traffic_monthly:
+          type: integer
+    IpGetAllResponse:
+      type: object
+      properties:
+        ip:
+          $ref: '#/components/schemas/IpGetAllResponseIp'
+    IpGetByServerIpResponseIp:
+      type: object
+      properties:
+        ip:
+          type: string
+          format: ipv4
+        server_ip:
+          type: string
+          format: ipv4
+        server_number:
+          type: integer
+        locked:
+          type: boolean
+        separate_mac:
+          nullable: true
+        traffic_warnings:
+          type: boolean
+        traffic_hourly:
+          type: integer
+        traffic_daily:
+          type: integer
+        traffic_monthly:
+          type: integer
+    IpGetByServerIpResponse:
+      type: object
+      properties:
+        ip:
+          $ref: '#/components/schemas/IpGetByServerIpResponseIp'
+    IpGetResponseIp:
+      type: object
+      properties:
+        ip:
+          type: string
+          format: ipv4
+        gateway:
+          type: string
+          format: ipv4
+        mask:
+          type: integer
+        broadcast:
+          type: string
+          format: ipv4
+        server_ip:
+          type: string
+          format: ipv4
+        server_number:
+          type: integer
+        locked:
+          type: boolean
+        separate_mac:
+          nullable: true
+        traffic_warnings:
+          type: boolean
+        traffic_hourly:
+          type: integer
+        traffic_daily:
+          type: integer
+        traffic_monthly:
+          type: integer
+    IpGetResponse:
+      type: object
+      properties:
+        ip:
+          $ref: '#/components/schemas/IpGetResponseIp'
+    IpEnableTrafficWarningsResponseIp:
+      type: object
+      properties:
+        ip:
+          type: string
+          format: ipv4
+        gateway:
+          type: string
+          format: ipv4
+        mask:
+          type: integer
+        broadcast:
+          type: string
+          format: ipv4
+        server_ip:
+          type: string
+          format: ipv4
+        server_number:
+          type: integer
+        locked:
+          type: boolean
+        separate_mac:
+          nullable: true
+        traffic_warnings:
+          type: boolean
+        traffic_hourly:
+          type: integer
+        traffic_daily:
+          type: integer
+        traffic_monthly:
+          type: integer
+    IpEnableTrafficWarningsResponse:
+      type: object
+      properties:
+        ip:
+          $ref: '#/components/schemas/IpEnableTrafficWarningsResponseIp'
+    IpDisableTrafficWarningsResponseIp:
+      type: object
+      properties:
+        ip:
+          type: string
+          format: ipv4
+        gateway:
+          type: string
+          format: ipv4
+        mask:
+          type: integer
+        broadcast:
+          type: string
+          format: ipv4
+        server_ip:
+          type: string
+          format: ipv4
+        server_number:
+          type: integer
+        locked:
+          type: boolean
+        separate_mac:
+          nullable: true
+        traffic_warnings:
+          type: boolean
+        traffic_hourly:
+          type: integer
+        traffic_daily:
+          type: integer
+        traffic_monthly:
+          type: integer
+    IpDisableTrafficWarningsResponse:
+      type: object
+      properties:
+        ip:
+          $ref: '#/components/schemas/IpDisableTrafficWarningsResponseIp'
+    IpSetTrafficWarningLimitsResponseIp:
+      type: object
+      properties:
+        ip:
+          type: string
+          format: ipv4
+        gateway:
+          type: string
+          format: ipv4
+        mask:
+          type: integer
+        broadcast:
+          type: string
+          format: ipv4
+        server_ip:
+          type: string
+          format: ipv4
+        server_number:
+          type: integer
+        locked:
+          type: boolean
+        separate_mac:
+          nullable: true
+        traffic_warnings:
+          type: boolean
+        traffic_hourly:
+          type: integer
+        traffic_daily:
+          type: integer
+        traffic_monthly:
+          type: integer
+    IpSetTrafficWarningLimitsResponse:
+      type: object
+      properties:
+        ip:
+          $ref: '#/components/schemas/IpSetTrafficWarningLimitsResponseIp'
+    SubnetGetAllResponseSubnet:
+      type: object
+      properties:
+        ip:
+          type: string
+          format: ipv4
+        mask:
+          type: integer
+        gateway:
+          type: string
+          format: ipv4
+        server_ip:
+          type: string
+          nullable: true
+          format: ipv4
+        server_number:
+          type: integer
+        failover:
+          type: boolean
+        locked:
+          type: boolean
+        traffic_warnings:
+          type: boolean
+        traffic_hourly:
+          type: integer
+        traffic_daily:
+          type: integer
+        traffic_monthly:
+          type: integer
+    SubnetGetAllResponse:
+      type: object
+      properties:
+        subnet:
+          $ref: '#/components/schemas/SubnetGetAllResponseSubnet'
+    SubnetGetByServerIpResponseSubnet:
+      type: object
+      properties:
+        ip:
+          type: string
+          format: ipv4
+        mask:
+          type: integer
+        gateway:
+          type: string
+          format: ipv4
+        server_ip:
+          type: string
+          nullable: true
+          format: ipv4
+        server_number:
+          type: integer
+        failover:
+          type: boolean
+        locked:
+          type: boolean
+        traffic_warnings:
+          type: boolean
+        traffic_hourly:
+          type: integer
+        traffic_daily:
+          type: integer
+        traffic_monthly:
+          type: integer
+    SubnetGetByServerIpResponse:
+      type: object
+      properties:
+        subnet:
+          $ref: '#/components/schemas/SubnetGetByServerIpResponseSubnet'
+    SubnetGetResponseSubnet:
+      type: object
+      properties:
+        ip:
+          type: string
+          format: ipv4
+        mask:
+          type: integer
+        gateway:
+          type: string
+          format: ipv4
+        server_ip:
+          type: string
+          format: ipv4
+        server_number:
+          type: integer
+        failover:
+          type: boolean
+        locked:
+          type: boolean
+        traffic_warnings:
+          type: boolean
+        traffic_hourly:
+          type: integer
+        traffic_daily:
+          type: integer
+        traffic_monthly:
+          type: integer
+    SubnetGetResponse:
+      type: object
+      properties:
+        subnet:
+          $ref: '#/components/schemas/SubnetGetResponseSubnet'
+    SubnetEnableTrafficWarningsResponseSubnet:
+      type: object
+      properties:
+        ip:
+          type: string
+          format: ipv4
+        mask:
+          type: integer
+        gateway:
+          type: string
+          format: ipv4
+        server_ip:
+          type: string
+          format: ipv4
+        server_number:
+          type: integer
+        failover:
+          type: boolean
+        locked:
+          type: boolean
+        traffic_warnings:
+          type: boolean
+        traffic_hourly:
+          type: integer
+        traffic_daily:
+          type: integer
+        traffic_monthly:
+          type: integer
+    SubnetEnableTrafficWarningsResponse:
+      type: object
+      properties:
+        subnet:
+          $ref: '#/components/schemas/SubnetEnableTrafficWarningsResponseSubnet'
+    SubnetDisableTrafficWarningsResponseSubnet:
+      type: object
+      properties:
+        ip:
+          type: string
+          format: ipv4
+        mask:
+          type: integer
+        gateway:
+          type: string
+          format: ipv4
+        server_ip:
+          type: string
+          format: ipv4
+        server_number:
+          type: integer
+        failover:
+          type: boolean
+        locked:
+          type: boolean
+        traffic_warnings:
+          type: boolean
+        traffic_hourly:
+          type: integer
+        traffic_daily:
+          type: integer
+        traffic_monthly:
+          type: integer
+    SubnetDisableTrafficWarningsResponse:
+      type: object
+      properties:
+        subnet:
+          $ref: '#/components/schemas/SubnetDisableTrafficWarningsResponseSubnet'
+    SubnetSetTrafficWarningLimitsResponseSubnet:
+      type: object
+      properties:
+        ip:
+          type: string
+          format: ipv4
+        mask:
+          type: integer
+        gateway:
+          type: string
+          format: ipv4
+        server_ip:
+          type: string
+          format: ipv4
+        server_number:
+          type: integer
+        failover:
+          type: boolean
+        locked:
+          type: boolean
+        traffic_warnings:
+          type: boolean
+        traffic_hourly:
+          type: integer
+        traffic_daily:
+          type: integer
+        traffic_monthly:
+          type: integer
+    SubnetSetTrafficWarningLimitsResponse:
+      type: object
+      properties:
+        subnet:
+          $ref: '#/components/schemas/SubnetSetTrafficWarningLimitsResponseSubnet'
+    TrafficGetResponseTraffic:
+      type: object
+      properties:
+        type:
+          type: string
+        from:
+          type: string
+          format: date
+        to:
+          type: string
+          format: date
+        data:
+          type: object
+          additionalProperties:
+            type: object
+            properties:
+              in:
+                type: number
+              out:
+                type: number
+              sum:
+                type: number
+    TrafficGetResponse:
+      type: object
+      properties:
+        traffic:
+          $ref: '#/components/schemas/TrafficGetResponseTraffic'
+    SeparateMacGetResponseMac:
+      type: object
+      properties:
+        ip:
+          type: string
+          format: ipv4
+        mac:
+          type: string
+    SeparateMacGetResponse:
+      type: object
+      properties:
+        mac:
+          $ref: '#/components/schemas/SeparateMacGetResponseMac'
+    SeparateMacCreateResponseMac:
+      type: object
+      properties:
+        ip:
+          type: string
+          format: ipv4
+        mac:
+          type: string
+    SeparateMacCreateResponse:
+      type: object
+      properties:
+        mac:
+          $ref: '#/components/schemas/SeparateMacCreateResponseMac'
+    SeparateMacDeleteResponseMac:
+      type: object
+      properties:
+        ip:
+          type: string
+          format: ipv4
+        mac:
+          nullable: true
+    SeparateMacDeleteResponse:
+      type: object
+      properties:
+        mac:
+          $ref: '#/components/schemas/SeparateMacDeleteResponseMac'
+    SubnetMacGetResponseMac:
+      type: object
+      properties:
+        ip:
+          type: string
+          format: ipv6
+        mask:
+          type: string
+        mac:
+          type: string
+        possible_mac:
+          type: object
+          additionalProperties:
+            type: string
+    SubnetMacGetResponse:
+      type: object
+      properties:
+        mac:
+          $ref: '#/components/schemas/SubnetMacGetResponseMac'
+    SubnetMacSetResponseMac:
+      type: object
+      properties:
+        ip:
+          type: string
+          format: ipv6
+        mask:
+          type: string
+        mac:
+          type: string
+        possible_mac:
+          type: object
+          additionalProperties:
+            type: string
+    SubnetMacSetResponse:
+      type: object
+      properties:
+        mac:
+          $ref: '#/components/schemas/SubnetMacSetResponseMac'
+    SubnetMacResetResponseMac:
+      type: object
+      properties:
+        ip:
+          type: string
+          format: ipv6
+        mask:
+          type: string
+        mac:
+          type: string
+        possible_mac:
+          type: object
+          additionalProperties:
+            type: string
+    SubnetMacResetResponse:
+      type: object
+      properties:
+        mac:
+          $ref: '#/components/schemas/SubnetMacResetResponseMac'
+    KeyGetResponseKey:
+      type: object
+      properties:
+        name:
+          type: string
+        fingerprint:
+          type: string
+        type:
+          type: string
+        size:
+          type: integer
+        data:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+    KeyGetResponse:
+      type: object
+      properties:
+        key:
+          $ref: '#/components/schemas/KeyGetResponseKey'
+    KeyCreateResponseKey:
+      type: object
+      properties:
+        name:
+          type: string
+        fingerprint:
+          type: string
+        type:
+          type: string
+        size:
+          type: integer
+        data:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+    KeyCreateResponse:
+      type: object
+      properties:
+        key:
+          $ref: '#/components/schemas/KeyCreateResponseKey'
+    KeyUpdateResponseKey:
+      type: object
+      properties:
+        name:
+          type: string
+        fingerprint:
+          type: string
+        type:
+          type: string
+        size:
+          type: integer
+        data:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+    KeyUpdateResponse:
+      type: object
+      properties:
+        key:
+          $ref: '#/components/schemas/KeyUpdateResponseKey'
+    OrderServerProductGetAllResponseProduct:
+      type: object
+      properties: {}
+    OrderServerProductGetAllResponse:
+      type: object
+      properties:
+        product:
+          $ref: '#/components/schemas/OrderServerProductGetAllResponseProduct'
+    OrderServerProductGetResponse:
+      type: object
+      properties:
+        product:
+          type: object
+          additionalProperties: true
+    OrderServerTransactionGetAllResponseTransactionAuthorizedKeyKey:
+      type: object
+      properties:
+        name:
+          type: string
+        fingerprint:
+          type: string
+        type:
+          type: string
+        size:
+          type: integer
+    OrderServerTransactionGetAllResponseTransactionAuthorizedKey:
+      type: object
+      properties:
+        key:
+          $ref: '#/components/schemas/OrderServerTransactionGetAllResponseTransactionAuthorizedKeyKey'
+    OrderServerTransactionGetAllResponseTransactionHostKeyKey:
+      type: object
+      properties:
+        fingerprint:
+          type: string
+        type:
+          type: string
+        size:
+          type: integer
+    OrderServerTransactionGetAllResponseTransactionHostKey:
+      type: object
+      properties:
+        key:
+          $ref: '#/components/schemas/OrderServerTransactionGetAllResponseTransactionHostKeyKey'
+    OrderServerTransactionGetAllResponseTransactionProduct:
+      type: object
+      properties: {}
+    OrderServerTransactionGetAllResponseTransaction:
+      type: object
+      properties:
+        id:
+          type: string
+        date:
+          type: string
+          format: date-time
+        status:
+          type: string
+        server_number:
+          type: integer
+          nullable: true
+        server_ip:
+          type: string
+          nullable: true
+          format: ipv4
+        authorized_key:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderServerTransactionGetAllResponseTransactionAuthorizedKey'
+        host_key:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderServerTransactionGetAllResponseTransactionHostKey'
+        comment:
+          nullable: true
+        product:
+          $ref: '#/components/schemas/OrderServerTransactionGetAllResponseTransactionProduct'
+        addons:
+          type: array
+          items:
+            type: string
+    OrderServerTransactionGetAllResponse:
+      type: object
+      properties:
+        transaction:
+          $ref: '#/components/schemas/OrderServerTransactionGetAllResponseTransaction'
+    OrderServerTransactionGetResponseTransactionAuthorizedKeyKey:
+      type: object
+      properties:
+        name:
+          type: string
+        fingerprint:
+          type: string
+        type:
+          type: string
+        size:
+          type: integer
+    OrderServerTransactionGetResponseTransactionAuthorizedKey:
+      type: object
+      properties:
+        key:
+          $ref: '#/components/schemas/OrderServerTransactionGetResponseTransactionAuthorizedKeyKey'
+    OrderServerTransactionGetResponseTransactionHostKeyKey:
+      type: object
+      properties:
+        fingerprint:
+          type: string
+        type:
+          type: string
+        size:
+          type: integer
+    OrderServerTransactionGetResponseTransactionHostKey:
+      type: object
+      properties:
+        key:
+          $ref: '#/components/schemas/OrderServerTransactionGetResponseTransactionHostKeyKey'
+    OrderServerTransactionGetResponseTransaction:
+      type: object
+      properties:
+        id:
+          type: string
+        date:
+          type: string
+          format: date-time
+        status:
+          type: string
+        server_number:
+          type: integer
+        server_ip:
+          type: string
+          format: ipv4
+        authorized_key:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderServerTransactionGetResponseTransactionAuthorizedKey'
+        host_key:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderServerTransactionGetResponseTransactionHostKey'
+        comment:
+          nullable: true
+        product:
+          type: object
+          additionalProperties: true
+        addons:
+          type: array
+          items:
+            type: string
+    OrderServerTransactionGetResponse:
+      type: object
+      properties:
+        transaction:
+          $ref: '#/components/schemas/OrderServerTransactionGetResponseTransaction'
+    OrderServerMarketProductGetAllResponseProduct:
+      type: object
+      properties: {}
+    OrderServerMarketProductGetAllResponse:
+      type: object
+      properties:
+        product:
+          $ref: '#/components/schemas/OrderServerMarketProductGetAllResponseProduct'
+    OrderServerMarketProductGetResponse:
+      type: object
+      properties:
+        product:
+          type: object
+          additionalProperties: true
+    OrderServerMarketTransactionGetAllResponseTransactionAuthorizedKeyKey:
+      type: object
+      properties:
+        name:
+          type: string
+        fingerprint:
+          type: string
+        type:
+          type: string
+        size:
+          type: integer
+    OrderServerMarketTransactionGetAllResponseTransactionAuthorizedKey:
+      type: object
+      properties:
+        key:
+          $ref: '#/components/schemas/OrderServerMarketTransactionGetAllResponseTransactionAuthorizedKeyKey'
+    OrderServerMarketTransactionGetAllResponseTransactionHostKeyKey:
+      type: object
+      properties:
+        fingerprint:
+          type: string
+        type:
+          type: string
+        size:
+          type: integer
+    OrderServerMarketTransactionGetAllResponseTransactionHostKey:
+      type: object
+      properties:
+        key:
+          $ref: '#/components/schemas/OrderServerMarketTransactionGetAllResponseTransactionHostKeyKey'
+    OrderServerMarketTransactionGetAllResponseTransactionProduct:
+      type: object
+      properties: {}
+    OrderServerMarketTransactionGetAllResponseTransaction:
+      type: object
+      properties:
+        id:
+          type: string
+        date:
+          type: string
+          format: date-time
+        status:
+          type: string
+        server_number:
+          type: integer
+          nullable: true
+        server_ip:
+          type: string
+          nullable: true
+          format: ipv4
+        authorized_key:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderServerMarketTransactionGetAllResponseTransactionAuthorizedKey'
+        host_key:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderServerMarketTransactionGetAllResponseTransactionHostKey'
+        comment:
+          nullable: true
+        product:
+          $ref: '#/components/schemas/OrderServerMarketTransactionGetAllResponseTransactionProduct'
+    OrderServerMarketTransactionGetAllResponse:
+      type: object
+      properties:
+        transaction:
+          $ref: '#/components/schemas/OrderServerMarketTransactionGetAllResponseTransaction'
+    OrderServerMarketTransactionGetResponseTransactionAuthorizedKeyKey:
+      type: object
+      properties:
+        name:
+          type: string
+        fingerprint:
+          type: string
+        type:
+          type: string
+        size:
+          type: integer
+    OrderServerMarketTransactionGetResponseTransactionAuthorizedKey:
+      type: object
+      properties:
+        key:
+          $ref: '#/components/schemas/OrderServerMarketTransactionGetResponseTransactionAuthorizedKeyKey'
+    OrderServerMarketTransactionGetResponseTransaction:
+      type: object
+      properties:
+        id:
+          type: string
+        date:
+          type: string
+          format: date-time
+        status:
+          type: string
+        server_number:
+          nullable: true
+        server_ip:
+          nullable: true
+        authorized_key:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderServerMarketTransactionGetResponseTransactionAuthorizedKey'
+        host_key:
+          type: array
+          items: {}
+        comment:
+          nullable: true
+        product:
+          type: object
+          additionalProperties: true
+        addons:
+          type: array
+          items:
+            type: string
+    OrderServerMarketTransactionGetResponse:
+      type: object
+      properties:
+        transaction:
+          $ref: '#/components/schemas/OrderServerMarketTransactionGetResponseTransaction'
+    StorageboxSnapshotGetResponseSnapshot:
+      type: object
+      properties:
+        name:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        size:
+          type: integer
+        filesystem_size:
+          type: integer
+        automatic:
+          type: boolean
+        comment:
+          type: string
+    StorageboxSnapshotGetResponse:
+      type: object
+      properties:
+        snapshot:
+          $ref: '#/components/schemas/StorageboxSnapshotGetResponseSnapshot'
+    StorageboxSnapshotCreateResponseSnapshot:
+      type: object
+      properties:
+        name:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        size:
+          type: integer
+    StorageboxSnapshotCreateResponse:
+      type: object
+      properties:
+        snapshot:
+          $ref: '#/components/schemas/StorageboxSnapshotCreateResponseSnapshot'
+    StorageboxGetResponseStoragebox:
+      type: object
+      properties:
+        id:
+          type: integer
+        login:
+          type: string
+        name:
+          type: string
+        product:
+          type: string
+        cancelled:
+          type: boolean
+        locked:
+          type: boolean
+        location:
+          type: string
+        linked_server:
+          type: integer
+        paid_until:
+          type: string
+          format: date
+        disk_quota:
+          type: integer
+        disk_usage:
+          type: integer
+        disk_usage_data:
+          type: integer
+        disk_usage_snapshots:
+          type: integer
+        webdav:
+          type: boolean
+        samba:
+          type: boolean
+        ssh:
+          type: boolean
+        external_reachability:
+          type: boolean
+        zfs:
+          type: boolean
+        server:
+          type: string
+        host_system:
+          type: string
+    StorageboxGetResponse:
+      type: object
+      properties:
+        storagebox:
+          $ref: '#/components/schemas/StorageboxGetResponseStoragebox'
+    StorageboxGetAllResponseStoragebox:
+      type: object
+      properties:
+        id:
+          type: integer
+        login:
+          type: string
+        name:
+          type: string
+        product:
+          type: string
+        cancelled:
+          type: boolean
+        locked:
+          type: boolean
+        location:
+          type: string
+        linked_server:
+          type: integer
+        paid_until:
+          type: string
+          format: date
+    StorageboxGetAllResponse:
+      type: object
+      properties:
+        storagebox:
+          $ref: '#/components/schemas/StorageboxGetAllResponseStoragebox'
+    StorageboxSnapshotPlanGetResponseSnapshotplan:
+      type: object
+      properties:
+        status:
+          type: string
+        minute:
+          type: integer
+        hour:
+          type: integer
+        day_of_week:
+          type: integer
+        day_of_month:
+          nullable: true
+        month:
+          nullable: true
+        max_snapshots:
+          type: integer
+    StorageboxSnapshotPlanGetResponse:
+      type: object
+      properties:
+        snapshotplan:
+          $ref: '#/components/schemas/StorageboxSnapshotPlanGetResponseSnapshotplan'
+    StorageboxSnapshotPlanEditResponseSnapshotplan:
+      type: object
+      properties:
+        status:
+          type: string
+        minute:
+          type: integer
+        hour:
+          type: integer
+        day_of_week:
+          type: integer
+        day_of_month:
+          nullable: true
+        month:
+          nullable: true
+        max_snapshots:
+          type: integer
+    StorageboxSnapshotPlanEditResponse:
+      type: object
+      properties:
+        snapshotplan:
+          $ref: '#/components/schemas/StorageboxSnapshotPlanEditResponseSnapshotplan'
+    FirewallTemplateGetAllResponseFirewallTemplate:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        filter_ipv6:
+          type: boolean
+        whitelist_hos:
+          type: boolean
+        is_default:
+          type: boolean
+    FirewallTemplateGetAllResponse:
+      type: object
+      properties:
+        firewall_template:
+          $ref: '#/components/schemas/FirewallTemplateGetAllResponseFirewallTemplate'
+    FirewallTemplateCreateResponseFirewallTemplateRulesInput:
+      type: object
+      properties:
+        ip_version:
+          type: string
+        name:
+          type: string
+        dst_ip:
+          nullable: true
+        src_ip:
+          type: string
+          nullable: true
+          format: ipv4
+        dst_port:
+          type: string
+        src_port:
+          nullable: true
+        protocol:
+          nullable: true
+        tcp_flags:
+          nullable: true
+        action:
+          type: string
+    FirewallTemplateCreateResponseFirewallTemplateRulesOutput:
+      type: object
+      properties:
+        ip_version:
+          nullable: true
+        name:
+          type: string
+        dst_ip:
+          nullable: true
+        src_ip:
+          nullable: true
+        dst_port:
+          nullable: true
+        src_port:
+          nullable: true
+        protocol:
+          nullable: true
+        tcp_flags:
+          nullable: true
+        action:
+          type: string
+    FirewallTemplateCreateResponseFirewallTemplateRules:
+      type: object
+      properties:
+        input:
+          type: array
+          items:
+            $ref: '#/components/schemas/FirewallTemplateCreateResponseFirewallTemplateRulesInput'
+        output:
+          type: array
+          items:
+            $ref: '#/components/schemas/FirewallTemplateCreateResponseFirewallTemplateRulesOutput'
+    FirewallTemplateCreateResponseFirewallTemplate:
+      type: object
+      properties:
+        id:
+          type: integer
+        filter_ipv6:
+          type: boolean
+        whitelist_hos:
+          type: boolean
+        is_default:
+          type: boolean
+        rules:
+          $ref: '#/components/schemas/FirewallTemplateCreateResponseFirewallTemplateRules'
+    FirewallTemplateCreateResponse:
+      type: object
+      properties:
+        firewall_template:
+          $ref: '#/components/schemas/FirewallTemplateCreateResponseFirewallTemplate'
+    FirewallTemplateGetResponseFirewallTemplateRulesInput:
+      type: object
+      properties:
+        ip_version:
+          type: string
+        name:
+          type: string
+        dst_ip:
+          nullable: true
+        src_ip:
+          type: string
+          nullable: true
+          format: ipv4
+        dst_port:
+          type: string
+        src_port:
+          nullable: true
+        protocol:
+          nullable: true
+        tcp_flags:
+          nullable: true
+        action:
+          type: string
+    FirewallTemplateGetResponseFirewallTemplateRulesOutput:
+      type: object
+      properties:
+        ip_version:
+          nullable: true
+        name:
+          type: string
+        dst_ip:
+          nullable: true
+        src_ip:
+          nullable: true
+        dst_port:
+          nullable: true
+        src_port:
+          nullable: true
+        protocol:
+          nullable: true
+        tcp_flags:
+          nullable: true
+        action:
+          type: string
+    FirewallTemplateGetResponseFirewallTemplateRules:
+      type: object
+      properties:
+        input:
+          type: array
+          items:
+            $ref: '#/components/schemas/FirewallTemplateGetResponseFirewallTemplateRulesInput'
+        output:
+          type: array
+          items:
+            $ref: '#/components/schemas/FirewallTemplateGetResponseFirewallTemplateRulesOutput'
+    FirewallTemplateGetResponseFirewallTemplate:
+      type: object
+      properties:
+        id:
+          type: integer
+        filter_ipv6:
+          type: boolean
+        whitelist_hos:
+          type: boolean
+        is_default:
+          type: boolean
+        rules:
+          $ref: '#/components/schemas/FirewallTemplateGetResponseFirewallTemplateRules'
+    FirewallTemplateGetResponse:
+      type: object
+      properties:
+        firewall_template:
+          $ref: '#/components/schemas/FirewallTemplateGetResponseFirewallTemplate'
+    FirewallTemplateUpdateResponseFirewallTemplateRulesInput:
+      type: object
+      properties:
+        ip_version:
+          type: string
+        name:
+          type: string
+        dst_ip:
+          nullable: true
+        src_ip:
+          type: string
+          nullable: true
+          format: ipv4
+        dst_port:
+          type: string
+        src_port:
+          nullable: true
+        protocol:
+          type: string
+          nullable: true
+        tcp_flags:
+          nullable: true
+        action:
+          type: string
+    FirewallTemplateUpdateResponseFirewallTemplateRulesOutput:
+      type: object
+      properties:
+        ip_version:
+          nullable: true
+        name:
+          type: string
+        dst_ip:
+          nullable: true
+        src_ip:
+          nullable: true
+        dst_port:
+          nullable: true
+        src_port:
+          nullable: true
+        protocol:
+          nullable: true
+        tcp_flags:
+          nullable: true
+        action:
+          type: string
+    FirewallTemplateUpdateResponseFirewallTemplateRules:
+      type: object
+      properties:
+        input:
+          type: array
+          items:
+            $ref: '#/components/schemas/FirewallTemplateUpdateResponseFirewallTemplateRulesInput'
+        output:
+          type: array
+          items:
+            $ref: '#/components/schemas/FirewallTemplateUpdateResponseFirewallTemplateRulesOutput'
+    FirewallTemplateUpdateResponseFirewallTemplate:
+      type: object
+      properties:
+        id:
+          type: integer
+        filter_ipv6:
+          type: boolean
+        whitelist_hos:
+          type: boolean
+        is_default:
+          type: boolean
+        rules:
+          $ref: '#/components/schemas/FirewallTemplateUpdateResponseFirewallTemplateRules'
+    FirewallTemplateUpdateResponse:
+      type: object
+      properties:
+        firewall_template:
+          $ref: '#/components/schemas/FirewallTemplateUpdateResponseFirewallTemplate'
+    FirewallTemplateUpdateNameResponseFirewallTemplateRulesInput:
+      type: object
+      properties:
+        ip_version:
+          type: string
+        name:
+          type: string
+        dst_ip:
+          nullable: true
+        src_ip:
+          type: string
+          nullable: true
+          format: ipv4
+        dst_port:
+          type: string
+        src_port:
+          nullable: true
+        protocol:
+          type: string
+          nullable: true
+        tcp_flags:
+          nullable: true
+        action:
+          type: string
+    FirewallTemplateUpdateNameResponseFirewallTemplateRulesOutput:
+      type: object
+      properties:
+        ip_version:
+          nullable: true
+        name:
+          type: string
+        dst_ip:
+          nullable: true
+        src_ip:
+          nullable: true
+        dst_port:
+          nullable: true
+        src_port:
+          nullable: true
+        protocol:
+          nullable: true
+        tcp_flags:
+          nullable: true
+        action:
+          type: string
+    FirewallTemplateUpdateNameResponseFirewallTemplateRules:
+      type: object
+      properties:
+        input:
+          type: array
+          items:
+            $ref: '#/components/schemas/FirewallTemplateUpdateNameResponseFirewallTemplateRulesInput'
+        output:
+          type: array
+          items:
+            $ref: '#/components/schemas/FirewallTemplateUpdateNameResponseFirewallTemplateRulesOutput'
+    FirewallTemplateUpdateNameResponseFirewallTemplate:
+      type: object
+      properties:
+        id:
+          type: integer
+        filter_ipv6:
+          type: boolean
+        whitelist_hos:
+          type: boolean
+        is_default:
+          type: boolean
+        rules:
+          $ref: '#/components/schemas/FirewallTemplateUpdateNameResponseFirewallTemplateRules'
+    FirewallTemplateUpdateNameResponse:
+      type: object
+      properties:
+        firewall_template:
+          $ref: '#/components/schemas/FirewallTemplateUpdateNameResponseFirewallTemplate'
+    StorageboxSubAccountGetResponseSubaccount:
+      type: object
+      properties:
+        username:
+          type: string
+        accountid:
+          type: string
+        server:
+          type: string
+        homedirectory:
+          type: string
+        samba:
+          type: boolean
+        ssh:
+          type: boolean
+        external_reachability:
+          type: boolean
+        webdav:
+          type: boolean
+        readonly:
+          type: boolean
+        createtime:
+          type: string
+          format: date-time
+        comment:
+          type: string
+    StorageboxSubAccountGetResponse:
+      type: object
+      properties:
+        subaccount:
+          $ref: '#/components/schemas/StorageboxSubAccountGetResponseSubaccount'
+    StorageboxSubAccountCreateResponseSubaccount:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+        accountid:
+          type: string
+        server:
+          type: string
+        homedirectory:
+          type: string
+    StorageboxSubAccountCreateResponse:
+      type: object
+      properties:
+        subaccount:
+          $ref: '#/components/schemas/StorageboxSubAccountCreateResponseSubaccount'
+    StorageboxUpdateResponseStoragebox:
+      type: object
+      properties:
+        id:
+          type: integer
+        login:
+          type: string
+        name:
+          type: string
+        product:
+          type: string
+        cancelled:
+          type: boolean
+        locked:
+          type: boolean
+        location:
+          type: string
+        linked_server:
+          type: integer
+        paid_until:
+          type: string
+          format: date
+        disk_quota:
+          type: integer
+        disk_usage:
+          type: integer
+        disk_usage_data:
+          type: integer
+        disk_usage_snapshots:
+          type: integer
+        webdav:
+          type: boolean
+        samba:
+          type: boolean
+        ssh:
+          type: boolean
+        external_reachability:
+          type: boolean
+        zfs:
+          type: boolean
+        server:
+          type: string
+        host_system:
+          type: string
+    StorageboxUpdateResponse:
+      type: object
+      properties:
+        storagebox:
+          $ref: '#/components/schemas/StorageboxUpdateResponseStoragebox'
+    StorageboxSubAccountResetPasswordResponse:
+      type: object
+      properties:
+        password:
+          type: string
+    VswitchCreateResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        vlan:
+          type: integer
+        cancelled:
+          type: boolean
+        server:
+          type: array
+          items: {}
+        subnet:
+          type: array
+          items: {}
+        cloud_network:
+          type: array
+          items: {}

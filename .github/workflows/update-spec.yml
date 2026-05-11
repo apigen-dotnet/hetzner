@@ -1,0 +1,128 @@
+name: Update OpenAPI Spec
+
+on:
+  schedule:
+    - cron: '0 18 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update-spec:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.x'
+
+      - name: Install Python deps
+        run: pip install pyyaml beautifulsoup4
+
+      - name: Read upstream config and download specs
+        id: config
+        run: |
+          if [ ! -f specs/upstream.toml ]; then
+            echo "No specs/upstream.toml found"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          enabled=$(grep '^enabled' specs/upstream.toml | sed 's/.*= *//' | tr -d '"' | tr -d "'")
+          if [ "$enabled" != "true" ]; then
+            echo "Upstream spec fetching is disabled"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          echo "skip=false" >> "$GITHUB_OUTPUT"
+
+          urls=()
+          targets=()
+          in_source=false
+          current_url=""
+          current_target=""
+
+          while IFS= read -r line; do
+            line=$(echo "$line" | sed 's/^[[:space:]]*//' | sed 's/[[:space:]]*$//')
+            if [[ "$line" == "[[sources]]" ]]; then
+              if [ -n "$current_url" ] && [ -n "$current_target" ]; then
+                urls+=("$current_url")
+                targets+=("$current_target")
+              fi
+              current_url=""
+              current_target=""
+              in_source=true
+              continue
+            fi
+            if [ "$in_source" = true ]; then
+              if [[ "$line" == url* ]]; then
+                current_url=$(echo "$line" | sed 's/.*= *//' | tr -d '"')
+              elif [[ "$line" == target* ]]; then
+                current_target=$(echo "$line" | sed 's/.*= *//' | tr -d '"')
+              fi
+            fi
+          done < specs/upstream.toml
+
+          if [ -n "$current_url" ] && [ -n "$current_target" ]; then
+            urls+=("$current_url")
+            targets+=("$current_target")
+          fi
+
+          if [ ${#urls[@]} -eq 0 ]; then
+            echo "No [[sources]] found in upstream.toml"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          for i in "${!urls[@]}"; do
+            echo "  Downloading: ${urls[$i]}"
+            echo "  Target: ${targets[$i]}"
+            curl -fsSL "${urls[$i]}" -o "${targets[$i]}"
+          done
+
+      - name: Rebuild Robot OpenAPI spec from PHP + HTML docs
+        if: steps.config.outputs.skip != 'true'
+        run: python3 tools/build_robot_spec.py --refresh
+
+      - name: Check for changes
+        if: steps.config.outputs.skip != 'true'
+        id: diff
+        run: |
+          if git diff --quiet specs/; then
+            echo "No changes detected"
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "Changes detected"
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create Pull Request
+        if: steps.config.outputs.skip != 'true' && steps.diff.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b update-openapi-spec
+          git add specs/
+          git commit -m "chore: update upstream OpenAPI specs"
+          git push -f origin update-openapi-spec
+
+          EXISTING_PR=$(gh pr list --head update-openapi-spec --json number --jq '.[0].number')
+          if [ -n "$EXISTING_PR" ]; then
+            echo "PR #$EXISTING_PR already exists, branch updated"
+          else
+            gh pr create \
+              --title "chore: update upstream OpenAPI specs" \
+              --body "Automated update of the upstream OpenAPI specifications.
+
+          - Cloud and unified API specs re-downloaded from docs.hetzner.cloud.
+          - Robot spec rebuilt from the PHP reference client and HTML docs.
+
+          Please review the changes and merge if appropriate."
+          fi

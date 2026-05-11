@@ -1,0 +1,9 @@
+enabled = true
+
+[[sources]]
+url = "https://docs.hetzner.cloud/cloud.spec.json"
+target = "specs/cloud.spec.json"
+
+[[sources]]
+url = "https://docs.hetzner.cloud/hetzner.spec.json"
+target = "specs/api.spec.json"

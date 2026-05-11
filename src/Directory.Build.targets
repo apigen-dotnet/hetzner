@@ -1,0 +1,29 @@
+<Project>
+  <!-- Bundle the paired Models DLL into each Client package output. -->
+  <PropertyGroup Condition="'$(MSBuildProjectName)' == 'Apigen.Hetzner.Cloud'">
+    <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);IncludeCloudModelsInPackage</TargetsForTfmSpecificBuildOutput>
+  </PropertyGroup>
+  <Target Name="IncludeCloudModelsInPackage">
+    <ItemGroup>
+      <BuildOutputInPackage Include="$(OutputPath)Apigen.Hetzner.Cloud.Models.dll" />
+    </ItemGroup>
+  </Target>
+
+  <PropertyGroup Condition="'$(MSBuildProjectName)' == 'Apigen.Hetzner.Api'">
+    <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);IncludeApiModelsInPackage</TargetsForTfmSpecificBuildOutput>
+  </PropertyGroup>
+  <Target Name="IncludeApiModelsInPackage">
+    <ItemGroup>
+      <BuildOutputInPackage Include="$(OutputPath)Apigen.Hetzner.Api.Models.dll" />
+    </ItemGroup>
+  </Target>
+
+  <PropertyGroup Condition="'$(MSBuildProjectName)' == 'Apigen.Hetzner.Robot'">
+    <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);IncludeRobotModelsInPackage</TargetsForTfmSpecificBuildOutput>
+  </PropertyGroup>
+  <Target Name="IncludeRobotModelsInPackage">
+    <ItemGroup>
+      <BuildOutputInPackage Include="$(OutputPath)Apigen.Hetzner.Robot.Models.dll" />
+    </ItemGroup>
+  </Target>
+</Project>

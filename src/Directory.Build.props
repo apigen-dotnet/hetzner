@@ -1,0 +1,56 @@
+<Project>
+  <PropertyGroup>
+    <Authors>Frank Hommers</Authors>
+    <Company>Initialize.nl</Company>
+    <Copyright>Copyright (c) Frank Hommers / Initialize.nl</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/apigen-dotnet/hetzner</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/apigen-dotnet/hetzner</RepositoryUrl>
+  </PropertyGroup>
+
+  <!-- Generated Models projects: not directly packed; bundled into their paired Client package. -->
+  <PropertyGroup Condition="$(MSBuildProjectName.EndsWith('.Models'))">
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <!-- Hetzner Cloud API client package. -->
+  <PropertyGroup Condition="'$(MSBuildProjectName)' == 'Apigen.Hetzner.Cloud'">
+    <PackageId>Apigen.Hetzner.Cloud</PackageId>
+    <Version>1.0.0</Version>
+    <Description>Generated C# client for the Hetzner Cloud API (api.hetzner.cloud/v1).</Description>
+    <PackageTags>hetzner;hetzner-cloud;api;client;openapi;apigen;cloud;vps;servers</PackageTags>
+    <PackageReadmeFile>NUGET.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <!-- Hetzner unified API client package (DNS, etc. — api.hetzner.com/v1). -->
+  <PropertyGroup Condition="'$(MSBuildProjectName)' == 'Apigen.Hetzner.Api'">
+    <PackageId>Apigen.Hetzner.Api</PackageId>
+    <Version>1.0.0</Version>
+    <Description>Generated C# client for the Hetzner API (api.hetzner.com/v1).</Description>
+    <PackageTags>hetzner;api;client;openapi;apigen;dns</PackageTags>
+    <PackageReadmeFile>NUGET.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <!-- Hetzner Robot Webservice client package. -->
+  <PropertyGroup Condition="'$(MSBuildProjectName)' == 'Apigen.Hetzner.Robot'">
+    <PackageId>Apigen.Hetzner.Robot</PackageId>
+    <Version>1.0.0</Version>
+    <Description>Generated C# client for the Hetzner Robot Webservice (robot-ws.your-server.de).</Description>
+    <PackageTags>hetzner;hetzner-robot;dedicated;api;client;openapi;apigen</PackageTags>
+    <PackageReadmeFile>NUGET.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <!-- Umbrella meta-package: depends on all three clients. -->
+  <PropertyGroup Condition="'$(MSBuildProjectName)' == 'Apigen.Hetzner'">
+    <PackageId>Apigen.Hetzner</PackageId>
+    <Version>1.0.0</Version>
+    <Description>Hetzner umbrella package — installs Apigen.Hetzner.Cloud, .Api and .Robot together.</Description>
+    <PackageTags>hetzner;api;client;openapi;apigen;meta-package</PackageTags>
+    <PackageReadmeFile>NUGET.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <!-- All packable Client projects share the NUGET.md readme. -->
+  <ItemGroup Condition="'$(IsPackable)' != 'false' AND '$(MSBuildProjectName)' != ''">
+    <None Include="../../NUGET.md" Pack="true" PackagePath="/" Condition="Exists('../../NUGET.md')" />
+  </ItemGroup>
+</Project>

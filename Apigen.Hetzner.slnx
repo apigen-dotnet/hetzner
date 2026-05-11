@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Apigen.Hetzner/Apigen.Hetzner.csproj" />
+    <Project Path="src/Apigen.Hetzner.Cloud/Apigen.Hetzner.Cloud.csproj" />
+    <Project Path="src/Apigen.Hetzner.Cloud.Models/Apigen.Hetzner.Cloud.Models.csproj" />
+    <Project Path="src/Apigen.Hetzner.Api/Apigen.Hetzner.Api.csproj" />
+    <Project Path="src/Apigen.Hetzner.Api.Models/Apigen.Hetzner.Api.Models.csproj" />
+    <Project Path="src/Apigen.Hetzner.Robot/Apigen.Hetzner.Robot.csproj" />
+    <Project Path="src/Apigen.Hetzner.Robot.Models/Apigen.Hetzner.Robot.Models.csproj" />
+  </Folder>
+</Solution>

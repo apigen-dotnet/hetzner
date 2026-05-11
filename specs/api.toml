@@ -1,0 +1,61 @@
+output_path = "src"
+target_framework = "net10.0"
+generate_nullable_reference_types = true
+generate_data_annotations = true
+
+global_usings = [
+    "System.Text.Json.Serialization"
+]
+
+[[specs]]
+path = "specs/api.spec.json"
+path_prefix = ""
+
+[models]
+namespace = "Apigen.Hetzner.Api.Models"
+project_name = "Apigen.Hetzner.Api.Models"
+
+[model_generation]
+strategy = "SeparateWithDeduplication"
+
+[enum_generation]
+generation_mode = "Raw"
+add_json_string_enum_converter = true
+add_json_string_enum_member_name = true
+
+[serialization]
+nullable_for_optional_properties = true
+ignore_condition = "WhenWritingNull"
+
+[client]
+generate_client = true
+namespace = "Apigen.Hetzner.Api"
+project_name = "Apigen.Hetzner.Api"
+client_class_name = "HetznerApiClient"
+use_async_suffix = true
+generate_interfaces = true
+
+[client.request_organization]
+strategy = "individual_files"
+directory = "Requests"
+include_base_classes = true
+
+[client.authentication]
+token_header = "Authorization"
+required_headers = []
+
+[naming]
+acronyms = { IPs = "Ips", IP = "Ip", SSH = "Ssh", URL = "Url", ID = "Id", IDs = "Ids", DNS = "Dns", ISO = "Iso" }
+stop_words = ["a", "an", "the", "of", "for", "to", "from", "by"]
+
+[formatting]
+use_spaces = true
+indent_width = 2
+
+[header]
+include_header = true
+include_timestamp = false
+include_source = true
+include_generator_info = true
+include_config_info = false
+custom_text = "Hetzner API Client - Auto-generated from OpenAPI specification"
