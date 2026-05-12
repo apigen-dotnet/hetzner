@@ -22,4 +22,22 @@
     <ProjectReference Include="../Apigen.Hetzner.Robot/Apigen.Hetzner.Robot.csproj" PrivateAssets="all" />
   </ItemGroup>
 
+  <!--
+    Runtime dependencies of the bundled sub-client DLLs.
+
+    PrivateAssets="all" on the sub-project ProjectReferences (above) strips
+    BOTH the project link (intended — these aren't separate NuGet packages)
+    AND their transitive PackageReferences (side effect) from the umbrella
+    .nupkg's <dependencies>. We re-declare them here so consumers get the
+    correct transitive closure when they install Apigen.Hetzner.
+
+    Keep in sync with the PackageReferences in:
+      src/Apigen.Hetzner.Cloud/Apigen.Hetzner.Cloud.csproj
+      src/Apigen.Hetzner.Api/Apigen.Hetzner.Api.csproj
+      src/Apigen.Hetzner.Robot/Apigen.Hetzner.Robot.csproj
+  -->
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
+  </ItemGroup>
+
 </Project>
