@@ -21,10 +21,10 @@ using System.Text.Json.Serialization;
 namespace Apigen.Hetzner.Robot.Models;
 
 /// <summary>
-/// Transaction4 from OpenAPI schema.
-/// Schema path: #/components/schemas/Transaction4
+/// Transaction5 from OpenAPI schema.
+/// Schema path: #/components/schemas/Transaction5
 /// </summary>
-public partial class Transaction4
+public partial class Transaction5
 {
   [System.Text.Json.Serialization.JsonPropertyName("id")]
   public string? Id { get; set; }
@@ -36,20 +36,23 @@ public partial class Transaction4
   public string? Status { get; set; }
 
   [System.Text.Json.Serialization.JsonPropertyName("server_number")]
-  public int? ServerNumber { get; set; }
+  public object? ServerNumber { get; set; }
 
   [System.Text.Json.Serialization.JsonPropertyName("server_ip")]
-  public string? ServerIp { get; set; }
+  public object? ServerIp { get; set; }
 
   [System.Text.Json.Serialization.JsonPropertyName("authorized_key")]
   public List<AuthorizedKey>? AuthorizedKey { get; set; }
 
   [System.Text.Json.Serialization.JsonPropertyName("host_key")]
-  public List<HostKey>? HostKey { get; set; }
+  public List<object?>? HostKey { get; set; }
 
   [System.Text.Json.Serialization.JsonPropertyName("comment")]
   public object? Comment { get; set; }
 
   [System.Text.Json.Serialization.JsonPropertyName("product")]
-  public Product? Product { get; set; }
+  public object? Product { get; set; }
+
+  [System.Text.Json.Serialization.JsonPropertyName("addons")]
+  public List<string?>? Addons { get; set; }
 }

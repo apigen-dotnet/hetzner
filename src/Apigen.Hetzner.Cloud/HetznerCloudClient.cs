@@ -12,7 +12,7 @@ namespace Apigen.Hetzner.Cloud;
 /// <summary>
 /// Main API client for accessing all resources
 /// </summary>
-public partial class HetznerCloudClient
+public partial class HetznerCloudClient : IDisposable
 {
   private readonly HttpClient _httpClient;
   private readonly bool _disposeHttpClient;

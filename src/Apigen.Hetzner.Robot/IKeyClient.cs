@@ -12,6 +12,18 @@ namespace Apigen.Hetzner.Robot;
 public partial interface IKeyClient
 {
   /// <summary>
+  /// Get all ssh public keys
+  /// Operation: GET /key
+  /// </summary>
+  Task<List<KeyGetAllResponse>> ListAsync(KeyGetAllRequest? request = null);
+
+  /// <summary>
+  /// Save a new ssh public key
+  /// Operation: POST /key
+  /// </summary>
+  Task<KeyCreateResponse> CreateAsync(Apigen.Hetzner.Robot.Models.KeyCreateRequest keyCreateRequest);
+
+  /// <summary>
   /// Get a specific ssh public key
   /// Operation: GET /key/{fingerprint}
   /// </summary>
@@ -28,11 +40,5 @@ public partial interface IKeyClient
   /// Operation: DELETE /key/{fingerprint}
   /// </summary>
   Task DeleteAsync(string fingerprint);
-
-  /// <summary>
-  /// Save a new ssh public key
-  /// Operation: POST /key
-  /// </summary>
-  Task<KeyCreateResponse> CreateAsync(Apigen.Hetzner.Robot.Models.KeyCreateRequest keyCreateRequest);
 
 }

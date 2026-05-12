@@ -21,11 +21,11 @@ using System.Text.Json.Serialization;
 namespace Apigen.Hetzner.Robot.Models;
 
 /// <summary>
-/// OrderServerMarketTransactionGetAllResponse from OpenAPI schema.
-/// Schema path: #/components/schemas/OrderServerMarketTransactionGetAllResponse
+/// RescueActivateResponse from OpenAPI schema.
+/// Schema path: #/components/schemas/RescueActivateResponse
 /// </summary>
-public partial class OrderServerMarketTransactionGetAllResponse
+public partial class RescueActivateResponse
 {
-  [System.Text.Json.Serialization.JsonPropertyName("transaction")]
-  public Transaction4? Transaction { get; set; }
+  [System.Text.Json.Serialization.JsonPropertyName("rescue")]
+  public object? Rescue { get; set; }
 }

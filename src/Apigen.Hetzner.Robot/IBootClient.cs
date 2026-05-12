@@ -24,6 +24,12 @@ public partial interface IBootClient
   Task<RescueGetResponse> RescueGetAsync(string serverNumber);
 
   /// <summary>
+  /// Activate rescue system for a server
+  /// Operation: POST /boot/{server_number}/rescue
+  /// </summary>
+  Task<RescueActivateResponse> RescueActivateAsync(string serverNumber, Apigen.Hetzner.Robot.Models.RescueActivateRequest rescueActivateRequest);
+
+  /// <summary>
   /// Deactivate rescue system for a server
   /// Operation: DELETE /boot/{server_number}/rescue
   /// </summary>
@@ -40,6 +46,12 @@ public partial interface IBootClient
   /// Operation: GET /boot/{server_number}/linux
   /// </summary>
   Task<LinuxGetResponse> LinuxGetAsync(string serverNumber);
+
+  /// <summary>
+  /// Activate linux installation
+  /// Operation: POST /boot/{server_number}/linux
+  /// </summary>
+  Task<LinuxActivateResponse> LinuxActivateAsync(string serverNumber, Apigen.Hetzner.Robot.Models.LinuxActivateRequest linuxActivateRequest);
 
   /// <summary>
   /// Deactivate linux installation

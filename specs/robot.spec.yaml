@@ -301,6 +301,54 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+    post:
+      operationId: rescueActivate
+      summary: Activate rescue system for a server
+      description: Activate Rescue System
+      tags:
+      - boot
+      parameters:
+      - name: server_number
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                os:
+                  type: string
+                  description: Operating system to boot
+                arch:
+                  type: string
+                  description: Architecture of operating system
+                authorized_key:
+                  type: array
+                  items: {}
+                  description: One or more SSH key fingerprints (optional)
+                keyboard:
+                  type: string
+                  description: 'Desired keyboard layout (optional, default: us)'
+              required:
+              - os
+              - arch
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RescueActivateResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
     delete:
       operationId: rescueDeactivate
       summary: Deactivate rescue system for a server
@@ -372,6 +420,55 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/LinuxGetResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: linuxActivate
+      summary: Activate linux installation
+      description: Activate Linux installation
+      tags:
+      - boot
+      parameters:
+      - name: server_number
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                dist:
+                  type: string
+                  description: Distribution identifier
+                arch:
+                  type: string
+                  description: Architecture
+                lang:
+                  type: string
+                  description: Language
+                authorized_key:
+                  type: array
+                  items: {}
+                  description: One or more SSH key fingerprints (optional)
+              required:
+              - dist
+              - arch
+              - lang
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LinuxActivateResponse'
         default:
           description: Error
           content:
@@ -1323,6 +1420,73 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /key:
+    get:
+      operationId: keyGetAll
+      summary: Get all ssh public keys
+      description: Query all SSH keys
+      tags:
+      - key
+      parameters:
+      - name: query
+        in: query
+        required: false
+        description: Additional ad-hoc query parameters as accepted by Hetzner.
+        schema:
+          type: object
+          additionalProperties: true
+        style: form
+        explode: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/KeyGetAllResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: keyCreate
+      summary: Save a new ssh public key
+      description: Add a new SSH key. Once the key is successfully added, the status code 201 CREATED is returned.
+      tags:
+      - key
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Key name
+                data:
+                  type: string
+                  description: Key data in OpenSSH or SSH2 (RFC4716) format
+              required:
+              - name
+              - data
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KeyCreateResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /key/{fingerprint}:
     get:
       operationId: keyGet
@@ -1409,42 +1573,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /key:
-    post:
-      operationId: keyCreate
-      summary: Save a new ssh public key
-      description: Add a new SSH key. Once the key is successfully added, the status code 201 CREATED is returned.
-      tags:
-      - key
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                  description: Key name
-                data:
-                  type: string
-                  description: Key data in OpenSSH or SSH2 (RFC4716) format
-              required:
-              - name
-              - data
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/KeyCreateResponse'
-        default:
-          description: Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
   /order/server/product:
     get:
       operationId: orderServerProductGetAll
@@ -1510,6 +1638,25 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/OrderServerTransactionGetAllResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: orderServer
+      summary: Order a standard server
+      description: Order a new server. If the order is successful, the status code 201 CREATED is returned.
+      tags:
+      - order
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderServerResponse'
         default:
           description: Error
           content:
@@ -1607,6 +1754,25 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/OrderServerMarketTransactionGetAllResponse'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: orderMarketServer
+      summary: Order a server from the server market
+      description: Order a new server from the server market. If the order is successful, the status code 201 CREATED is returned.
+      tags:
+      - order
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderMarketServerResponse'
         default:
           description: Error
           content:
@@ -2731,6 +2897,12 @@ components:
           type: object
           additionalProperties:
             nullable: true
+    RescueActivateResponse:
+      type: object
+      properties:
+        rescue:
+          type: object
+          additionalProperties: true
     RescueDeactivateResponse:
       type: object
       properties:
@@ -2752,6 +2924,12 @@ components:
           type: object
           additionalProperties:
             nullable: true
+    LinuxActivateResponse:
+      type: object
+      properties:
+        linux:
+          type: object
+          additionalProperties: true
     LinuxDeactivateResponse:
       type: object
       properties:
@@ -3394,6 +3572,11 @@ components:
         created_at:
           type: string
           format: date-time
+    KeyGetAllResponse:
+      type: object
+      properties:
+        key:
+          $ref: '#/components/schemas/Key'
     KeyGetResponse:
       type: object
       properties:
@@ -3528,6 +3711,40 @@ components:
       properties:
         transaction:
           $ref: '#/components/schemas/Transaction2'
+    Transaction3:
+      type: object
+      properties:
+        id:
+          type: string
+        date:
+          type: string
+          format: date-time
+        status:
+          type: string
+        server_number:
+          nullable: true
+        server_ip:
+          nullable: true
+        authorized_key:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuthorizedKey'
+        host_key:
+          type: array
+          items: {}
+        comment:
+          nullable: true
+        product:
+          type: object
+          additionalProperties: true
+        addons:
+          type: array
+          items: {}
+    OrderServerResponse:
+      type: object
+      properties:
+        transaction:
+          $ref: '#/components/schemas/Transaction3'
     OrderServerMarketProductGetAllResponse:
       type: object
       properties:
@@ -3539,7 +3756,7 @@ components:
         product:
           type: object
           additionalProperties: true
-    Transaction3:
+    Transaction4:
       type: object
       properties:
         id:
@@ -3572,8 +3789,8 @@ components:
       type: object
       properties:
         transaction:
-          $ref: '#/components/schemas/Transaction3'
-    Transaction4:
+          $ref: '#/components/schemas/Transaction4'
+    Transaction5:
       type: object
       properties:
         id:
@@ -3607,7 +3824,12 @@ components:
       type: object
       properties:
         transaction:
-          $ref: '#/components/schemas/Transaction4'
+          $ref: '#/components/schemas/Transaction5'
+    OrderMarketServerResponse:
+      type: object
+      properties:
+        transaction:
+          $ref: '#/components/schemas/Transaction3'
     Snapshot:
       type: object
       properties:

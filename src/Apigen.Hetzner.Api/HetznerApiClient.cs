@@ -12,7 +12,7 @@ namespace Apigen.Hetzner.Api;
 /// <summary>
 /// Main API client for accessing all resources
 /// </summary>
-public partial class HetznerApiClient
+public partial class HetznerApiClient : IDisposable
 {
   private readonly HttpClient _httpClient;
   private readonly bool _disposeHttpClient;

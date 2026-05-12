@@ -30,6 +30,12 @@ public partial interface IOrderClient
   Task<List<OrderServerTransactionGetAllResponse>> OrderServerTransactionGetAllAsync();
 
   /// <summary>
+  /// Order a standard server
+  /// Operation: POST /order/server/transaction
+  /// </summary>
+  Task<OrderServerResponse> OrderServerAsync();
+
+  /// <summary>
   /// Query the status of a specific server order
   /// Operation: GET /order/server/transaction/{transaction_id}
   /// </summary>
@@ -52,6 +58,12 @@ public partial interface IOrderClient
   /// Operation: GET /order/server_market/transaction
   /// </summary>
   Task<List<OrderServerMarketTransactionGetAllResponse>> OrderServerMarketTransactionGetAllAsync();
+
+  /// <summary>
+  /// Order a server from the server market
+  /// Operation: POST /order/server_market/transaction
+  /// </summary>
+  Task<OrderMarketServerResponse> OrderMarketServerAsync();
 
   /// <summary>
   /// Query the status of a specific server market order

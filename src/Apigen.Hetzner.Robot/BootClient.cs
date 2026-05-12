@@ -100,6 +100,46 @@ public partial class BootClient
 
 
   /// <summary>
+  /// Activate rescue system for a server
+  /// Operation: POST /boot/{server_number}/rescue
+  /// </summary>
+  public async Task<RescueActivateResponse> RescueActivateAsync(string serverNumber, Apigen.Hetzner.Robot.Models.RescueActivateRequest rescueActivateRequest)
+  {
+    Dictionary<string, object> pathParams = new()
+    {
+      ["server_number"] = serverNumber
+    };
+    string url = "boot/{server_number}/rescue".BuildUrl(pathParams);
+
+    long startTimestamp = System.Diagnostics.Stopwatch.GetTimestamp();
+    HttpClientLog.LogDebugRequestStarted(_logger, "POST", url);
+    FormUrlEncodedContent content = rescueActivateRequest.ToFormUrlEncodedContent();
+    string formBody = await content.ReadAsStringAsync();
+    HttpClientLog.LogTraceRequestBody(_logger, "POST", "application/x-www-form-urlencoded", formBody);
+    HttpResponseMessage response = await _httpClient.PostAsync(url, content);
+    long durationMs = (long)System.Diagnostics.Stopwatch.GetElapsedTime(startTimestamp).TotalMilliseconds;
+    HttpClientLog.LogDebugRequestCompleted(_logger, (int)response.StatusCode, "POST", url, durationMs);
+
+    string responseContent;
+    try
+    {
+      response.EnsureSuccessStatusCode();
+      responseContent = await response.Content.ReadAsStringAsync();
+    }
+    catch (HttpRequestException ex)
+    {
+      responseContent = await response.Content.ReadAsStringAsync();
+      HttpClientLog.LogErrorRequestFailed(_logger, (int)response.StatusCode, "POST", url, responseContent, ex);
+      throw;
+    }
+
+    HttpClientLog.LogTraceResponseBody(_logger, url, responseContent);
+    RescueActivateResponse? result = JsonSerializer.Deserialize<RescueActivateResponse>(responseContent, JsonConfig.Default);
+    return result ?? new RescueActivateResponse();
+  }
+
+
+  /// <summary>
   /// Deactivate rescue system for a server
   /// Operation: DELETE /boot/{server_number}/rescue
   /// </summary>
@@ -207,6 +247,46 @@ public partial class BootClient
     HttpClientLog.LogTraceResponseBody(_logger, url, responseContent);
     LinuxGetResponse? result = JsonSerializer.Deserialize<LinuxGetResponse>(responseContent, JsonConfig.Default);
     return result ?? new LinuxGetResponse();
+  }
+
+
+  /// <summary>
+  /// Activate linux installation
+  /// Operation: POST /boot/{server_number}/linux
+  /// </summary>
+  public async Task<LinuxActivateResponse> LinuxActivateAsync(string serverNumber, Apigen.Hetzner.Robot.Models.LinuxActivateRequest linuxActivateRequest)
+  {
+    Dictionary<string, object> pathParams = new()
+    {
+      ["server_number"] = serverNumber
+    };
+    string url = "boot/{server_number}/linux".BuildUrl(pathParams);
+
+    long startTimestamp = System.Diagnostics.Stopwatch.GetTimestamp();
+    HttpClientLog.LogDebugRequestStarted(_logger, "POST", url);
+    FormUrlEncodedContent content = linuxActivateRequest.ToFormUrlEncodedContent();
+    string formBody = await content.ReadAsStringAsync();
+    HttpClientLog.LogTraceRequestBody(_logger, "POST", "application/x-www-form-urlencoded", formBody);
+    HttpResponseMessage response = await _httpClient.PostAsync(url, content);
+    long durationMs = (long)System.Diagnostics.Stopwatch.GetElapsedTime(startTimestamp).TotalMilliseconds;
+    HttpClientLog.LogDebugRequestCompleted(_logger, (int)response.StatusCode, "POST", url, durationMs);
+
+    string responseContent;
+    try
+    {
+      response.EnsureSuccessStatusCode();
+      responseContent = await response.Content.ReadAsStringAsync();
+    }
+    catch (HttpRequestException ex)
+    {
+      responseContent = await response.Content.ReadAsStringAsync();
+      HttpClientLog.LogErrorRequestFailed(_logger, (int)response.StatusCode, "POST", url, responseContent, ex);
+      throw;
+    }
+
+    HttpClientLog.LogTraceResponseBody(_logger, url, responseContent);
+    LinuxActivateResponse? result = JsonSerializer.Deserialize<LinuxActivateResponse>(responseContent, JsonConfig.Default);
+    return result ?? new LinuxActivateResponse();
   }
 
 

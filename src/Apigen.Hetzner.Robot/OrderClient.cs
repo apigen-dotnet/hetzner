@@ -129,6 +129,39 @@ public partial class OrderClient
 
 
   /// <summary>
+  /// Order a standard server
+  /// Operation: POST /order/server/transaction
+  /// </summary>
+  public async Task<OrderServerResponse> OrderServerAsync()
+  {
+    string url = "order/server/transaction";
+
+    long startTimestamp = System.Diagnostics.Stopwatch.GetTimestamp();
+    HttpClientLog.LogDebugRequestStarted(_logger, "POST", url);
+    HttpResponseMessage response = await _httpClient.PostAsync(url, null);
+    long durationMs = (long)System.Diagnostics.Stopwatch.GetElapsedTime(startTimestamp).TotalMilliseconds;
+    HttpClientLog.LogDebugRequestCompleted(_logger, (int)response.StatusCode, "POST", url, durationMs);
+
+    string responseContent;
+    try
+    {
+      response.EnsureSuccessStatusCode();
+      responseContent = await response.Content.ReadAsStringAsync();
+    }
+    catch (HttpRequestException ex)
+    {
+      responseContent = await response.Content.ReadAsStringAsync();
+      HttpClientLog.LogErrorRequestFailed(_logger, (int)response.StatusCode, "POST", url, responseContent, ex);
+      throw;
+    }
+
+    HttpClientLog.LogTraceResponseBody(_logger, url, responseContent);
+    OrderServerResponse? result = JsonSerializer.Deserialize<OrderServerResponse>(responseContent, JsonConfig.Default);
+    return result ?? new OrderServerResponse();
+  }
+
+
+  /// <summary>
   /// Query the status of a specific server order
   /// Operation: GET /order/server/transaction/{transaction_id}
   /// </summary>
@@ -265,6 +298,39 @@ public partial class OrderClient
     HttpClientLog.LogTraceResponseBody(_logger, url, responseContent);
     List<OrderServerMarketTransactionGetAllResponse>? result = JsonSerializer.Deserialize<List<OrderServerMarketTransactionGetAllResponse>>(responseContent, JsonConfig.Default);
     return result ?? new List<OrderServerMarketTransactionGetAllResponse>();
+  }
+
+
+  /// <summary>
+  /// Order a server from the server market
+  /// Operation: POST /order/server_market/transaction
+  /// </summary>
+  public async Task<OrderMarketServerResponse> OrderMarketServerAsync()
+  {
+    string url = "order/server_market/transaction";
+
+    long startTimestamp = System.Diagnostics.Stopwatch.GetTimestamp();
+    HttpClientLog.LogDebugRequestStarted(_logger, "POST", url);
+    HttpResponseMessage response = await _httpClient.PostAsync(url, null);
+    long durationMs = (long)System.Diagnostics.Stopwatch.GetElapsedTime(startTimestamp).TotalMilliseconds;
+    HttpClientLog.LogDebugRequestCompleted(_logger, (int)response.StatusCode, "POST", url, durationMs);
+
+    string responseContent;
+    try
+    {
+      response.EnsureSuccessStatusCode();
+      responseContent = await response.Content.ReadAsStringAsync();
+    }
+    catch (HttpRequestException ex)
+    {
+      responseContent = await response.Content.ReadAsStringAsync();
+      HttpClientLog.LogErrorRequestFailed(_logger, (int)response.StatusCode, "POST", url, responseContent, ex);
+      throw;
+    }
+
+    HttpClientLog.LogTraceResponseBody(_logger, url, responseContent);
+    OrderMarketServerResponse? result = JsonSerializer.Deserialize<OrderMarketServerResponse>(responseContent, JsonConfig.Default);
+    return result ?? new OrderMarketServerResponse();
   }
 
 

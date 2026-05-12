@@ -231,7 +231,9 @@ class PhpMethod:
 # another `function` keyword. We achieve that with a negated-class inside the
 # docblock content.
 _PHPDOC_BLOCK = re.compile(
-    r"/\*\*((?:(?!\*/).)*?)\*/\s*public function (\w+)\s*\(([^)]*)\)\s*\{(.*?)^  \}",
+    # Signature may itself contain `()` in default values, e.g.
+    # `array $authorizedKeys = array()`. Allow one level of nested parens.
+    r"/\*\*((?:(?!\*/).)*?)\*/\s*public function (\w+)\s*\(((?:[^()]|\([^()]*\))*)\)\s*\{(.*?)^  \}",
     re.DOTALL | re.MULTILINE,
 )
 
