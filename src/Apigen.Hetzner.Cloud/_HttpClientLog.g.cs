@@ -51,6 +51,36 @@ internal static partial class HttpClientLog
       LogTraceRequestBodyCore(logger, method, contentType, body);
   }
 
+  [LoggerMessage(EventId = 1004, Level = LogLevel.Debug,
+    Message = "{Method} request to {Url} was cancelled")]
+  private static partial void LogDebugRequestCancelledCore(ILogger logger, string method, string url);
+
+  public static void LogDebugRequestCancelled(ILogger? logger, string method, string url)
+  {
+    if (logger != null)
+      LogDebugRequestCancelledCore(logger, method, url);
+  }
+
+  [LoggerMessage(EventId = 3002, Level = LogLevel.Error,
+    Message = "{Method} request to {Url} timed out")]
+  private static partial void LogErrorRequestTimeoutCore(ILogger logger, string method, string url, Exception exception);
+
+  public static void LogErrorRequestTimeout(ILogger? logger, string method, string url, Exception exception)
+  {
+    if (logger != null)
+      LogErrorRequestTimeoutCore(logger, method, url, exception);
+  }
+
+  [LoggerMessage(EventId = 3003, Level = LogLevel.Error,
+    Message = "Transport failure for {Method} {Url}: {ErrorMessage}")]
+  private static partial void LogErrorTransportFailureCore(ILogger logger, string method, string url, string errorMessage, Exception exception);
+
+  public static void LogErrorTransportFailure(ILogger? logger, string method, string url, Exception exception)
+  {
+    if (logger != null)
+      LogErrorTransportFailureCore(logger, method, url, exception.Message, exception);
+  }
+
   [LoggerMessage(EventId = 2003, Level = LogLevel.Trace,
     Message = "Response from {Url}: {Body}")]
   private static partial void LogTraceResponseBodyCore(ILogger logger, string url, string body);

@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using Apigen.Hetzner.Cloud.Models;
 
@@ -15,24 +16,24 @@ public partial interface IImagesClient
   /// List Images
   /// Operation: GET /images
   /// </summary>
-  Task<JsonElement> ListImagesAsync(ListImagesRequest? request = null);
+  Task<JsonElement> ListImagesAsync(ListImagesRequest? request = null, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Get an Image
   /// Operation: GET /images/{id}
   /// </summary>
-  Task<JsonElement> GetAsync(int id);
+  Task<JsonElement> GetAsync(int id, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Update an Image
   /// Operation: PUT /images/{id}
   /// </summary>
-  Task<JsonElement> UpdateAsync(int id, Apigen.Hetzner.Cloud.Models.UpdateImageRequest updateImageRequest);
+  Task<JsonElement> UpdateAsync(int id, Apigen.Hetzner.Cloud.Models.UpdateImageRequest updateImageRequest, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Delete an Image
   /// Operation: DELETE /images/{id}
   /// </summary>
-  Task DeleteAsync(int id);
+  Task DeleteAsync(int id, CancellationToken cancellationToken = default);
 
 }

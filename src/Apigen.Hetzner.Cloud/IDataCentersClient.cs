@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using Apigen.Hetzner.Cloud.Models;
 
@@ -15,12 +16,12 @@ public partial interface IDataCentersClient
   /// List Data Centers
   /// Operation: GET /datacenters
   /// </summary>
-  Task<JsonElement> ListDatacentersAsync(ListDatacentersRequest? request = null);
+  Task<JsonElement> ListDatacentersAsync(ListDatacentersRequest? request = null, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Get a Data Center
   /// Operation: GET /datacenters/{id}
   /// </summary>
-  Task<JsonElement> GetAsync(int id);
+  Task<JsonElement> GetAsync(int id, CancellationToken cancellationToken = default);
 
 }

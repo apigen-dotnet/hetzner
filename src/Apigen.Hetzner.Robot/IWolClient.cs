@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using Apigen.Hetzner.Robot.Models;
 
@@ -15,12 +16,12 @@ public partial interface IWolClient
   /// Get Wake On Lan data
   /// Operation: GET /wol/{server_number}
   /// </summary>
-  Task<WolGetResponse> GetAsync(string serverNumber);
+  Task<WolGetResponse> GetAsync(string serverNumber, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Send Wake On Lan packet to server
   /// Operation: POST /wol/{server_number}
   /// </summary>
-  Task<WolSendResponse> WolSendAsync(string serverNumber);
+  Task<WolSendResponse> WolSendAsync(string serverNumber, CancellationToken cancellationToken = default);
 
 }

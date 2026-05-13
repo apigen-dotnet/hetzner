@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using Apigen.Hetzner.Cloud.Models;
 
@@ -15,6 +16,6 @@ public partial interface IPricingClient
   /// Get all prices
   /// Operation: GET /pricing
   /// </summary>
-  Task<JsonElement> GetAsync();
+  Task<JsonElement> GetAsync(CancellationToken cancellationToken = default);
 
 }

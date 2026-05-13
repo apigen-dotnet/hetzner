@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using Apigen.Hetzner.Robot.Models;
 
@@ -15,18 +16,18 @@ public partial interface IResetClient
   /// Get server reset
   /// Operation: GET /reset/{server_number}
   /// </summary>
-  Task<ResetGetResponse> GetAsync(string serverNumber);
+  Task<ResetGetResponse> GetAsync(string serverNumber, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Execute server reset
   /// Operation: POST /reset/{server_number}
   /// </summary>
-  Task<ResetExecuteResponse> ResetExecuteAsync(string serverNumber, Apigen.Hetzner.Robot.Models.ResetExecuteRequest resetExecuteRequest);
+  Task<ResetExecuteResponse> ResetExecuteAsync(string serverNumber, Apigen.Hetzner.Robot.Models.ResetExecuteRequest resetExecuteRequest, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Get server reset (collection)
   /// Operation: GET /reset
   /// </summary>
-  Task<List<ResetGetAllResponse>> ListAsync();
+  Task<List<ResetGetAllResponse>> ListAsync(CancellationToken cancellationToken = default);
 
 }

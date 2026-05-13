@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using Apigen.Hetzner.Cloud.Models;
 
@@ -15,30 +16,30 @@ public partial interface IPrimaryIpsClient
   /// List Primary IPs
   /// Operation: GET /primary_ips
   /// </summary>
-  Task<JsonElement> ListPrimaryIpsAsync(ListPrimaryIpsRequest? request = null);
+  Task<JsonElement> ListPrimaryIpsAsync(ListPrimaryIpsRequest? request = null, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Create a Primary IP
   /// Operation: POST /primary_ips
   /// </summary>
-  Task<JsonElement> CreatePrimaryIpAsync(Apigen.Hetzner.Cloud.Models.CreatePrimaryIpRequest createPrimaryIpRequest);
+  Task<JsonElement> CreatePrimaryIpAsync(Apigen.Hetzner.Cloud.Models.CreatePrimaryIpRequest createPrimaryIpRequest, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Get a Primary IP
   /// Operation: GET /primary_ips/{id}
   /// </summary>
-  Task<JsonElement> GetAsync(int id);
+  Task<JsonElement> GetAsync(int id, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Update a Primary IP
   /// Operation: PUT /primary_ips/{id}
   /// </summary>
-  Task<JsonElement> UpdateAsync(int id, Apigen.Hetzner.Cloud.Models.UpdatePrimaryIpRequest updatePrimaryIpRequest);
+  Task<JsonElement> UpdateAsync(int id, Apigen.Hetzner.Cloud.Models.UpdatePrimaryIpRequest updatePrimaryIpRequest, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Delete a Primary IP
   /// Operation: DELETE /primary_ips/{id}
   /// </summary>
-  Task DeleteAsync(int id);
+  Task DeleteAsync(int id, CancellationToken cancellationToken = default);
 
 }

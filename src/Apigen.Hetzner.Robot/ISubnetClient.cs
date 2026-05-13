@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using Apigen.Hetzner.Robot.Models;
 
@@ -15,36 +16,36 @@ public partial interface ISubnetClient
   /// Get all subnets of specific server
   /// Operation: GET /subnet
   /// </summary>
-  Task<List<SubnetGetByServerIpResponse>> ListAsync(SubnetGetByServerIpRequest? request = null);
+  Task<List<SubnetGetByServerIpResponse>> ListAsync(SubnetGetByServerIpRequest? request = null, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Get subnet
   /// Operation: GET /subnet/{ip}
   /// </summary>
-  Task<SubnetGetResponse> GetAsync(string ip);
+  Task<SubnetGetResponse> GetAsync(string ip, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Set traffic warning limits for subnet
   /// Operation: POST /subnet/{ip}
   /// </summary>
-  Task<SubnetSetTrafficWarningLimitsResponse> SubnetSetTrafficWarningLimitsAsync(string ip, Apigen.Hetzner.Robot.Models.SubnetSetTrafficWarningLimitsRequest subnetSetTrafficWarningLimitsRequest);
+  Task<SubnetSetTrafficWarningLimitsResponse> SubnetSetTrafficWarningLimitsAsync(string ip, Apigen.Hetzner.Robot.Models.SubnetSetTrafficWarningLimitsRequest subnetSetTrafficWarningLimitsRequest, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Get the mac address of a ipv6 subnet
   /// Operation: GET /subnet/{ip}/mac
   /// </summary>
-  Task<SubnetMacGetResponse> SubnetMacGetAsync(string ip);
+  Task<SubnetMacGetResponse> SubnetMacGetAsync(string ip, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Set the mac address of a ipv6 subnet
   /// Operation: PUT /subnet/{ip}/mac
   /// </summary>
-  Task<SubnetMacSetResponse> SubnetMacSetAsync(string ip, Apigen.Hetzner.Robot.Models.SubnetMacSetRequest subnetMacSetRequest);
+  Task<SubnetMacSetResponse> SubnetMacSetAsync(string ip, Apigen.Hetzner.Robot.Models.SubnetMacSetRequest subnetMacSetRequest, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Reset the mac address of a ipv6 subnet to the
   /// Operation: DELETE /subnet/{ip}/mac
   /// </summary>
-  Task<SubnetMacResetResponse> SubnetMacResetAsync(string ip);
+  Task<SubnetMacResetResponse> SubnetMacResetAsync(string ip, CancellationToken cancellationToken = default);
 
 }

@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using Apigen.Hetzner.Cloud.Models;
 
@@ -15,30 +16,30 @@ public partial interface ISshKeysClient
   /// List SSH keys
   /// Operation: GET /ssh_keys
   /// </summary>
-  Task<JsonElement> ListSshKeysAsync(ListSshKeysRequest? request = null);
+  Task<JsonElement> ListSshKeysAsync(ListSshKeysRequest? request = null, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Create an SSH key
   /// Operation: POST /ssh_keys
   /// </summary>
-  Task<JsonElement> CreateSshKeyAsync(Apigen.Hetzner.Cloud.Models.CreateSshKeyRequest createSshKeyRequest);
+  Task<JsonElement> CreateSshKeyAsync(Apigen.Hetzner.Cloud.Models.CreateSshKeyRequest createSshKeyRequest, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Get a SSH key
   /// Operation: GET /ssh_keys/{id}
   /// </summary>
-  Task<JsonElement> GetAsync(int id);
+  Task<JsonElement> GetAsync(int id, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Update an SSH key
   /// Operation: PUT /ssh_keys/{id}
   /// </summary>
-  Task<JsonElement> UpdateAsync(int id, Apigen.Hetzner.Cloud.Models.UpdateSshKeyRequest updateSshKeyRequest);
+  Task<JsonElement> UpdateAsync(int id, Apigen.Hetzner.Cloud.Models.UpdateSshKeyRequest updateSshKeyRequest, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Delete an SSH key
   /// Operation: DELETE /ssh_keys/{id}
   /// </summary>
-  Task DeleteAsync(int id);
+  Task DeleteAsync(int id, CancellationToken cancellationToken = default);
 
 }

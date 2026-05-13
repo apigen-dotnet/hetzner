@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using Apigen.Hetzner.Cloud.Models;
 
@@ -15,102 +16,102 @@ public partial interface ILoadBalancerActionsClient
   /// List Actions
   /// Operation: GET /load_balancers/actions
   /// </summary>
-  Task<JsonElement> ListLoadBalancersActionsAsync(ListLoadBalancersActionsRequest? request = null);
+  Task<JsonElement> ListLoadBalancersActionsAsync(ListLoadBalancersActionsRequest? request = null, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Get an Action
   /// Operation: GET /load_balancers/actions/{id}
   /// </summary>
-  Task<JsonElement> GetAsync(int id);
+  Task<JsonElement> GetAsync(int id, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// List Actions for a Load Balancer
   /// Operation: GET /load_balancers/{id}/actions
   /// </summary>
-  Task<JsonElement> ListLoadBalancerActionsAsync(int id, ListLoadBalancerActionsRequest? request = null);
+  Task<JsonElement> ListLoadBalancerActionsAsync(int id, ListLoadBalancerActionsRequest? request = null, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Add Service
   /// Operation: POST /load_balancers/{id}/actions/add_service
   /// </summary>
-  Task<JsonElement> AddLoadBalancerServiceAsync(int id);
+  Task<JsonElement> AddLoadBalancerServiceAsync(int id, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Add Target
   /// Operation: POST /load_balancers/{id}/actions/add_target
   /// </summary>
-  Task<JsonElement> AddLoadBalancerTargetAsync(int id);
+  Task<JsonElement> AddLoadBalancerTargetAsync(int id, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Attach a Load Balancer to a Network
   /// Operation: POST /load_balancers/{id}/actions/attach_to_network
   /// </summary>
-  Task<JsonElement> AttachLoadBalancerToNetworkAsync(int id, Apigen.Hetzner.Cloud.Models.AttachLoadBalancerToNetworkRequest attachLoadBalancerToNetworkRequest);
+  Task<JsonElement> AttachLoadBalancerToNetworkAsync(int id, Apigen.Hetzner.Cloud.Models.AttachLoadBalancerToNetworkRequest attachLoadBalancerToNetworkRequest, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Change Algorithm
   /// Operation: POST /load_balancers/{id}/actions/change_algorithm
   /// </summary>
-  Task<JsonElement> ChangeLoadBalancerAlgorithmAsync(int id, Apigen.Hetzner.Cloud.Models.ChangeLoadBalancerAlgorithmRequest changeLoadBalancerAlgorithmRequest);
+  Task<JsonElement> ChangeLoadBalancerAlgorithmAsync(int id, Apigen.Hetzner.Cloud.Models.ChangeLoadBalancerAlgorithmRequest changeLoadBalancerAlgorithmRequest, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Change reverse DNS entry for this Load Balancer
   /// Operation: POST /load_balancers/{id}/actions/change_dns_ptr
   /// </summary>
-  Task<JsonElement> ChangeLoadBalancerDnsPtrAsync(int id, Apigen.Hetzner.Cloud.Models.ChangeLoadBalancerDnsPtrRequest changeLoadBalancerDnsPtrRequest);
+  Task<JsonElement> ChangeLoadBalancerDnsPtrAsync(int id, Apigen.Hetzner.Cloud.Models.ChangeLoadBalancerDnsPtrRequest changeLoadBalancerDnsPtrRequest, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Change Load Balancer Protection
   /// Operation: POST /load_balancers/{id}/actions/change_protection
   /// </summary>
-  Task<JsonElement> ChangeLoadBalancerProtectionAsync(int id, Apigen.Hetzner.Cloud.Models.ChangeLoadBalancerProtectionRequest changeLoadBalancerProtectionRequest);
+  Task<JsonElement> ChangeLoadBalancerProtectionAsync(int id, Apigen.Hetzner.Cloud.Models.ChangeLoadBalancerProtectionRequest changeLoadBalancerProtectionRequest, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Change the Type of a Load Balancer
   /// Operation: POST /load_balancers/{id}/actions/change_type
   /// </summary>
-  Task<JsonElement> ChangeLoadBalancerTypeAsync(int id, Apigen.Hetzner.Cloud.Models.ChangeLoadBalancerTypeRequest changeLoadBalancerTypeRequest);
+  Task<JsonElement> ChangeLoadBalancerTypeAsync(int id, Apigen.Hetzner.Cloud.Models.ChangeLoadBalancerTypeRequest changeLoadBalancerTypeRequest, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Delete Service
   /// Operation: POST /load_balancers/{id}/actions/delete_service
   /// </summary>
-  Task<JsonElement> DeleteLoadBalancerServiceAsync(int id, Apigen.Hetzner.Cloud.Models.DeleteLoadBalancerServiceRequest deleteLoadBalancerServiceRequest);
+  Task<JsonElement> DeleteLoadBalancerServiceAsync(int id, Apigen.Hetzner.Cloud.Models.DeleteLoadBalancerServiceRequest deleteLoadBalancerServiceRequest, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Detach a Load Balancer from a Network
   /// Operation: POST /load_balancers/{id}/actions/detach_from_network
   /// </summary>
-  Task<JsonElement> DetachLoadBalancerFromNetworkAsync(int id, Apigen.Hetzner.Cloud.Models.DetachLoadBalancerFromNetworkRequest detachLoadBalancerFromNetworkRequest);
+  Task<JsonElement> DetachLoadBalancerFromNetworkAsync(int id, Apigen.Hetzner.Cloud.Models.DetachLoadBalancerFromNetworkRequest detachLoadBalancerFromNetworkRequest, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Disable the public interface of a Load Balancer
   /// Operation: POST /load_balancers/{id}/actions/disable_public_interface
   /// </summary>
-  Task<JsonElement> DisableLoadBalancerPublicInterfaceAsync(int id);
+  Task<JsonElement> DisableLoadBalancerPublicInterfaceAsync(int id, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Enable the public interface of a Load Balancer
   /// Operation: POST /load_balancers/{id}/actions/enable_public_interface
   /// </summary>
-  Task<JsonElement> EnableLoadBalancerPublicInterfaceAsync(int id);
+  Task<JsonElement> EnableLoadBalancerPublicInterfaceAsync(int id, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Remove Target
   /// Operation: POST /load_balancers/{id}/actions/remove_target
   /// </summary>
-  Task<JsonElement> RemoveLoadBalancerTargetAsync(int id, Apigen.Hetzner.Cloud.Models.RemoveLoadBalancerTargetRequest removeLoadBalancerTargetRequest);
+  Task<JsonElement> RemoveLoadBalancerTargetAsync(int id, Apigen.Hetzner.Cloud.Models.RemoveLoadBalancerTargetRequest removeLoadBalancerTargetRequest, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Update Service
   /// Operation: POST /load_balancers/{id}/actions/update_service
   /// </summary>
-  Task<JsonElement> UpdateLoadBalancerServiceAsync(int id);
+  Task<JsonElement> UpdateLoadBalancerServiceAsync(int id, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Get an Action for a Load Balancer
   /// Operation: GET /load_balancers/{id}/actions/{action_id}
   /// </summary>
-  Task<JsonElement> GetAsync(int id, int actionId);
+  Task<JsonElement> GetAsync(int id, int actionId, CancellationToken cancellationToken = default);
 
 }

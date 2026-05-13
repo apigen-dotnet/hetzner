@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using Apigen.Hetzner.Cloud.Models;
 
@@ -15,12 +16,12 @@ public partial interface ILoadBalancerTypesClient
   /// List Load Balancer Types
   /// Operation: GET /load_balancer_types
   /// </summary>
-  Task<JsonElement> ListLoadBalancerTypesAsync(ListLoadBalancerTypesRequest? request = null);
+  Task<JsonElement> ListLoadBalancerTypesAsync(ListLoadBalancerTypesRequest? request = null, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Get a Load Balancer Type
   /// Operation: GET /load_balancer_types/{id}
   /// </summary>
-  Task<JsonElement> GetAsync(int id);
+  Task<JsonElement> GetAsync(int id, CancellationToken cancellationToken = default);
 
 }

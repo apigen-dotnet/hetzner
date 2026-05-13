@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using Apigen.Hetzner.Cloud.Models;
 
@@ -15,12 +16,12 @@ public partial interface IISOsClient
   /// List ISOs
   /// Operation: GET /isos
   /// </summary>
-  Task<JsonElement> ListIsosAsync(ListIsosRequest? request = null);
+  Task<JsonElement> ListIsosAsync(ListIsosRequest? request = null, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Get an ISO
   /// Operation: GET /isos/{id}
   /// </summary>
-  Task<JsonElement> GetAsync(int id);
+  Task<JsonElement> GetAsync(int id, CancellationToken cancellationToken = default);
 
 }

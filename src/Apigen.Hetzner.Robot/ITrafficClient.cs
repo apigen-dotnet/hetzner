@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using Apigen.Hetzner.Robot.Models;
 
@@ -15,6 +16,6 @@ public partial interface ITrafficClient
   /// Get traffic for single ips and subnets
   /// Operation: POST /traffic
   /// </summary>
-  Task<TrafficGetResponse> CreateAsync();
+  Task<TrafficGetResponse> CreateAsync(CancellationToken cancellationToken = default);
 
 }

@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using Apigen.Hetzner.Cloud.Models;
 
@@ -15,30 +16,30 @@ public partial interface IZoneRRSetsClient
   /// List RRSets
   /// Operation: GET /zones/{id_or_name}/rrsets
   /// </summary>
-  Task<JsonElement> ListZoneRrsetsAsync(string idOrName, ListZoneRrsetsRequest? request = null);
+  Task<JsonElement> ListZoneRrsetsAsync(string idOrName, ListZoneRrsetsRequest? request = null, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Create an RRSet
   /// Operation: POST /zones/{id_or_name}/rrsets
   /// </summary>
-  Task<JsonElement> CreateZoneRrsetAsync(string idOrName, Apigen.Hetzner.Cloud.Models.CreateZoneRrsetRequest createZoneRrsetRequest);
+  Task<JsonElement> CreateZoneRrsetAsync(string idOrName, Apigen.Hetzner.Cloud.Models.CreateZoneRrsetRequest createZoneRrsetRequest, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Get an RRSet
   /// Operation: GET /zones/{id_or_name}/rrsets/{rr_name}/{rr_type}
   /// </summary>
-  Task<JsonElement> GetAsync(string idOrName, string rrName, string rrType);
+  Task<JsonElement> GetAsync(string idOrName, string rrName, string rrType, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Update an RRSet
   /// Operation: PUT /zones/{id_or_name}/rrsets/{rr_name}/{rr_type}
   /// </summary>
-  Task<JsonElement> UpdateAsync(string idOrName, string rrName, string rrType, Apigen.Hetzner.Cloud.Models.UpdateZoneRrsetRequest updateZoneRrsetRequest);
+  Task<JsonElement> UpdateAsync(string idOrName, string rrName, string rrType, Apigen.Hetzner.Cloud.Models.UpdateZoneRrsetRequest updateZoneRrsetRequest, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Delete an RRSet
   /// Operation: DELETE /zones/{id_or_name}/rrsets/{rr_name}/{rr_type}
   /// </summary>
-  Task<JsonElement> DeleteAsync(string idOrName, string rrName, string rrType);
+  Task<JsonElement> DeleteAsync(string idOrName, string rrName, string rrType, CancellationToken cancellationToken = default);
 
 }

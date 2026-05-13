@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using Apigen.Hetzner.Cloud.Models;
 
@@ -15,36 +16,36 @@ public partial interface IZoneRRSetActionsClient
   /// Change an RRSet&apos;s Protection
   /// Operation: POST /zones/{id_or_name}/rrsets/{rr_name}/{rr_type}/actions/change_protection
   /// </summary>
-  Task<JsonElement> ChangeZoneRrsetProtectionAsync(string idOrName, string rrName, string rrType, Apigen.Hetzner.Cloud.Models.ChangeZoneRrsetProtectionRequest changeZoneRrsetProtectionRequest);
+  Task<JsonElement> ChangeZoneRrsetProtectionAsync(string idOrName, string rrName, string rrType, Apigen.Hetzner.Cloud.Models.ChangeZoneRrsetProtectionRequest changeZoneRrsetProtectionRequest, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Change an RRSet&apos;s TTL
   /// Operation: POST /zones/{id_or_name}/rrsets/{rr_name}/{rr_type}/actions/change_ttl
   /// </summary>
-  Task<JsonElement> ChangeZoneRrsetTtlAsync(string idOrName, string rrName, string rrType, Apigen.Hetzner.Cloud.Models.ChangeZoneRrsetTtlRequest changeZoneRrsetTtlRequest);
+  Task<JsonElement> ChangeZoneRrsetTtlAsync(string idOrName, string rrName, string rrType, Apigen.Hetzner.Cloud.Models.ChangeZoneRrsetTtlRequest changeZoneRrsetTtlRequest, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Set Records of an RRSet
   /// Operation: POST /zones/{id_or_name}/rrsets/{rr_name}/{rr_type}/actions/set_records
   /// </summary>
-  Task<JsonElement> SetZoneRrsetRecordsAsync(string idOrName, string rrName, string rrType, Apigen.Hetzner.Cloud.Models.SetZoneRrsetRecordsRequest setZoneRrsetRecordsRequest);
+  Task<JsonElement> SetZoneRrsetRecordsAsync(string idOrName, string rrName, string rrType, Apigen.Hetzner.Cloud.Models.SetZoneRrsetRecordsRequest setZoneRrsetRecordsRequest, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Add Records to an RRSet
   /// Operation: POST /zones/{id_or_name}/rrsets/{rr_name}/{rr_type}/actions/add_records
   /// </summary>
-  Task<JsonElement> AddZoneRrsetRecordsAsync(string idOrName, string rrName, string rrType, Apigen.Hetzner.Cloud.Models.AddZoneRrsetRecordsRequest addZoneRrsetRecordsRequest);
+  Task<JsonElement> AddZoneRrsetRecordsAsync(string idOrName, string rrName, string rrType, Apigen.Hetzner.Cloud.Models.AddZoneRrsetRecordsRequest addZoneRrsetRecordsRequest, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Remove Records from an RRSet
   /// Operation: POST /zones/{id_or_name}/rrsets/{rr_name}/{rr_type}/actions/remove_records
   /// </summary>
-  Task<JsonElement> RemoveZoneRrsetRecordsAsync(string idOrName, string rrName, string rrType, Apigen.Hetzner.Cloud.Models.RemoveZoneRrsetRecordsRequest removeZoneRrsetRecordsRequest);
+  Task<JsonElement> RemoveZoneRrsetRecordsAsync(string idOrName, string rrName, string rrType, Apigen.Hetzner.Cloud.Models.RemoveZoneRrsetRecordsRequest removeZoneRrsetRecordsRequest, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Update Records of an RRSet
   /// Operation: POST /zones/{id_or_name}/rrsets/{rr_name}/{rr_type}/actions/update_records
   /// </summary>
-  Task<JsonElement> UpdateZoneRrsetRecordsAsync(string idOrName, string rrName, string rrType, Apigen.Hetzner.Cloud.Models.UpdateZoneRrsetRecordsRequest updateZoneRrsetRecordsRequest);
+  Task<JsonElement> UpdateZoneRrsetRecordsAsync(string idOrName, string rrName, string rrType, Apigen.Hetzner.Cloud.Models.UpdateZoneRrsetRecordsRequest updateZoneRrsetRecordsRequest, CancellationToken cancellationToken = default);
 
 }

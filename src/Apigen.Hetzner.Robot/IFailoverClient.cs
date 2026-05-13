@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using Apigen.Hetzner.Robot.Models;
 
@@ -15,24 +16,24 @@ public partial interface IFailoverClient
   /// Get failover
   /// Operation: GET /failover/{ip}
   /// </summary>
-  Task<FailoverGetResponse> GetAsync(string ip, FailoverGetRequest? request = null);
+  Task<FailoverGetResponse> GetAsync(string ip, FailoverGetRequest? request = null, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Route failover
   /// Operation: POST /failover/{ip}
   /// </summary>
-  Task<FailoverRouteResponse> FailoverRouteAsync(string ip, Apigen.Hetzner.Robot.Models.FailoverRouteRequest failoverRouteRequest);
+  Task<FailoverRouteResponse> FailoverRouteAsync(string ip, Apigen.Hetzner.Robot.Models.FailoverRouteRequest failoverRouteRequest, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Delete failover routing
   /// Operation: DELETE /failover/{ip}
   /// </summary>
-  Task<FailoverDeleteResponse> DeleteAsync(string ip);
+  Task<FailoverDeleteResponse> DeleteAsync(string ip, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Get failover (collection)
   /// Operation: GET /failover
   /// </summary>
-  Task<List<FailoverGetAllResponse>> ListAsync(FailoverGetAllRequest? request = null);
+  Task<List<FailoverGetAllResponse>> ListAsync(FailoverGetAllRequest? request = null, CancellationToken cancellationToken = default);
 
 }

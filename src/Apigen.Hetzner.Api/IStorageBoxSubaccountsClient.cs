@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using Apigen.Hetzner.Api.Models;
 
@@ -15,30 +16,30 @@ public partial interface IStorageBoxSubaccountsClient
   /// List Subaccounts
   /// Operation: GET /storage_boxes/{id}/subaccounts
   /// </summary>
-  Task<JsonElement> ListStorageBoxSubaccountsAsync(int id, ListStorageBoxSubaccountsRequest? request = null);
+  Task<JsonElement> ListStorageBoxSubaccountsAsync(int id, ListStorageBoxSubaccountsRequest? request = null, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Create a Subaccount
   /// Operation: POST /storage_boxes/{id}/subaccounts
   /// </summary>
-  Task<JsonElement> CreateStorageBoxSubaccountAsync(int id, Apigen.Hetzner.Api.Models.CreateStorageBoxSubaccountRequest createStorageBoxSubaccountRequest);
+  Task<JsonElement> CreateStorageBoxSubaccountAsync(int id, Apigen.Hetzner.Api.Models.CreateStorageBoxSubaccountRequest createStorageBoxSubaccountRequest, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Get a Subaccount
   /// Operation: GET /storage_boxes/{id}/subaccounts/{subaccount_id}
   /// </summary>
-  Task<JsonElement> GetAsync(int id, int subaccountId);
+  Task<JsonElement> GetAsync(int id, int subaccountId, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Update a Subaccount
   /// Operation: PUT /storage_boxes/{id}/subaccounts/{subaccount_id}
   /// </summary>
-  Task<JsonElement> UpdateAsync(int id, int subaccountId, Apigen.Hetzner.Api.Models.UpdateStorageBoxSubaccountRequest updateStorageBoxSubaccountRequest);
+  Task<JsonElement> UpdateAsync(int id, int subaccountId, Apigen.Hetzner.Api.Models.UpdateStorageBoxSubaccountRequest updateStorageBoxSubaccountRequest, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Delete a Subaccount
   /// Operation: DELETE /storage_boxes/{id}/subaccounts/{subaccount_id}
   /// </summary>
-  Task<JsonElement> DeleteAsync(int id, int subaccountId);
+  Task<JsonElement> DeleteAsync(int id, int subaccountId, CancellationToken cancellationToken = default);
 
 }

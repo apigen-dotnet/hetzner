@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using Apigen.Hetzner.Api.Models;
 
@@ -15,12 +16,12 @@ public partial interface IStorageBoxTypesClient
   /// List Storage Box Types
   /// Operation: GET /storage_box_types
   /// </summary>
-  Task<JsonElement> ListStorageBoxTypesAsync(ListStorageBoxTypesRequest? request = null);
+  Task<JsonElement> ListStorageBoxTypesAsync(ListStorageBoxTypesRequest? request = null, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Get a Storage Box Type
   /// Operation: GET /storage_box_types/{id}
   /// </summary>
-  Task<JsonElement> GetAsync(int id);
+  Task<JsonElement> GetAsync(int id, CancellationToken cancellationToken = default);
 
 }

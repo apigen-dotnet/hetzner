@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using Apigen.Hetzner.Robot.Models;
 
@@ -15,36 +16,36 @@ public partial interface IIpClient
   /// Get all single ips of specific server
   /// Operation: GET /ip
   /// </summary>
-  Task<List<IpGetByServerIpResponse>> ListAsync(IpGetByServerIpRequest? request = null);
+  Task<List<IpGetByServerIpResponse>> ListAsync(IpGetByServerIpRequest? request = null, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Get ip
   /// Operation: GET /ip/{ip}
   /// </summary>
-  Task<IpGetResponse> GetAsync(string ip);
+  Task<IpGetResponse> GetAsync(string ip, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Set traffic warning limits for single ip
   /// Operation: POST /ip/{ip}
   /// </summary>
-  Task<IpSetTrafficWarningLimitsResponse> IpSetTrafficWarningLimitsAsync(string ip, Apigen.Hetzner.Robot.Models.IpSetTrafficWarningLimitsRequest ipSetTrafficWarningLimitsRequest);
+  Task<IpSetTrafficWarningLimitsResponse> IpSetTrafficWarningLimitsAsync(string ip, Apigen.Hetzner.Robot.Models.IpSetTrafficWarningLimitsRequest ipSetTrafficWarningLimitsRequest, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Get separate mac for a single ip
   /// Operation: GET /ip/{ip}/mac
   /// </summary>
-  Task<SeparateMacGetResponse> SeparateMacGetAsync(string ip);
+  Task<SeparateMacGetResponse> SeparateMacGetAsync(string ip, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Create separate mac for a single ip
   /// Operation: PUT /ip/{ip}/mac
   /// </summary>
-  Task<SeparateMacCreateResponse> SeparateMacCreateAsync(string ip);
+  Task<SeparateMacCreateResponse> SeparateMacCreateAsync(string ip, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Delete separate mac for a single ip
   /// Operation: DELETE /ip/{ip}/mac
   /// </summary>
-  Task<SeparateMacDeleteResponse> SeparateMacDeleteAsync(string ip);
+  Task<SeparateMacDeleteResponse> SeparateMacDeleteAsync(string ip, CancellationToken cancellationToken = default);
 
 }
