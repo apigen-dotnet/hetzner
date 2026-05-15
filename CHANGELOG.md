@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.6] - 2026-05-13
+
+- **Fix**: DELETE operations whose OpenAPI spec defines a request body now actually send that body. Previously the generator emitted `HttpClient.DeleteAsync(url, ct)` which has no body overload, so the body was silently dropped. Generated code now uses `SendAsync(new HttpRequestMessage(HttpMethod.Delete, url) { Content = content }, ct)`. Regenerated against Apigen.Generator 2.3.1.
+
 ## [1.0.5] - 2026-05-13
 
 - Regenerated against Apigen.Generator 2.3.0.

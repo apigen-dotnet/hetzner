@@ -19,7 +19,7 @@
   <PropertyGroup Condition="'$(MSBuildProjectName)' == 'Apigen.Hetzner'">
     <IsPackable>true</IsPackable>
     <PackageId>Apigen.Hetzner</PackageId>
-    <Version>1.0.5</Version>
+    <Version>1.0.6</Version>
     <Description>Generated C# clients for the Hetzner Cloud API, Hetzner API and Hetzner Robot Webservice — one package, three independent typed clients.</Description>
     <PackageTags>hetzner;hetzner-cloud;hetzner-robot;api;client;openapi;apigen;cloud;robot;dns</PackageTags>
     <PackageReadmeFile>NUGET.md</PackageReadmeFile>

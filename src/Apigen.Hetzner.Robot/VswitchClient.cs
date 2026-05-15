@@ -141,7 +141,11 @@ public partial class VswitchClient
     {
       long startTimestamp = System.Diagnostics.Stopwatch.GetTimestamp();
       HttpClientLog.LogDebugRequestStarted(_logger, "DELETE", url);
-      HttpResponseMessage response = await _httpClient.DeleteAsync(url, cancellationToken);
+      FormUrlEncodedContent content = vswitchCancelRequest.ToFormUrlEncodedContent();
+      string formBody = await content.ReadAsStringAsync(cancellationToken);
+      HttpClientLog.LogTraceRequestBody(_logger, "DELETE", "application/x-www-form-urlencoded", formBody);
+      HttpRequestMessage httpRequest = new HttpRequestMessage(HttpMethod.Delete, url) { Content = content };
+      HttpResponseMessage response = await _httpClient.SendAsync(httpRequest, cancellationToken);
       long durationMs = (long)System.Diagnostics.Stopwatch.GetElapsedTime(startTimestamp).TotalMilliseconds;
       HttpClientLog.LogDebugRequestCompleted(_logger, (int)response.StatusCode, "DELETE", url, durationMs);
 
@@ -240,7 +244,11 @@ public partial class VswitchClient
     {
       long startTimestamp = System.Diagnostics.Stopwatch.GetTimestamp();
       HttpClientLog.LogDebugRequestStarted(_logger, "DELETE", url);
-      HttpResponseMessage response = await _httpClient.DeleteAsync(url, cancellationToken);
+      FormUrlEncodedContent content = vswitchRemoveServersRequest.ToFormUrlEncodedContent();
+      string formBody = await content.ReadAsStringAsync(cancellationToken);
+      HttpClientLog.LogTraceRequestBody(_logger, "DELETE", "application/x-www-form-urlencoded", formBody);
+      HttpRequestMessage httpRequest = new HttpRequestMessage(HttpMethod.Delete, url) { Content = content };
+      HttpResponseMessage response = await _httpClient.SendAsync(httpRequest, cancellationToken);
       long durationMs = (long)System.Diagnostics.Stopwatch.GetElapsedTime(startTimestamp).TotalMilliseconds;
       HttpClientLog.LogDebugRequestCompleted(_logger, (int)response.StatusCode, "DELETE", url, durationMs);
 
