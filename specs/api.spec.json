@@ -1,10 +1,10 @@
 {
-  "openapi": "3.0.3",
+  "openapi": "3.1.2",
   "info": {
     "title": "Hetzner API",
     "version": "1.0.0",
     "x-summary": "Manage Hetzner services and resources linked to them, such as Storage Boxes.\n",
-    "description": "# Overview\n\nThis is the official documentation for the Hetzner API.\n\n## Introduction\n\nThe Hetzner API operates over HTTPS and uses JSON as its data format. The API is a RESTful API and utilizes HTTP methods and HTTP status codes to specify requests and responses.\n\n### Open source credits\n\nIf you are developing an open-source project that supports or intends to add support for Hetzner APIs, you may be eligible for a free one-time credit of up to € 50 / $ 50 on your account. Please contact us via the support page on your [Console](https://console.hetzner.com/support) and let us know the following:\n\n- The name of the project you are working on\n- A short description of the project\n- Link to the project website or repo where the project is hosted\n- Affiliation with / role in the project (e.g. project maintainer)\n- Link to some other open-source work you have already done (if you have done so)\n\n**Note:** We only consider rewards for projects that provide Hetzner-specific functionality or integrations. For example, our Object Storage exposes a standard S3 API without any Hetzner-specific extensions. Projects that focus solely on generic S3 capabilities (e.g., general S3 clients or SDKs) are not Hetzner-specific and are therefore not eligible for Hetzner Rewards.\n\n## Getting Started\n\nTo get started using the API you first need an API token. Sign in into the [Hetzner Console](https://console.hetzner.com/) choose a Project, go to `Security` → `API Tokens`, and generate a new token. Make sure to copy the token because it won’t be shown to you again. A token is bound to a Project, to interact with the API of another Project you have to create a new token inside the Project. Let’s say your new token is `LRK9DAWQ1ZAEFSrCNEEzLCUwhYX1U3g7wMg4dTlkkDC96fyDuyJ39nVbVjCKSDfj`.\n\nYou’re now ready to do your first request against the API. To get a list of all Storage Boxes in your Project, issue the example request on the right side using [curl](https://curl.se/).\n\nMake sure to replace the token in the example command with the token you have just created. Since your Project probably does not contain any Storage Boxes yet, the example response will look like the response on the right side. We will almost always provide a resource root like `storage_boxes` inside the example response. A response can also contain a `meta` object with information like [Pagination](#description/pagination).\n\n**Example Request**\n\n```shell\ncurl -H \"Authorization: Bearer LRK9DAWQ1ZAEFSrCNEEzLCUwhYX1U3g7wMg4dTlkkDC96fyDuyJ39nVbVjCKSDfj\" \\\n  https://api.hetzner.com/v1/storage_boxes\n```\n\n**Example Response**\n\n```json\n{\n  \"storage_boxes\": [],\n  \"meta\": {\n    \"pagination\": {\n      \"page\": 1,\n      \"per_page\": 25,\n      \"previous_page\": null,\n      \"next_page\": null,\n      \"last_page\": 1,\n      \"total_entries\": 0\n    }\n  }\n}\n```\n\n## Authentication\n\nAll requests to the Hetzner API must be authenticated via a API token. Include your secret API token in every request you send to the API with the `Authorization` HTTP header.\n\nTo create a new API token for your Project, switch into the [Hetzner Console](https://console.hetzner.com/) choose a Project, go to `Security` → `API Tokens`, and generate a new token.\n\n**Example Authorization header**\n\n```http\nAuthorization: Bearer LRK9DAWQ1ZAEFSrCNEEzLCUwhYX1U3g7wMg4dTlkkDC96fyDuyJ39nVbVjCKSDfj\n```\n\n## Query Parameters\n\nThe API makes use of query parameters to sort and filter responses. The parameter names and values must be URI encoded according to [RFC2396](https://datatracker.ietf.org/doc/html/rfc2396). Query parameters of type `array` can be used multiple times:\n\n**Example query parameters for pagination**\n\n```\nhttps://api.hetzner.com/v1/storage_boxes?page=1&page_size=12\n```\n\n**Example use of multiple values for a parameter**\n\n```\nhttps://api.hetzner.com/v1/storage_boxes?sort=id&sort=name\n```\n\n**Example use of an encoded parameter**\n\n```\nhttps://api.hetzner.com/v1/storage_boxes?label_selector=key%3Dvalue\n```\n\n## Errors\n\nErrors are indicated by HTTP status codes. Further, the response of the request which generated the error contains an error code, an error message, and, optionally, error details. The schema of the error details object depends on the error code.\n\nThe error response contains the following keys:\n\n| Keys      | Meaning                                                               |\n| --------- | --------------------------------------------------------------------- |\n| `code`    | Short string indicating the type of error (machine-parsable)          |\n| `message` | Textual description on what has gone wrong                            |\n| `details` | An object providing for details on the error (schema depends on code) |\n\n**Example response**\n\n```json\n{\n  \"error\": {\n    \"code\": \"invalid_input\",\n    \"message\": \"invalid input in field 'broken_field': is too long\",\n    \"details\": {\n      \"fields\": [\n        {\n          \"name\": \"broken_field\",\n          \"messages\": [\"is too long\"]\n        }\n      ]\n    }\n  }\n}\n```\n\n### Error Codes\n\n| Status | Code | Description |\n| --- | --- | --- |\n| `400` | `json_error` | Invalid JSON input in your request. |\n| `401` | `unauthorized` | Request was made with an invalid or unknown token. |\n| `401` | `token_readonly` | The token is only allowed to perform GET requests. |\n| `403` | `forbidden` | Insufficient permissions for this request. |\n| `403` | `maintenance` | Cannot perform operation due to maintenance. |\n| `403` | `resource_limit_exceeded` | Error when exceeding the maximum quantity of a resource for an account. |\n| `404` | `not_found` | Entity not found. |\n| `405` | `method_not_allowed` | The request method is not allowed |\n| `409` | `uniqueness_error` | One or more of the objects fields must be unique. |\n| `409` | `conflict` | The resource has changed during the request, please retry. |\n| `410` | `deprecated_api_endpoint` | The API endpoint functionality was removed. |\n| `412` | `resource_unavailable` | The requested resource is currently unavailable (e.g. not available for order). |\n| `422` | `invalid_input` | Error while parsing or processing the input. |\n| `422` | `service_error` | Error within a service. |\n| `422` | `unsupported_error` | The corresponding resource does not support the Action. |\n| `423` | `locked` | The item you are trying to access is locked (there is already an Action running). |\n| `423` | `protected` | The Action you are trying to start is protected for this resource. |\n| `429` | `rate_limit_exceeded` | Error when sending too many requests. |\n| `500` | `server_error` | Error within the API backend. |\n| `503` | `unavailable` | A service or product is currently not available. |\n| `504` | `timeout` | The request could not be answered in time, please retry. |\n\n**invalid_input**\n\n```json\n{\n  \"error\": {\n    \"code\": \"invalid_input\",\n    \"message\": \"invalid input in field 'broken_field': is too long\",\n    \"details\": {\n      \"fields\": [\n        {\n          \"name\": \"broken_field\",\n          \"messages\": [\"is too long\"]\n        }\n      ]\n    }\n  }\n}\n```\n\n**uniqueness_error**\n\n```json\n{\n  \"error\": {\n    \"code\": \"uniqueness_error\",\n    \"message\": \"SSH key with the same fingerprint already exists\",\n    \"details\": {\n      \"fields\": [\n        {\n          \"name\": \"public_key\"\n        }\n      ]\n    }\n  }\n}\n```\n\n**resource_limit_exceeded**\n\n```json\n{\n  \"error\": {\n    \"code\": \"resource_limit_exceeded\",\n    \"message\": \"project limit exceeded\",\n    \"details\": {\n      \"limits\": [\n        {\n          \"name\": \"project_limit\"\n        }\n      ]\n    }\n  }\n}\n```\n\n**deprecated_api_endpoint**\n\n```json\n{\n  \"error\": {\n    \"code\": \"deprecated_api_endpoint\",\n    \"message\": \"API functionality was removed\",\n    \"details\": {\n      \"announcement\": \"https://docs.hetzner.cloud/changelog#2023-07-20-foo-endpoint-is-deprecated\"\n    }\n  }\n}\n```\n\n## Actions\n\nActions represent asynchronous tasks within the API, targeting one or more resources. Triggering changes in the API may return a `running` action.\n\nAn action should be waited upon, until it reaches either the `success` or `error` state. Avoid polling the action's state too frequently to reduce the risk of exhausting your API requests and hitting the [rate limit](#description/rate-limiting).\n\nIf an action fails, it will contain details about the underlying error.\n\nOnce the asynchronous tasks have completed and the targeted resources are in a consistent state, the action is marked as succeeded.\n\nIn some cases, you may trigger multiple changes at once, and only wait for the returned actions at a later stage.\n\n## Labels\n\nLabels are `key/value` pairs that can be attached to all resources.\n\nValid label keys have two segments: an optional prefix and name, separated by a slash (`/`). The name segment is required and must be a string of 63 characters or less, beginning and ending with an alphanumeric character (`[a-z0-9A-Z]`) with dashes (`-`), underscores (`_`), dots (`.`), and alphanumerics between. The prefix is optional. If specified, the prefix must be a DNS subdomain: a series of DNS labels separated by dots (`.`), not longer than 253 characters in total, followed by a slash (`/`).\n\nValid label values must be a string of 63 characters or less and must be empty or begin and end with an alphanumeric character (`[a-z0-9A-Z]`) with dashes (`-`), underscores (`_`), dots (`.`), and alphanumerics between.\n\nThe `hetzner.cloud/` prefix is reserved and cannot be used.\n\n**Example Labels**\n\n```json\n{\n  \"labels\": {\n    \"environment\": \"development\",\n    \"service\": \"backend\",\n    \"example.com/my\": \"label\",\n    \"just-a-key\": \"\"\n  }\n}\n```\n\n## Label Selector\n\nFor resources with labels, you can filter resources by their labels using the label selector query language.\n\n| Expression           | Meaning                                              |\n| -------------------- | ---------------------------------------------------- |\n| `k==v` / `k=v`       | Value of key `k` does equal value `v`                |\n| `k!=v`               | Value of key `k` does not equal value `v`            |\n| `k`                  | Key `k` is present                                   |\n| `!k`                 | Key `k` is not present                               |\n| `k in (v1,v2,v3)`    | Value of key `k` is `v1`, `v2`, or `v3`              |\n| `k notin (v1,v2,v3)` | Value of key `k` is neither `v1`, nor `v2`, nor `v3` |\n| `k1==v,!k2`          | Value of key `k1` is `v` and key `k2` is not present |\n\n### Examples\n\n- Returns all resources that have a `env=production` label and that don't have a `type=database` label:\n\n  `env=production,type!=database`\n\n- Returns all resources that have a `env=testing` or `env=staging` label:\n\n  `env in (testing,staging)`\n\n- Returns all resources that don't have a `type` label:\n\n  `!type`\n\n## Pagination\n\nResponses which return multiple items support pagination. If they do support pagination, it can be controlled with following query string parameters:\n\n- A `page` parameter specifies the page to fetch. The number of the first page is 1.\n- A `per_page` parameter specifies the number of items returned per page. The default value is 25, the maximum value is 50 except otherwise specified in the documentation.\n\nResponses contain a `Link` header with pagination information.\n\nAdditionally, if the response body is JSON and the root object is an object, that object has a `pagination` object inside the `meta` object with pagination information:\n\n**Example Pagination**\n\n```json\n{\n    \"storage_boxes\": [...],\n    \"meta\": {\n        \"pagination\": {\n            \"page\": 2,\n            \"per_page\": 25,\n            \"previous_page\": 1,\n            \"next_page\": 3,\n            \"last_page\": 4,\n            \"total_entries\": 100\n        }\n    }\n}\n```\n\nThe keys `previous_page`, `next_page`, `last_page`, and `total_entries` may be `null` when on the first page, last page, or when the total number of entries is unknown.\n\n**Example Pagination Link header**\n\n```http\nLink: <https://api.hetzner.com/v1/storage_boxes?page=2&per_page=5>; rel=\"prev\",\n      <https://api.hetzner.com/v1/storage_boxes?page=4&per_page=5>; rel=\"next\",\n      <https://api.hetzner.com/v1/storage_boxes?page=6&per_page=5>; rel=\"last\"\n```\n\nLine breaks have been added for display purposes only and responses may only contain some of the above `rel` values.\n\n## Rate Limiting\n\nAll requests, whether they are authenticated or not, are subject to rate limiting. If you have reached your limit, your requests will be handled with a `429 Too Many Requests` error. Burst requests are allowed. Responses contain several headers which provide information about your current rate limit status.\n\n- The `RateLimit-Limit` header contains the total number of requests you can perform per hour.\n- The `RateLimit-Remaining` header contains the number of requests remaining in the current rate limit time frame.\n- The `RateLimit-Reset` header contains a UNIX timestamp of the point in time when your rate limit will have recovered, and you will have the full number of requests available again.\n\nThe default limit is 3600 requests per hour and per Project. The number of remaining requests increases gradually. For example, when your limit is 3600 requests per hour, the number of remaining requests will increase by 1 every second.\n\n## Sorting\n\nSome responses which return multiple items support sorting. If they do support sorting the documentation states which fields can be used for sorting. You specify sorting with the `sort` query string parameter. You can sort by multiple fields. You can set the sort direction by appending `:asc` or `:desc` to the field name. By default, ascending sorting is used.\n\n**Example: Sorting**\n\n```\nhttps://api.hetzner.com/v1/storage_boxes?sort=status\nhttps://api.hetzner.com/v1/storage_boxes?sort=status:asc\nhttps://api.hetzner.com/v1/storage_boxes?sort=status:desc\nhttps://api.hetzner.com/v1/storage_boxes?sort=status:asc&sort=command:desc\n```\n\n## Deprecation Notices\n\nYou can find all announced deprecations in our [Changelog](/changelog).\n"
+    "description": "# Overview\n\nThis is the official documentation for the Hetzner API.\n\n## Introduction\n\nThe Hetzner API operates over HTTPS and uses JSON as its data format. The API is a RESTful API and utilizes HTTP methods and HTTP status codes to specify requests and responses.\n\n### Open source credits\n\nIf you are developing an open-source project that supports or intends to add support for Hetzner APIs, you may be eligible for a free one-time credit of up to € 50 / $ 50 on your account. Please contact us via the support page on your [Console](https://console.hetzner.com/support) and let us know the following:\n\n- The name of the project you are working on\n- A short description of the project\n- Link to the project website or repo where the project is hosted\n- Affiliation with / role in the project (e.g. project maintainer)\n- Link to some other open-source work you have already done (if you have done so)\n\n**Note:** We only consider rewards for projects that provide Hetzner-specific functionality or integrations. For example, our Object Storage exposes a standard S3 API without any Hetzner-specific extensions. Projects that focus solely on generic S3 capabilities (e.g., general S3 clients or SDKs) are not Hetzner-specific and are therefore not eligible for Hetzner Rewards.\n\n## Getting Started\n\nTo get started using the API you first need an API token. Sign in into the [Hetzner Console](https://console.hetzner.com/) choose a Project, go to `Security` → `API Tokens`, and generate a new token. Make sure to copy the token because it won’t be shown to you again. A token is bound to a Project, to interact with the API of another Project you have to create a new token inside the Project. Let’s say your new token is `LRK9DAWQ1ZAEFSrCNEEzLCUwhYX1U3g7wMg4dTlkkDC96fyDuyJ39nVbVjCKSDfj`.\n\nYou’re now ready to do your first request against the API. To get a list of all Storage Boxes in your Project, issue the example request on the right side using [curl](https://curl.se/).\n\nMake sure to replace the token in the example command with the token you have just created. Since your Project probably does not contain any Storage Boxes yet, the example response will look like the response on the right side. We will almost always provide a resource root like `storage_boxes` inside the example response. A response can also contain a `meta` object with information like [Pagination](#description/pagination).\n\n**Example Request**\n\n```shell\ncurl -H \"Authorization: Bearer LRK9DAWQ1ZAEFSrCNEEzLCUwhYX1U3g7wMg4dTlkkDC96fyDuyJ39nVbVjCKSDfj\" \\\n  https://api.hetzner.com/v1/storage_boxes\n```\n\n**Example Response**\n\n```json\n{\n  \"storage_boxes\": [],\n  \"meta\": {\n    \"pagination\": {\n      \"page\": 1,\n      \"per_page\": 25,\n      \"previous_page\": null,\n      \"next_page\": null,\n      \"last_page\": 1,\n      \"total_entries\": 0\n    }\n  }\n}\n```\n\n## Authentication\n\nAll requests to the Hetzner API must be authenticated via a API token. Include your secret API token in every request you send to the API with the `Authorization` HTTP header.\n\nTo create a new API token for your Project, switch into the [Hetzner Console](https://console.hetzner.com/) choose a Project, go to `Security` → `API Tokens`, and generate a new token.\n\n**Example Authorization header**\n\n```http\nAuthorization: Bearer LRK9DAWQ1ZAEFSrCNEEzLCUwhYX1U3g7wMg4dTlkkDC96fyDuyJ39nVbVjCKSDfj\n```\n\n## Query Parameters\n\nThe API makes use of query parameters to sort and filter responses. The parameter names and values must be URI encoded according to [RFC2396](https://datatracker.ietf.org/doc/html/rfc2396). Query parameters of type `array` can be used multiple times:\n\n**Example query parameters for pagination**\n\n```\nhttps://api.hetzner.com/v1/storage_boxes?page=1&page_size=12\n```\n\n**Example use of multiple values for a parameter**\n\n```\nhttps://api.hetzner.com/v1/storage_boxes?sort=id&sort=name\n```\n\n**Example use of an encoded parameter**\n\n```\nhttps://api.hetzner.com/v1/storage_boxes?label_selector=key%3Dvalue\n```\n\n## Errors\n\nErrors are indicated by HTTP status codes. Further, the response of the request which generated the error contains an error code, an error message, and, optionally, error details. The schema of the error details object depends on the error code.\n\nThe error response contains the following keys:\n\n| Keys      | Meaning                                                               |\n| --------- | --------------------------------------------------------------------- |\n| `code`    | Short string indicating the type of error (machine-parsable)          |\n| `message` | Textual description on what has gone wrong                            |\n| `details` | An object providing for details on the error (schema depends on code) |\n\n**Example response**\n\n```json\n{\n  \"error\": {\n    \"code\": \"invalid_input\",\n    \"message\": \"invalid input in field 'broken_field': is too long\",\n    \"details\": {\n      \"fields\": [\n        {\n          \"name\": \"broken_field\",\n          \"messages\": [\"is too long\"]\n        }\n      ]\n    }\n  }\n}\n```\n\n### Error Codes\n\n| Status | Code | Description |\n| --- | --- | --- |\n| `400` | `json_error` | Invalid JSON input in your request. |\n| `401` | `unauthorized` | Request was made with an invalid or unknown token. |\n| `401` | `token_readonly` | The token is only allowed to perform GET requests. |\n| `403` | `forbidden` | Insufficient permissions for this request. |\n| `403` | `maintenance` | Cannot perform operation due to maintenance. |\n| `403` | `resource_limit_exceeded` | Error when exceeding the maximum quantity of a resource for an account. |\n| `404` | `not_found` | Entity not found. |\n| `405` | `method_not_allowed` | The request method is not allowed |\n| `409` | `uniqueness_error` | One or more of the objects fields must be unique. |\n| `409` | `conflict` | The resource has changed during the request, please retry. |\n| `410` | `deprecated_api_endpoint` | The API endpoint functionality was removed. |\n| `412` | `resource_unavailable` | The requested resource is currently unavailable (e.g. not available for order). |\n| `422` | `invalid_input` | Error while parsing or processing the input. |\n| `422` | `service_error` | Error within a service. |\n| `422` | `unsupported_error` | The corresponding resource does not support the Action. |\n| `423` | `locked` | The item you are trying to access is locked (there is already an Action running). |\n| `423` | `protected` | The Action you are trying to start is protected for this resource. |\n| `429` | `rate_limit_exceeded` | Error when sending too many requests. |\n| `500` | `server_error` | Error within the API backend. |\n| `502` | `bad_gateway` | The request could not be answered by the API backend, please retry. |\n| `503` | `unavailable` | A service or product is currently not available. |\n| `504` | `timeout` | The request could not be answered in time, please retry. |\n\n**invalid_input**\n\n```json\n{\n  \"error\": {\n    \"code\": \"invalid_input\",\n    \"message\": \"invalid input in field 'broken_field': is too long\",\n    \"details\": {\n      \"fields\": [\n        {\n          \"name\": \"broken_field\",\n          \"messages\": [\"is too long\"]\n        }\n      ]\n    }\n  }\n}\n```\n\n**uniqueness_error**\n\n```json\n{\n  \"error\": {\n    \"code\": \"uniqueness_error\",\n    \"message\": \"SSH key with the same fingerprint already exists\",\n    \"details\": {\n      \"fields\": [\n        {\n          \"name\": \"public_key\"\n        }\n      ]\n    }\n  }\n}\n```\n\n**resource_limit_exceeded**\n\n```json\n{\n  \"error\": {\n    \"code\": \"resource_limit_exceeded\",\n    \"message\": \"project limit exceeded\",\n    \"details\": {\n      \"limits\": [\n        {\n          \"name\": \"project_limit\"\n        }\n      ]\n    }\n  }\n}\n```\n\n**deprecated_api_endpoint**\n\n```json\n{\n  \"error\": {\n    \"code\": \"deprecated_api_endpoint\",\n    \"message\": \"API functionality was removed\",\n    \"details\": {\n      \"announcement\": \"https://docs.hetzner.cloud/changelog#2023-07-20-foo-endpoint-is-deprecated\"\n    }\n  }\n}\n```\n\n## Actions\n\nActions represent asynchronous tasks within the API, targeting one or more resources. Triggering changes in the API may return a `running` action.\n\nAn action should be waited upon, until it reaches either the `success` or `error` state. Avoid polling the action's state too frequently to reduce the risk of exhausting your API requests and hitting the [rate limit](#description/rate-limiting).\n\nIf an action fails, it will contain details about the underlying error.\n\nOnce the asynchronous tasks have completed and the targeted resources are in a consistent state, the action is marked as succeeded.\n\nIn some cases, you may trigger multiple changes at once, and only wait for the returned actions at a later stage.\n\n## Labels\n\nLabels are `key/value` pairs that can be attached to all resources.\n\nValid label keys have two segments: an optional prefix and name, separated by a slash (`/`). The name segment is required and must be a string of 63 characters or less, beginning and ending with an alphanumeric character (`[a-z0-9A-Z]`) with dashes (`-`), underscores (`_`), dots (`.`), and alphanumerics between. The prefix is optional. If specified, the prefix must be a DNS subdomain: a series of DNS labels separated by dots (`.`), not longer than 253 characters in total, followed by a slash (`/`).\n\nValid label values must be a string of 63 characters or less and must be empty or begin and end with an alphanumeric character (`[a-z0-9A-Z]`) with dashes (`-`), underscores (`_`), dots (`.`), and alphanumerics between.\n\nThe `hetzner.cloud/` prefix is reserved and cannot be used.\n\n**Example Labels**\n\n```json\n{\n  \"labels\": {\n    \"environment\": \"development\",\n    \"service\": \"backend\",\n    \"example.com/my\": \"label\",\n    \"just-a-key\": \"\"\n  }\n}\n```\n\n## Label Selector\n\nFor resources with labels, you can filter resources by their labels using the label selector query language.\n\n| Expression           | Meaning                                              |\n| -------------------- | ---------------------------------------------------- |\n| `k==v` / `k=v`       | Value of key `k` does equal value `v`                |\n| `k!=v`               | Value of key `k` does not equal value `v`            |\n| `k`                  | Key `k` is present                                   |\n| `!k`                 | Key `k` is not present                               |\n| `k in (v1,v2,v3)`    | Value of key `k` is `v1`, `v2`, or `v3`              |\n| `k notin (v1,v2,v3)` | Value of key `k` is neither `v1`, nor `v2`, nor `v3` |\n| `k1==v,!k2`          | Value of key `k1` is `v` and key `k2` is not present |\n\n### Examples\n\n- Returns all resources that have a `env=production` label and that don't have a `type=database` label:\n\n  `env=production,type!=database`\n\n- Returns all resources that have a `env=testing` or `env=staging` label:\n\n  `env in (testing,staging)`\n\n- Returns all resources that don't have a `type` label:\n\n  `!type`\n\n## Pagination\n\nResponses which return multiple items support pagination. If they do support pagination, it can be controlled with following query string parameters:\n\n- A `page` parameter specifies the page to fetch. The number of the first page is 1.\n- A `per_page` parameter specifies the number of items returned per page. The default value is 25, the maximum value is 50 except otherwise specified in the documentation.\n\nResponses contain a `Link` header with pagination information.\n\nAdditionally, if the response body is JSON and the root object is an object, that object has a `pagination` object inside the `meta` object with pagination information:\n\n**Example Pagination**\n\n```json\n{\n    \"storage_boxes\": [...],\n    \"meta\": {\n        \"pagination\": {\n            \"page\": 2,\n            \"per_page\": 25,\n            \"previous_page\": 1,\n            \"next_page\": 3,\n            \"last_page\": 4,\n            \"total_entries\": 100\n        }\n    }\n}\n```\n\nThe keys `previous_page`, `next_page`, `last_page`, and `total_entries` may be `null` when on the first page, last page, or when the total number of entries is unknown.\n\n**Example Pagination Link header**\n\n```http\nLink: <https://api.hetzner.com/v1/storage_boxes?page=2&per_page=5>; rel=\"prev\",\n      <https://api.hetzner.com/v1/storage_boxes?page=4&per_page=5>; rel=\"next\",\n      <https://api.hetzner.com/v1/storage_boxes?page=6&per_page=5>; rel=\"last\"\n```\n\nLine breaks have been added for display purposes only and responses may only contain some of the above `rel` values.\n\n## Rate Limiting\n\nAll requests, whether they are authenticated or not, are subject to rate limiting. If you have reached your limit, your requests will be handled with a `429 Too Many Requests` error. Burst requests are allowed. Responses contain several headers which provide information about your current rate limit status.\n\n- The `RateLimit-Limit` header contains the total number of requests you can perform per hour.\n- The `RateLimit-Remaining` header contains the number of requests remaining in the current rate limit time frame.\n- The `RateLimit-Reset` header contains a UNIX timestamp of the point in time when your rate limit will have recovered, and you will have the full number of requests available again.\n\nThe default limit is 3600 requests per hour and per Project. The number of remaining requests increases gradually. For example, when your limit is 3600 requests per hour, the number of remaining requests will increase by 1 every second.\n\n## Sorting\n\nSome responses which return multiple items support sorting. If they do support sorting the documentation states which fields can be used for sorting. You specify sorting with the `sort` query string parameter. You can sort by multiple fields. You can set the sort direction by appending `:asc` or `:desc` to the field name. By default, ascending sorting is used.\n\n**Example: Sorting**\n\n```\nhttps://api.hetzner.com/v1/storage_boxes?sort=status\nhttps://api.hetzner.com/v1/storage_boxes?sort=status:asc\nhttps://api.hetzner.com/v1/storage_boxes?sort=status:desc\nhttps://api.hetzner.com/v1/storage_boxes?sort=status:asc&sort=command:desc\n```\n\n## Deprecation Notices\n\nYou can find all announced deprecations in our [Changelog](/changelog).\n"
   },
   "servers": [
     {
@@ -170,14 +170,18 @@
                               },
                               "snapshot_limit": {
                                 "description": "Maximum number of allowed manual snapshots.",
-                                "type": "integer",
-                                "nullable": true,
+                                "type": [
+                                  "integer",
+                                  "null"
+                                ],
                                 "example": 10
                               },
                               "automatic_snapshot_limit": {
                                 "description": "Maximum number of snapshots created automatically by a snapshot plan.",
-                                "type": "integer",
-                                "nullable": true,
+                                "type": [
+                                  "integer",
+                                  "null"
+                                ],
                                 "example": 10
                               },
                               "subaccounts_limit": {
@@ -280,8 +284,10 @@
                               "deprecation": {
                                 "title": "DeprecationInfo",
                                 "description": "Describes if, when and how the resource is deprecated. If this field is\nset to `null` the resource is not deprecated. If a value is set, it is\nconsidered deprecated.\n",
-                                "type": "object",
-                                "nullable": true,
+                                "type": [
+                                  "object",
+                                  "null"
+                                ],
                                 "properties": {
                                   "unavailable_after": {
                                     "description": "Date of the deprecated resource removal.\n\nOnce this date is reached, the resource will not be returned\nby resource type \"list\" endpoint, and the resource can not be\nused to create new resources. For example, if this is an\nimage, you can not create new servers with this image after\nthe mentioned date.\n",
@@ -412,7 +418,10 @@
                           },
                           "snapshot_plan": {
                             "description": "Details of the active snapshot plan.\n\nNot available if the `status` is `initializing`.\n",
-                            "type": "object",
+                            "type": [
+                              "object",
+                              "null"
+                            ],
                             "properties": {
                               "max_snapshots": {
                                 "description": "Maximum amount of Snapshots that will be created by this Snapshot Plan.\n\nOlder Snapshots will be deleted.\n",
@@ -436,8 +445,10 @@
                               },
                               "day_of_week": {
                                 "description": "Day of the week when the Snapshot Plan is executed.\n\nStarts at 1 for Monday til 7 for Sunday. Null means every day.\n",
-                                "type": "integer",
-                                "nullable": true,
+                                "type": [
+                                  "integer",
+                                  "null"
+                                ],
                                 "default": null,
                                 "minimum": 1,
                                 "maximum": 7,
@@ -445,8 +456,10 @@
                               },
                               "day_of_month": {
                                 "description": "Day of the month when the Snapshot Plan is executed.\n\nNull means every day.\n",
-                                "type": "integer",
-                                "nullable": true,
+                                "type": [
+                                  "integer",
+                                  "null"
+                                ],
                                 "default": null,
                                 "minimum": 1,
                                 "maximum": 31,
@@ -459,8 +472,7 @@
                               "hour",
                               "day_of_week",
                               "day_of_month"
-                            ],
-                            "nullable": true
+                            ]
                           },
                           "protection": {
                             "description": "Protection configuration for the Resource.",
@@ -499,20 +511,26 @@
                           },
                           "username": {
                             "description": "Primary username of the [Storage Box](#tag/storage-boxes).\n\nNot available if the `status` is `initializing`.\n",
-                            "type": "string",
-                            "nullable": true,
+                            "type": [
+                              "string",
+                              "null"
+                            ],
                             "example": "u12345"
                           },
                           "server": {
                             "description": "FQDN of the [Storage Box](#tag/storage-boxes).\n\nNot available if the `status` is `initializing`.\n",
-                            "type": "string",
-                            "nullable": true,
+                            "type": [
+                              "string",
+                              "null"
+                            ],
                             "example": "u1337.your-storagebox.de"
                           },
                           "system": {
                             "description": "Host system of the [Storage Box](#tag/storage-boxes).\n\nNot available if the `status` is `initializing`.\n",
-                            "type": "string",
-                            "nullable": true,
+                            "type": [
+                              "string",
+                              "null"
+                            ],
                             "example": "FSN1-BX355"
                           },
                           "stats": {
@@ -588,30 +606,38 @@
                             },
                             "previous_page": {
                               "description": "Page number of the previous page. Can be null if the current page is the first one.",
-                              "type": "integer",
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
                               "format": "int64",
-                              "nullable": true,
                               "example": 2
                             },
                             "next_page": {
                               "description": "Page number of the next page. Can be null if the current page is the last one.",
-                              "type": "integer",
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
                               "format": "int64",
-                              "nullable": true,
                               "example": 4
                             },
                             "last_page": {
                               "description": "Page number of the last page available. Can be null if the current page is the last one.",
-                              "type": "integer",
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
                               "format": "int64",
-                              "nullable": true,
                               "example": 4
                             },
                             "total_entries": {
                               "description": "Total number of entries that exist for this query. Can be null if unknown.",
-                              "type": "integer",
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
                               "format": "int64",
-                              "nullable": true,
                               "example": 100
                             }
                           },
@@ -658,8 +684,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -702,8 +730,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -887,14 +917,18 @@
                             },
                             "snapshot_limit": {
                               "description": "Maximum number of allowed manual snapshots.",
-                              "type": "integer",
-                              "nullable": true,
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
                               "example": 10
                             },
                             "automatic_snapshot_limit": {
                               "description": "Maximum number of snapshots created automatically by a snapshot plan.",
-                              "type": "integer",
-                              "nullable": true,
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
                               "example": 10
                             },
                             "subaccounts_limit": {
@@ -997,8 +1031,10 @@
                             "deprecation": {
                               "title": "DeprecationInfo",
                               "description": "Describes if, when and how the resource is deprecated. If this field is\nset to `null` the resource is not deprecated. If a value is set, it is\nconsidered deprecated.\n",
-                              "type": "object",
-                              "nullable": true,
+                              "type": [
+                                "object",
+                                "null"
+                              ],
                               "properties": {
                                 "unavailable_after": {
                                   "description": "Date of the deprecated resource removal.\n\nOnce this date is reached, the resource will not be returned\nby resource type \"list\" endpoint, and the resource can not be\nused to create new resources. For example, if this is an\nimage, you can not create new servers with this image after\nthe mentioned date.\n",
@@ -1129,7 +1165,10 @@
                         },
                         "snapshot_plan": {
                           "description": "Details of the active snapshot plan.\n\nNot available if the `status` is `initializing`.\n",
-                          "type": "object",
+                          "type": [
+                            "object",
+                            "null"
+                          ],
                           "properties": {
                             "max_snapshots": {
                               "description": "Maximum amount of Snapshots that will be created by this Snapshot Plan.\n\nOlder Snapshots will be deleted.\n",
@@ -1153,8 +1192,10 @@
                             },
                             "day_of_week": {
                               "description": "Day of the week when the Snapshot Plan is executed.\n\nStarts at 1 for Monday til 7 for Sunday. Null means every day.\n",
-                              "type": "integer",
-                              "nullable": true,
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
                               "default": null,
                               "minimum": 1,
                               "maximum": 7,
@@ -1162,8 +1203,10 @@
                             },
                             "day_of_month": {
                               "description": "Day of the month when the Snapshot Plan is executed.\n\nNull means every day.\n",
-                              "type": "integer",
-                              "nullable": true,
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
                               "default": null,
                               "minimum": 1,
                               "maximum": 31,
@@ -1176,8 +1219,7 @@
                             "hour",
                             "day_of_week",
                             "day_of_month"
-                          ],
-                          "nullable": true
+                          ]
                         },
                         "protection": {
                           "description": "Protection configuration for the Resource.",
@@ -1216,20 +1258,26 @@
                         },
                         "username": {
                           "description": "Primary username of the [Storage Box](#tag/storage-boxes).\n\nNot available if the `status` is `initializing`.\n",
-                          "type": "string",
-                          "nullable": true,
+                          "type": [
+                            "string",
+                            "null"
+                          ],
                           "example": "u12345"
                         },
                         "server": {
                           "description": "FQDN of the [Storage Box](#tag/storage-boxes).\n\nNot available if the `status` is `initializing`.\n",
-                          "type": "string",
-                          "nullable": true,
+                          "type": [
+                            "string",
+                            "null"
+                          ],
                           "example": "u1337.your-storagebox.de"
                         },
                         "system": {
                           "description": "Host system of the [Storage Box](#tag/storage-boxes).\n\nNot available if the `status` is `initializing`.\n",
-                          "type": "string",
-                          "nullable": true,
+                          "type": [
+                            "string",
+                            "null"
+                          ],
                           "example": "FSN1-BX355"
                         },
                         "stats": {
@@ -1316,10 +1364,12 @@
                         },
                         "finished": {
                           "description": "Point in time when the Action was finished (in [RFC3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) format). Only set if the Action is finished otherwise null.",
-                          "type": "string",
+                          "type": [
+                            "string",
+                            "null"
+                          ],
                           "format": "date-time",
-                          "example": "2016-01-30T23:55:00Z",
-                          "nullable": true
+                          "example": "2016-01-30T23:55:00Z"
                         },
                         "progress": {
                           "description": "Progress of the Action in percent.",
@@ -1355,8 +1405,10 @@
                         },
                         "error": {
                           "description": "Error message for the Action if an error occurred, otherwise null.",
-                          "type": "object",
-                          "nullable": true,
+                          "type": [
+                            "object",
+                            "null"
+                          ],
                           "properties": {
                             "code": {
                               "description": "Fixed error code for machines.",
@@ -1504,8 +1556,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -1548,8 +1602,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -1668,14 +1724,18 @@
                             },
                             "snapshot_limit": {
                               "description": "Maximum number of allowed manual snapshots.",
-                              "type": "integer",
-                              "nullable": true,
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
                               "example": 10
                             },
                             "automatic_snapshot_limit": {
                               "description": "Maximum number of snapshots created automatically by a snapshot plan.",
-                              "type": "integer",
-                              "nullable": true,
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
                               "example": 10
                             },
                             "subaccounts_limit": {
@@ -1778,8 +1838,10 @@
                             "deprecation": {
                               "title": "DeprecationInfo",
                               "description": "Describes if, when and how the resource is deprecated. If this field is\nset to `null` the resource is not deprecated. If a value is set, it is\nconsidered deprecated.\n",
-                              "type": "object",
-                              "nullable": true,
+                              "type": [
+                                "object",
+                                "null"
+                              ],
                               "properties": {
                                 "unavailable_after": {
                                   "description": "Date of the deprecated resource removal.\n\nOnce this date is reached, the resource will not be returned\nby resource type \"list\" endpoint, and the resource can not be\nused to create new resources. For example, if this is an\nimage, you can not create new servers with this image after\nthe mentioned date.\n",
@@ -1910,7 +1972,10 @@
                         },
                         "snapshot_plan": {
                           "description": "Details of the active snapshot plan.\n\nNot available if the `status` is `initializing`.\n",
-                          "type": "object",
+                          "type": [
+                            "object",
+                            "null"
+                          ],
                           "properties": {
                             "max_snapshots": {
                               "description": "Maximum amount of Snapshots that will be created by this Snapshot Plan.\n\nOlder Snapshots will be deleted.\n",
@@ -1934,8 +1999,10 @@
                             },
                             "day_of_week": {
                               "description": "Day of the week when the Snapshot Plan is executed.\n\nStarts at 1 for Monday til 7 for Sunday. Null means every day.\n",
-                              "type": "integer",
-                              "nullable": true,
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
                               "default": null,
                               "minimum": 1,
                               "maximum": 7,
@@ -1943,8 +2010,10 @@
                             },
                             "day_of_month": {
                               "description": "Day of the month when the Snapshot Plan is executed.\n\nNull means every day.\n",
-                              "type": "integer",
-                              "nullable": true,
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
                               "default": null,
                               "minimum": 1,
                               "maximum": 31,
@@ -1957,8 +2026,7 @@
                             "hour",
                             "day_of_week",
                             "day_of_month"
-                          ],
-                          "nullable": true
+                          ]
                         },
                         "protection": {
                           "description": "Protection configuration for the Resource.",
@@ -1997,20 +2065,26 @@
                         },
                         "username": {
                           "description": "Primary username of the [Storage Box](#tag/storage-boxes).\n\nNot available if the `status` is `initializing`.\n",
-                          "type": "string",
-                          "nullable": true,
+                          "type": [
+                            "string",
+                            "null"
+                          ],
                           "example": "u12345"
                         },
                         "server": {
                           "description": "FQDN of the [Storage Box](#tag/storage-boxes).\n\nNot available if the `status` is `initializing`.\n",
-                          "type": "string",
-                          "nullable": true,
+                          "type": [
+                            "string",
+                            "null"
+                          ],
                           "example": "u1337.your-storagebox.de"
                         },
                         "system": {
                           "description": "Host system of the [Storage Box](#tag/storage-boxes).\n\nNot available if the `status` is `initializing`.\n",
-                          "type": "string",
-                          "nullable": true,
+                          "type": [
+                            "string",
+                            "null"
+                          ],
                           "example": "FSN1-BX355"
                         },
                         "stats": {
@@ -2091,8 +2165,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -2135,8 +2211,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -2281,14 +2359,18 @@
                             },
                             "snapshot_limit": {
                               "description": "Maximum number of allowed manual snapshots.",
-                              "type": "integer",
-                              "nullable": true,
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
                               "example": 10
                             },
                             "automatic_snapshot_limit": {
                               "description": "Maximum number of snapshots created automatically by a snapshot plan.",
-                              "type": "integer",
-                              "nullable": true,
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
                               "example": 10
                             },
                             "subaccounts_limit": {
@@ -2391,8 +2473,10 @@
                             "deprecation": {
                               "title": "DeprecationInfo",
                               "description": "Describes if, when and how the resource is deprecated. If this field is\nset to `null` the resource is not deprecated. If a value is set, it is\nconsidered deprecated.\n",
-                              "type": "object",
-                              "nullable": true,
+                              "type": [
+                                "object",
+                                "null"
+                              ],
                               "properties": {
                                 "unavailable_after": {
                                   "description": "Date of the deprecated resource removal.\n\nOnce this date is reached, the resource will not be returned\nby resource type \"list\" endpoint, and the resource can not be\nused to create new resources. For example, if this is an\nimage, you can not create new servers with this image after\nthe mentioned date.\n",
@@ -2523,7 +2607,10 @@
                         },
                         "snapshot_plan": {
                           "description": "Details of the active snapshot plan.\n\nNot available if the `status` is `initializing`.\n",
-                          "type": "object",
+                          "type": [
+                            "object",
+                            "null"
+                          ],
                           "properties": {
                             "max_snapshots": {
                               "description": "Maximum amount of Snapshots that will be created by this Snapshot Plan.\n\nOlder Snapshots will be deleted.\n",
@@ -2547,8 +2634,10 @@
                             },
                             "day_of_week": {
                               "description": "Day of the week when the Snapshot Plan is executed.\n\nStarts at 1 for Monday til 7 for Sunday. Null means every day.\n",
-                              "type": "integer",
-                              "nullable": true,
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
                               "default": null,
                               "minimum": 1,
                               "maximum": 7,
@@ -2556,8 +2645,10 @@
                             },
                             "day_of_month": {
                               "description": "Day of the month when the Snapshot Plan is executed.\n\nNull means every day.\n",
-                              "type": "integer",
-                              "nullable": true,
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
                               "default": null,
                               "minimum": 1,
                               "maximum": 31,
@@ -2570,8 +2661,7 @@
                             "hour",
                             "day_of_week",
                             "day_of_month"
-                          ],
-                          "nullable": true
+                          ]
                         },
                         "protection": {
                           "description": "Protection configuration for the Resource.",
@@ -2610,20 +2700,26 @@
                         },
                         "username": {
                           "description": "Primary username of the [Storage Box](#tag/storage-boxes).\n\nNot available if the `status` is `initializing`.\n",
-                          "type": "string",
-                          "nullable": true,
+                          "type": [
+                            "string",
+                            "null"
+                          ],
                           "example": "u12345"
                         },
                         "server": {
                           "description": "FQDN of the [Storage Box](#tag/storage-boxes).\n\nNot available if the `status` is `initializing`.\n",
-                          "type": "string",
-                          "nullable": true,
+                          "type": [
+                            "string",
+                            "null"
+                          ],
                           "example": "u1337.your-storagebox.de"
                         },
                         "system": {
                           "description": "Host system of the [Storage Box](#tag/storage-boxes).\n\nNot available if the `status` is `initializing`.\n",
-                          "type": "string",
-                          "nullable": true,
+                          "type": [
+                            "string",
+                            "null"
+                          ],
                           "example": "FSN1-BX355"
                         },
                         "stats": {
@@ -2704,8 +2800,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -2748,8 +2846,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -2862,10 +2962,12 @@
                         },
                         "finished": {
                           "description": "Point in time when the Action was finished (in [RFC3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) format). Only set if the Action is finished otherwise null.",
-                          "type": "string",
+                          "type": [
+                            "string",
+                            "null"
+                          ],
                           "format": "date-time",
-                          "example": "2016-01-30T23:55:00Z",
-                          "nullable": true
+                          "example": "2016-01-30T23:55:00Z"
                         },
                         "progress": {
                           "description": "Progress of the Action in percent.",
@@ -2901,8 +3003,10 @@
                         },
                         "error": {
                           "description": "Error message for the Action if an error occurred, otherwise null.",
-                          "type": "object",
-                          "nullable": true,
+                          "type": [
+                            "object",
+                            "null"
+                          ],
                           "properties": {
                             "code": {
                               "description": "Fixed error code for machines.",
@@ -2982,8 +3086,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -3026,8 +3132,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -3163,8 +3271,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -3207,8 +3317,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -3399,10 +3511,12 @@
                           },
                           "finished": {
                             "description": "Point in time when the Action was finished (in [RFC3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) format). Only set if the Action is finished otherwise null.",
-                            "type": "string",
+                            "type": [
+                              "string",
+                              "null"
+                            ],
                             "format": "date-time",
-                            "example": "2016-01-30T23:55:00Z",
-                            "nullable": true
+                            "example": "2016-01-30T23:55:00Z"
                           },
                           "progress": {
                             "description": "Progress of the Action in percent.",
@@ -3438,8 +3552,10 @@
                           },
                           "error": {
                             "description": "Error message for the Action if an error occurred, otherwise null.",
-                            "type": "object",
-                            "nullable": true,
+                            "type": [
+                              "object",
+                              "null"
+                            ],
                             "properties": {
                               "code": {
                                 "description": "Fixed error code for machines.",
@@ -3492,30 +3608,38 @@
                             },
                             "previous_page": {
                               "description": "Page number of the previous page. Can be null if the current page is the first one.",
-                              "type": "integer",
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
                               "format": "int64",
-                              "nullable": true,
                               "example": 2
                             },
                             "next_page": {
                               "description": "Page number of the next page. Can be null if the current page is the last one.",
-                              "type": "integer",
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
                               "format": "int64",
-                              "nullable": true,
                               "example": 4
                             },
                             "last_page": {
                               "description": "Page number of the last page available. Can be null if the current page is the last one.",
-                              "type": "integer",
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
                               "format": "int64",
-                              "nullable": true,
                               "example": 4
                             },
                             "total_entries": {
                               "description": "Total number of entries that exist for this query. Can be null if unknown.",
-                              "type": "integer",
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
                               "format": "int64",
-                              "nullable": true,
                               "example": 100
                             }
                           },
@@ -3562,8 +3686,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -3606,8 +3732,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -3717,10 +3845,12 @@
                         },
                         "finished": {
                           "description": "Point in time when the Action was finished (in [RFC3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) format). Only set if the Action is finished otherwise null.",
-                          "type": "string",
+                          "type": [
+                            "string",
+                            "null"
+                          ],
                           "format": "date-time",
-                          "example": "2016-01-30T23:55:00Z",
-                          "nullable": true
+                          "example": "2016-01-30T23:55:00Z"
                         },
                         "progress": {
                           "description": "Progress of the Action in percent.",
@@ -3756,8 +3886,10 @@
                         },
                         "error": {
                           "description": "Error message for the Action if an error occurred, otherwise null.",
-                          "type": "object",
-                          "nullable": true,
+                          "type": [
+                            "object",
+                            "null"
+                          ],
                           "properties": {
                             "code": {
                               "description": "Fixed error code for machines.",
@@ -3815,8 +3947,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -3859,8 +3993,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -4043,10 +4179,12 @@
                           },
                           "finished": {
                             "description": "Point in time when the Action was finished (in [RFC3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) format). Only set if the Action is finished otherwise null.",
-                            "type": "string",
+                            "type": [
+                              "string",
+                              "null"
+                            ],
                             "format": "date-time",
-                            "example": "2016-01-30T23:55:00Z",
-                            "nullable": true
+                            "example": "2016-01-30T23:55:00Z"
                           },
                           "progress": {
                             "description": "Progress of the Action in percent.",
@@ -4082,8 +4220,10 @@
                           },
                           "error": {
                             "description": "Error message for the Action if an error occurred, otherwise null.",
-                            "type": "object",
-                            "nullable": true,
+                            "type": [
+                              "object",
+                              "null"
+                            ],
                             "properties": {
                               "code": {
                                 "description": "Fixed error code for machines.",
@@ -4136,30 +4276,38 @@
                             },
                             "previous_page": {
                               "description": "Page number of the previous page. Can be null if the current page is the first one.",
-                              "type": "integer",
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
                               "format": "int64",
-                              "nullable": true,
                               "example": 2
                             },
                             "next_page": {
                               "description": "Page number of the next page. Can be null if the current page is the last one.",
-                              "type": "integer",
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
                               "format": "int64",
-                              "nullable": true,
                               "example": 4
                             },
                             "last_page": {
                               "description": "Page number of the last page available. Can be null if the current page is the last one.",
-                              "type": "integer",
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
                               "format": "int64",
-                              "nullable": true,
                               "example": 4
                             },
                             "total_entries": {
                               "description": "Total number of entries that exist for this query. Can be null if unknown.",
-                              "type": "integer",
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
                               "format": "int64",
-                              "nullable": true,
                               "example": 100
                             }
                           },
@@ -4206,8 +4354,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -4250,8 +4400,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -4364,10 +4516,12 @@
                         },
                         "finished": {
                           "description": "Point in time when the Action was finished (in [RFC3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) format). Only set if the Action is finished otherwise null.",
-                          "type": "string",
+                          "type": [
+                            "string",
+                            "null"
+                          ],
                           "format": "date-time",
-                          "example": "2016-01-30T23:55:00Z",
-                          "nullable": true
+                          "example": "2016-01-30T23:55:00Z"
                         },
                         "progress": {
                           "description": "Progress of the Action in percent.",
@@ -4403,8 +4557,10 @@
                         },
                         "error": {
                           "description": "Error message for the Action if an error occurred, otherwise null.",
-                          "type": "object",
-                          "nullable": true,
+                          "type": [
+                            "object",
+                            "null"
+                          ],
                           "properties": {
                             "code": {
                               "description": "Fixed error code for machines.",
@@ -4462,8 +4618,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -4506,8 +4664,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -4624,10 +4784,12 @@
                         },
                         "finished": {
                           "description": "Point in time when the Action was finished (in [RFC3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) format). Only set if the Action is finished otherwise null.",
-                          "type": "string",
+                          "type": [
+                            "string",
+                            "null"
+                          ],
                           "format": "date-time",
-                          "example": "2016-01-30T23:55:00Z",
-                          "nullable": true
+                          "example": "2016-01-30T23:55:00Z"
                         },
                         "progress": {
                           "description": "Progress of the Action in percent.",
@@ -4663,8 +4825,10 @@
                         },
                         "error": {
                           "description": "Error message for the Action if an error occurred, otherwise null.",
-                          "type": "object",
-                          "nullable": true,
+                          "type": [
+                            "object",
+                            "null"
+                          ],
                           "properties": {
                             "code": {
                               "description": "Fixed error code for machines.",
@@ -4744,8 +4908,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -4788,8 +4954,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -4925,10 +5093,12 @@
                         },
                         "finished": {
                           "description": "Point in time when the Action was finished (in [RFC3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) format). Only set if the Action is finished otherwise null.",
-                          "type": "string",
+                          "type": [
+                            "string",
+                            "null"
+                          ],
                           "format": "date-time",
-                          "example": "2016-01-30T23:55:00Z",
-                          "nullable": true
+                          "example": "2016-01-30T23:55:00Z"
                         },
                         "progress": {
                           "description": "Progress of the Action in percent.",
@@ -4964,8 +5134,10 @@
                         },
                         "error": {
                           "description": "Error message for the Action if an error occurred, otherwise null.",
-                          "type": "object",
-                          "nullable": true,
+                          "type": [
+                            "object",
+                            "null"
+                          ],
                           "properties": {
                             "code": {
                               "description": "Fixed error code for machines.",
@@ -5048,8 +5220,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -5092,8 +5266,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -5228,10 +5404,12 @@
                         },
                         "finished": {
                           "description": "Point in time when the Action was finished (in [RFC3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) format). Only set if the Action is finished otherwise null.",
-                          "type": "string",
+                          "type": [
+                            "string",
+                            "null"
+                          ],
                           "format": "date-time",
-                          "example": "2016-01-30T23:55:00Z",
-                          "nullable": true
+                          "example": "2016-01-30T23:55:00Z"
                         },
                         "progress": {
                           "description": "Progress of the Action in percent.",
@@ -5267,8 +5445,10 @@
                         },
                         "error": {
                           "description": "Error message for the Action if an error occurred, otherwise null.",
-                          "type": "object",
-                          "nullable": true,
+                          "type": [
+                            "object",
+                            "null"
+                          ],
                           "properties": {
                             "code": {
                               "description": "Fixed error code for machines.",
@@ -5351,8 +5531,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -5395,8 +5577,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -5544,10 +5728,12 @@
                         },
                         "finished": {
                           "description": "Point in time when the Action was finished (in [RFC3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) format). Only set if the Action is finished otherwise null.",
-                          "type": "string",
+                          "type": [
+                            "string",
+                            "null"
+                          ],
                           "format": "date-time",
-                          "example": "2016-01-30T23:55:00Z",
-                          "nullable": true
+                          "example": "2016-01-30T23:55:00Z"
                         },
                         "progress": {
                           "description": "Progress of the Action in percent.",
@@ -5583,8 +5769,10 @@
                         },
                         "error": {
                           "description": "Error message for the Action if an error occurred, otherwise null.",
-                          "type": "object",
-                          "nullable": true,
+                          "type": [
+                            "object",
+                            "null"
+                          ],
                           "properties": {
                             "code": {
                               "description": "Fixed error code for machines.",
@@ -5667,8 +5855,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -5711,8 +5901,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -5848,10 +6040,12 @@
                         },
                         "finished": {
                           "description": "Point in time when the Action was finished (in [RFC3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) format). Only set if the Action is finished otherwise null.",
-                          "type": "string",
+                          "type": [
+                            "string",
+                            "null"
+                          ],
                           "format": "date-time",
-                          "example": "2016-01-30T23:55:00Z",
-                          "nullable": true
+                          "example": "2016-01-30T23:55:00Z"
                         },
                         "progress": {
                           "description": "Progress of the Action in percent.",
@@ -5887,8 +6081,10 @@
                         },
                         "error": {
                           "description": "Error message for the Action if an error occurred, otherwise null.",
-                          "type": "object",
-                          "nullable": true,
+                          "type": [
+                            "object",
+                            "null"
+                          ],
                           "properties": {
                             "code": {
                               "description": "Fixed error code for machines.",
@@ -5941,7 +6137,7 @@
                           },
                           {
                             "id": 42,
-                            "type": "snapshot"
+                            "type": "storage_box_snapshot"
                           }
                         ],
                         "error": {
@@ -5975,8 +6171,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -6019,8 +6217,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -6136,10 +6336,12 @@
                         },
                         "finished": {
                           "description": "Point in time when the Action was finished (in [RFC3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) format). Only set if the Action is finished otherwise null.",
-                          "type": "string",
+                          "type": [
+                            "string",
+                            "null"
+                          ],
                           "format": "date-time",
-                          "example": "2016-01-30T23:55:00Z",
-                          "nullable": true
+                          "example": "2016-01-30T23:55:00Z"
                         },
                         "progress": {
                           "description": "Progress of the Action in percent.",
@@ -6175,8 +6377,10 @@
                         },
                         "error": {
                           "description": "Error message for the Action if an error occurred, otherwise null.",
-                          "type": "object",
-                          "nullable": true,
+                          "type": [
+                            "object",
+                            "null"
+                          ],
                           "properties": {
                             "code": {
                               "description": "Fixed error code for machines.",
@@ -6259,8 +6463,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -6303,8 +6509,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -6405,8 +6613,10 @@
                   },
                   "day_of_week": {
                     "description": "Day of the week when the Snapshot Plan is executed.\n\nStarts at 1 for Monday til 7 for Sunday. Null means every day.\n",
-                    "type": "integer",
-                    "nullable": true,
+                    "type": [
+                      "integer",
+                      "null"
+                    ],
                     "default": null,
                     "minimum": 1,
                     "maximum": 7,
@@ -6414,8 +6624,10 @@
                   },
                   "day_of_month": {
                     "description": "Day of the month when the Snapshot Plan is executed.\n\nNull means every day.\n",
-                    "type": "integer",
-                    "nullable": true,
+                    "type": [
+                      "integer",
+                      "null"
+                    ],
                     "default": null,
                     "minimum": 1,
                     "maximum": 31,
@@ -6475,10 +6687,12 @@
                         },
                         "finished": {
                           "description": "Point in time when the Action was finished (in [RFC3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) format). Only set if the Action is finished otherwise null.",
-                          "type": "string",
+                          "type": [
+                            "string",
+                            "null"
+                          ],
                           "format": "date-time",
-                          "example": "2016-01-30T23:55:00Z",
-                          "nullable": true
+                          "example": "2016-01-30T23:55:00Z"
                         },
                         "progress": {
                           "description": "Progress of the Action in percent.",
@@ -6514,8 +6728,10 @@
                         },
                         "error": {
                           "description": "Error message for the Action if an error occurred, otherwise null.",
-                          "type": "object",
-                          "nullable": true,
+                          "type": [
+                            "object",
+                            "null"
+                          ],
                           "properties": {
                             "code": {
                               "description": "Fixed error code for machines.",
@@ -6598,8 +6814,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -6642,8 +6860,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -6946,8 +7166,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -6990,8 +7212,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -7206,10 +7430,12 @@
                         },
                         "finished": {
                           "description": "Point in time when the Action was finished (in [RFC3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) format). Only set if the Action is finished otherwise null.",
-                          "type": "string",
+                          "type": [
+                            "string",
+                            "null"
+                          ],
                           "format": "date-time",
-                          "example": "2016-01-30T23:55:00Z",
-                          "nullable": true
+                          "example": "2016-01-30T23:55:00Z"
                         },
                         "progress": {
                           "description": "Progress of the Action in percent.",
@@ -7245,8 +7471,10 @@
                         },
                         "error": {
                           "description": "Error message for the Action if an error occurred, otherwise null.",
-                          "type": "object",
-                          "nullable": true,
+                          "type": [
+                            "object",
+                            "null"
+                          ],
                           "properties": {
                             "code": {
                               "description": "Fixed error code for machines.",
@@ -7338,8 +7566,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -7382,8 +7612,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -7620,8 +7852,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -7664,8 +7898,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -7937,8 +8173,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -7981,8 +8219,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -8109,10 +8349,12 @@
                         },
                         "finished": {
                           "description": "Point in time when the Action was finished (in [RFC3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) format). Only set if the Action is finished otherwise null.",
-                          "type": "string",
+                          "type": [
+                            "string",
+                            "null"
+                          ],
                           "format": "date-time",
-                          "example": "2016-01-30T23:55:00Z",
-                          "nullable": true
+                          "example": "2016-01-30T23:55:00Z"
                         },
                         "progress": {
                           "description": "Progress of the Action in percent.",
@@ -8148,8 +8390,10 @@
                         },
                         "error": {
                           "description": "Error message for the Action if an error occurred, otherwise null.",
-                          "type": "object",
-                          "nullable": true,
+                          "type": [
+                            "object",
+                            "null"
+                          ],
                           "properties": {
                             "code": {
                               "description": "Fixed error code for machines.",
@@ -8236,8 +8480,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -8280,8 +8526,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -8434,10 +8682,12 @@
                         },
                         "finished": {
                           "description": "Point in time when the Action was finished (in [RFC3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) format). Only set if the Action is finished otherwise null.",
-                          "type": "string",
+                          "type": [
+                            "string",
+                            "null"
+                          ],
                           "format": "date-time",
-                          "example": "2016-01-30T23:55:00Z",
-                          "nullable": true
+                          "example": "2016-01-30T23:55:00Z"
                         },
                         "progress": {
                           "description": "Progress of the Action in percent.",
@@ -8473,8 +8723,10 @@
                         },
                         "error": {
                           "description": "Error message for the Action if an error occurred, otherwise null.",
-                          "type": "object",
-                          "nullable": true,
+                          "type": [
+                            "object",
+                            "null"
+                          ],
                           "properties": {
                             "code": {
                               "description": "Fixed error code for machines.",
@@ -8558,8 +8810,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -8602,8 +8856,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -8752,10 +9008,12 @@
                         },
                         "finished": {
                           "description": "Point in time when the Action was finished (in [RFC3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) format). Only set if the Action is finished otherwise null.",
-                          "type": "string",
+                          "type": [
+                            "string",
+                            "null"
+                          ],
                           "format": "date-time",
-                          "example": "2016-01-30T23:55:00Z",
-                          "nullable": true
+                          "example": "2016-01-30T23:55:00Z"
                         },
                         "progress": {
                           "description": "Progress of the Action in percent.",
@@ -8791,8 +9049,10 @@
                         },
                         "error": {
                           "description": "Error message for the Action if an error occurred, otherwise null.",
-                          "type": "object",
-                          "nullable": true,
+                          "type": [
+                            "object",
+                            "null"
+                          ],
                           "properties": {
                             "code": {
                               "description": "Fixed error code for machines.",
@@ -8879,8 +9139,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -8923,8 +9185,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -9086,10 +9350,12 @@
                         },
                         "finished": {
                           "description": "Point in time when the Action was finished (in [RFC3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) format). Only set if the Action is finished otherwise null.",
-                          "type": "string",
+                          "type": [
+                            "string",
+                            "null"
+                          ],
                           "format": "date-time",
-                          "example": "2016-01-30T23:55:00Z",
-                          "nullable": true
+                          "example": "2016-01-30T23:55:00Z"
                         },
                         "progress": {
                           "description": "Progress of the Action in percent.",
@@ -9125,8 +9391,10 @@
                         },
                         "error": {
                           "description": "Error message for the Action if an error occurred, otherwise null.",
-                          "type": "object",
-                          "nullable": true,
+                          "type": [
+                            "object",
+                            "null"
+                          ],
                           "properties": {
                             "code": {
                               "description": "Fixed error code for machines.",
@@ -9213,8 +9481,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -9257,8 +9527,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -9546,8 +9818,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -9590,8 +9864,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -9759,10 +10035,12 @@
                         },
                         "finished": {
                           "description": "Point in time when the Action was finished (in [RFC3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) format). Only set if the Action is finished otherwise null.",
-                          "type": "string",
+                          "type": [
+                            "string",
+                            "null"
+                          ],
                           "format": "date-time",
-                          "example": "2016-01-30T23:55:00Z",
-                          "nullable": true
+                          "example": "2016-01-30T23:55:00Z"
                         },
                         "progress": {
                           "description": "Progress of the Action in percent.",
@@ -9798,8 +10076,10 @@
                         },
                         "error": {
                           "description": "Error message for the Action if an error occurred, otherwise null.",
-                          "type": "object",
-                          "nullable": true,
+                          "type": [
+                            "object",
+                            "null"
+                          ],
                           "properties": {
                             "code": {
                               "description": "Fixed error code for machines.",
@@ -9891,8 +10171,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -9935,8 +10217,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -10143,8 +10427,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -10187,8 +10473,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -10424,8 +10712,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -10468,8 +10758,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -10596,10 +10888,12 @@
                         },
                         "finished": {
                           "description": "Point in time when the Action was finished (in [RFC3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6) format). Only set if the Action is finished otherwise null.",
-                          "type": "string",
+                          "type": [
+                            "string",
+                            "null"
+                          ],
                           "format": "date-time",
-                          "example": "2016-01-30T23:55:00Z",
-                          "nullable": true
+                          "example": "2016-01-30T23:55:00Z"
                         },
                         "progress": {
                           "description": "Progress of the Action in percent.",
@@ -10635,8 +10929,10 @@
                         },
                         "error": {
                           "description": "Error message for the Action if an error occurred, otherwise null.",
-                          "type": "object",
-                          "nullable": true,
+                          "type": [
+                            "object",
+                            "null"
+                          ],
                           "properties": {
                             "code": {
                               "description": "Fixed error code for machines.",
@@ -10723,8 +11019,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -10767,8 +11065,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -10892,14 +11192,18 @@
                           },
                           "snapshot_limit": {
                             "description": "Maximum number of allowed manual snapshots.",
-                            "type": "integer",
-                            "nullable": true,
+                            "type": [
+                              "integer",
+                              "null"
+                            ],
                             "example": 10
                           },
                           "automatic_snapshot_limit": {
                             "description": "Maximum number of snapshots created automatically by a snapshot plan.",
-                            "type": "integer",
-                            "nullable": true,
+                            "type": [
+                              "integer",
+                              "null"
+                            ],
                             "example": 10
                           },
                           "subaccounts_limit": {
@@ -11002,8 +11306,10 @@
                           "deprecation": {
                             "title": "DeprecationInfo",
                             "description": "Describes if, when and how the resource is deprecated. If this field is\nset to `null` the resource is not deprecated. If a value is set, it is\nconsidered deprecated.\n",
-                            "type": "object",
-                            "nullable": true,
+                            "type": [
+                              "object",
+                              "null"
+                            ],
                             "properties": {
                               "unavailable_after": {
                                 "description": "Date of the deprecated resource removal.\n\nOnce this date is reached, the resource will not be returned\nby resource type \"list\" endpoint, and the resource can not be\nused to create new resources. For example, if this is an\nimage, you can not create new servers with this image after\nthe mentioned date.\n",
@@ -11059,30 +11365,38 @@
                             },
                             "previous_page": {
                               "description": "Page number of the previous page. Can be null if the current page is the first one.",
-                              "type": "integer",
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
                               "format": "int64",
-                              "nullable": true,
                               "example": 2
                             },
                             "next_page": {
                               "description": "Page number of the next page. Can be null if the current page is the last one.",
-                              "type": "integer",
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
                               "format": "int64",
-                              "nullable": true,
                               "example": 4
                             },
                             "last_page": {
                               "description": "Page number of the last page available. Can be null if the current page is the last one.",
-                              "type": "integer",
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
                               "format": "int64",
-                              "nullable": true,
                               "example": 4
                             },
                             "total_entries": {
                               "description": "Total number of entries that exist for this query. Can be null if unknown.",
-                              "type": "integer",
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
                               "format": "int64",
-                              "nullable": true,
                               "example": 100
                             }
                           },
@@ -11129,8 +11443,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -11173,8 +11489,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -11277,14 +11595,18 @@
                         },
                         "snapshot_limit": {
                           "description": "Maximum number of allowed manual snapshots.",
-                          "type": "integer",
-                          "nullable": true,
+                          "type": [
+                            "integer",
+                            "null"
+                          ],
                           "example": 10
                         },
                         "automatic_snapshot_limit": {
                           "description": "Maximum number of snapshots created automatically by a snapshot plan.",
-                          "type": "integer",
-                          "nullable": true,
+                          "type": [
+                            "integer",
+                            "null"
+                          ],
                           "example": 10
                         },
                         "subaccounts_limit": {
@@ -11387,8 +11709,10 @@
                         "deprecation": {
                           "title": "DeprecationInfo",
                           "description": "Describes if, when and how the resource is deprecated. If this field is\nset to `null` the resource is not deprecated. If a value is set, it is\nconsidered deprecated.\n",
-                          "type": "object",
-                          "nullable": true,
+                          "type": [
+                            "object",
+                            "null"
+                          ],
                           "properties": {
                             "unavailable_after": {
                               "description": "Date of the deprecated resource removal.\n\nOnce this date is reached, the resource will not be returned\nby resource type \"list\" endpoint, and the resource can not be\nused to create new resources. For example, if this is an\nimage, you can not create new servers with this image after\nthe mentioned date.\n",
@@ -11449,8 +11773,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
@@ -11493,8 +11819,10 @@
                         },
                         "details": {
                           "description": "Details about the error.",
-                          "type": "object",
-                          "nullable": true
+                          "type": [
+                            "object",
+                            "null"
+                          ]
                         }
                       },
                       "required": [
