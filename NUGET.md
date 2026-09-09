@@ -28,9 +28,9 @@ var cloud = HetznerCloudClient.WithBearer("hcloud-token");
 var api   = HetznerApiClient.WithBearer("hetzner-account-token");
 var robot = HetznerRobotClient.WithBasic("#ws+user", "ws-password");
 
-var cloudServers     = await cloud.Servers.ListServersAsync();
-var dnsZones         = await api.Zones.ListAsync();
-var dedicatedServers = await robot.Server.GetAllAsync();
+var cloudServers     = await cloud.Servers.ListAsync();
+var dnsZones         = await cloud.Zones.ListAsync();
+var dedicatedServers = await robot.Server.ListAsync();
 var serverDetail     = (await robot.Server.GetAsync("321")).Server;
 Console.WriteLine(serverDetail.ServerIp);
 ```

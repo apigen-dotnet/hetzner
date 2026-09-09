@@ -56,12 +56,12 @@ public partial class ServiceHttpsProtocol
   /// </summary>
   [Required]
   [System.Text.Json.Serialization.JsonPropertyName("health_check")]
-  public object? HealthCheck { get; set; }
+  public ServiceTcpHealthCheck HealthCheck { get; set; } = null!;
 
   /// <summary>
   /// Configuration option for protocol https.
   /// </summary>
   [Required]
   [System.Text.Json.Serialization.JsonPropertyName("http")]
-  public object? Http { get; set; }
+  public ServiceHttpsProtocolHttp Http { get; set; } = null!;
 }

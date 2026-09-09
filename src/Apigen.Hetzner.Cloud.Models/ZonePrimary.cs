@@ -57,7 +57,7 @@ public partial class ZonePrimary
   /// </summary>
   [Required]
   [System.Text.Json.Serialization.JsonPropertyName("created")]
-  public DateTime Created { get; set; }
+  public DateTimeOffset Created { get; set; }
 
   /// <summary>
   /// Primary nameservers of the [Zone](#tag/zones).
@@ -66,7 +66,7 @@ public partial class ZonePrimary
   /// 
   /// </summary>
   [System.Text.Json.Serialization.JsonPropertyName("primary_nameservers")]
-  public List<object?>? PrimaryNameservers { get; set; }
+  public List<ZonePrimaryPrimaryNameservers>? PrimaryNameservers { get; set; }
 
   /// <summary>
   /// User-defined labels (key/value pairs) for the Resource.
@@ -82,7 +82,7 @@ public partial class ZonePrimary
   /// </summary>
   [Required]
   [System.Text.Json.Serialization.JsonPropertyName("protection")]
-  public object? Protection { get; set; }
+  public ZonePrimaryProtection Protection { get; set; } = null!;
 
   /// <summary>
   /// Default Time To Live (TTL) of the [Zone](#tag/zones).
@@ -114,7 +114,7 @@ public partial class ZonePrimary
 
   [Required]
   [System.Text.Json.Serialization.JsonPropertyName("authoritative_nameservers")]
-  public object? AuthoritativeNameservers { get; set; }
+  public ZonePrimaryAuthoritativeNameservers AuthoritativeNameservers { get; set; } = null!;
 
   /// <summary>
   /// Registrar of the domain.

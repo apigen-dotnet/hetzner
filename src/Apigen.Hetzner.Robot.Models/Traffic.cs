@@ -36,5 +36,5 @@ public partial class Traffic
   public DateOnly? To { get; set; }
 
   [System.Text.Json.Serialization.JsonPropertyName("data")]
-  public Dictionary<string, object?>? Data { get; set; }
+  public Dictionary<string, TrafficData>? Data { get; set; }
 }

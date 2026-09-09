@@ -30,6 +30,8 @@ public partial class CreatePrimaryIpRequest
   /// Name of the Resource. Must be unique per Project.
   /// </summary>
   [Required]
+  [MinLength(1)]
+  [MaxLength(255)]
   [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.Never)]
   [System.Text.Json.Serialization.JsonPropertyName("name")]
   public string? Name { get; set; }
@@ -52,20 +54,6 @@ public partial class CreatePrimaryIpRequest
   public string? Type { get; set; }
 
   /// <summary>
-  /// Deprecated**: This property is deprecated and will be removed after 1 July 2026.
-  /// Use the location key instead.
-  /// 
-  /// [Data Center](#tag/data-centers) ID or name.
-  /// 
-  /// The [Primary IP](#tag/primary-ips) will be bound to this [Data Center](#tag/data-centers).
-  /// Omit if assignee_id/assignee_type or location are provided.
-  /// 
-  /// </summary>
-  [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
-  [System.Text.Json.Serialization.JsonPropertyName("datacenter")]
-  public object? Datacenter { get; set; }
-
-  /// <summary>
   /// [Location](#tag/locations) ID or name the [Primary IP](#tag/primary-ips) will be bound to.
   /// 
   /// Omit if assignee_id/assignee_type or datacenter are provided.
@@ -76,14 +64,12 @@ public partial class CreatePrimaryIpRequest
   public object? Location { get; set; }
 
   /// <summary>
-  /// Type of resource the [Primary IP](#tag/primary-ips) can get assigned to.
+  /// Type of resource to assign the [Primary IP](#tag/primary-ips) to.
   /// 
-  /// Currently [Primary IPs](#tag/primary-ips) can only be assigned to [Servers](#tag/servers),
-  /// therefore this field must be set to server.
+  /// Omitted if the [Primary IP](#tag/primary-ips) should not get assigned.
   /// 
   /// </summary>
-  [Required]
-  [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.Never)]
+  [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
   [System.Text.Json.Serialization.JsonPropertyName("assignee_type")]
   public string? AssigneeType { get; set; }
 

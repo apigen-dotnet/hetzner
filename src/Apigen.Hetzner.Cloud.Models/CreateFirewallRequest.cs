@@ -29,12 +29,12 @@ public partial class CreateFirewallRequest
   /// <summary>
   /// Name of the [Firewall](#tag/firewalls).
   /// 
-  /// Limited to a maximum of 128 characters.
-  /// 
   /// Must be unique per Project.
   /// 
   /// </summary>
   [Required]
+  [MinLength(1)]
+  [MaxLength(128)]
   [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.Never)]
   [System.Text.Json.Serialization.JsonPropertyName("name")]
   public string? Name { get; set; }
@@ -56,7 +56,7 @@ public partial class CreateFirewallRequest
   /// </summary>
   [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
   [System.Text.Json.Serialization.JsonPropertyName("rules")]
-  public List<object?>? Rules { get; set; }
+  public List<CreateFirewallRequestRules>? Rules { get; set; }
 
   /// <summary>
   /// Resources to apply the [Firewall](#tag/firewalls) to.
@@ -66,5 +66,5 @@ public partial class CreateFirewallRequest
   /// </summary>
   [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
   [System.Text.Json.Serialization.JsonPropertyName("apply_to")]
-  public List<object?>? ApplyTo { get; set; }
+  public List<CreateFirewallRequestApplyTo>? ApplyTo { get; set; }
 }

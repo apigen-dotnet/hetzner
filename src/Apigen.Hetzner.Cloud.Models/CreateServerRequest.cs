@@ -35,22 +35,11 @@ public partial class CreateServerRequest
   public string? Name { get; set; }
 
   /// <summary>
-  /// ID or name of the Location to create the Server in (must not be used together with datacenter).
+  /// ID or name of the Location to create the Server in.
   /// </summary>
   [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
   [System.Text.Json.Serialization.JsonPropertyName("location")]
   public string? Location { get; set; }
-
-  /// <summary>
-  /// Deprecated**: This property is deprecated and will be removed after the 1 July 2026.
-  /// Use the location property instead.
-  /// 
-  /// ID or name of the Data Center to create Server in (must not be used together with location).
-  /// 
-  /// </summary>
-  [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
-  [System.Text.Json.Serialization.JsonPropertyName("datacenter")]
-  public string? Datacenter { get; set; }
 
   /// <summary>
   /// ID or name of the Server type this Server should be created with.
@@ -108,7 +97,7 @@ public partial class CreateServerRequest
   /// </summary>
   [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
   [System.Text.Json.Serialization.JsonPropertyName("firewalls")]
-  public List<object?>? Firewalls { get; set; }
+  public List<CreateServerRequestFirewalls>? Firewalls { get; set; }
 
   /// <summary>
   /// Cloud-Init user data to use during Server creation. This field is limited to 32KiB.
@@ -138,5 +127,5 @@ public partial class CreateServerRequest
   /// </summary>
   [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
   [System.Text.Json.Serialization.JsonPropertyName("public_net")]
-  public object? PublicNet { get; set; }
+  public CreateServerRequestPublicNet? PublicNet { get; set; }
 }

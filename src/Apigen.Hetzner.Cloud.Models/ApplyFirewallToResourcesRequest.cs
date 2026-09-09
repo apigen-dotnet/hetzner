@@ -35,5 +35,5 @@ public partial class ApplyFirewallToResourcesRequest
   [Required]
   [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.Never)]
   [System.Text.Json.Serialization.JsonPropertyName("apply_to")]
-  public List<object?>? ApplyTo { get; set; }
+  public List<CreateFirewallRequestApplyTo>? ApplyTo { get; set; }
 }

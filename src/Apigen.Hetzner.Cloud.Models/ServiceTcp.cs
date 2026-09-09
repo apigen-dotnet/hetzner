@@ -56,5 +56,5 @@ public partial class ServiceTcp
   /// </summary>
   [Required]
   [System.Text.Json.Serialization.JsonPropertyName("health_check")]
-  public object? HealthCheck { get; set; }
+  public ServiceTcpHealthCheck HealthCheck { get; set; } = null!;
 }

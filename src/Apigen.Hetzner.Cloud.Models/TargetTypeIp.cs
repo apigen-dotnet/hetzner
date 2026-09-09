@@ -35,12 +35,12 @@ public partial class TargetTypeIp
   /// </summary>
   [Required]
   [System.Text.Json.Serialization.JsonPropertyName("ip")]
-  public object? Ip { get; set; }
+  public TargetTypeIpIp Ip { get; set; } = null!;
 
   /// <summary>
   /// List of health statuses of the services on this target. Only present for target types &quot;server&quot; and &quot;ip&quot;.
   /// </summary>
   [Required]
   [System.Text.Json.Serialization.JsonPropertyName("health_status")]
-  public List<object?>? HealthStatus { get; set; }
+  public List<TargetTypeServerHealthStatus>? HealthStatus { get; set; }
 }

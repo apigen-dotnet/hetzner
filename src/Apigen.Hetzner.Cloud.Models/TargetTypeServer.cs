@@ -35,14 +35,14 @@ public partial class TargetTypeServer
   /// </summary>
   [Required]
   [System.Text.Json.Serialization.JsonPropertyName("server")]
-  public object? Server { get; set; }
+  public TargetTypeServerServer Server { get; set; } = null!;
 
   /// <summary>
   /// List of health statuses of the services on this target. Only present for target types &quot;server&quot; and &quot;ip&quot;.
   /// </summary>
   [Required]
   [System.Text.Json.Serialization.JsonPropertyName("health_status")]
-  public List<object?>? HealthStatus { get; set; }
+  public List<TargetTypeServerHealthStatus>? HealthStatus { get; set; }
 
   /// <summary>
   /// Use the private network IP instead of the public IP. Only present for target types &quot;server&quot; and &quot;label_selector&quot;.

@@ -32,5 +32,5 @@ public partial class RemoveFirewallFromResourcesRequest
   [Required]
   [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.Never)]
   [System.Text.Json.Serialization.JsonPropertyName("remove_from")]
-  public List<object?>? RemoveFrom { get; set; }
+  public List<CreateFirewallRequestApplyTo>? RemoveFrom { get; set; }
 }

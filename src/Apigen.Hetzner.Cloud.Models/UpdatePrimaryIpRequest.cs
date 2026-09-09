@@ -29,6 +29,8 @@ public partial class UpdatePrimaryIpRequest
   /// <summary>
   /// Name of the Resource. Must be unique per Project.
   /// </summary>
+  [MinLength(1)]
+  [MaxLength(255)]
   [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
   [System.Text.Json.Serialization.JsonPropertyName("name")]
   public string? Name { get; set; }

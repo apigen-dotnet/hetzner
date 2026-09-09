@@ -63,7 +63,12 @@ public partial class CreateFloatingIpRequest
 
   /// <summary>
   /// Name of the Resource. Must be unique per Project.
+  /// 
+  /// A name will be generated if none is given.
+  /// 
   /// </summary>
+  [MinLength(1)]
+  [MaxLength(255)]
   [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
   [System.Text.Json.Serialization.JsonPropertyName("name")]
   public string? Name { get; set; }

@@ -21,16 +21,17 @@ using System.Text.Json.Serialization;
 namespace Apigen.Hetzner.Cloud.Models;
 
 /// <summary>
-/// LoadBalancerHealthCheckRequest from OpenAPI schema.
-/// Schema path: #/components/schemas/LoadBalancerHealthCheckRequest
+/// ServiceTcpHealthCheck from OpenAPI schema.
+/// Schema path: #/components/schemas/ServiceTcpHealthCheck
+/// 
+/// Service health check.
 /// </summary>
-public partial class LoadBalancerHealthCheckRequest
+public partial class ServiceTcpHealthCheck
 {
   /// <summary>
   /// Type of the health check.
   /// </summary>
   [Required]
-  [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.Never)]
   [System.Text.Json.Serialization.JsonPropertyName("protocol")]
   public string? Protocol { get; set; }
 
@@ -68,7 +69,6 @@ public partial class LoadBalancerHealthCheckRequest
   /// <summary>
   /// Additional configuration for protocol http.
   /// </summary>
-  [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
   [System.Text.Json.Serialization.JsonPropertyName("http")]
-  public object? Http { get; set; }
+  public ServiceTcpHealthCheckHttp? Http { get; set; }
 }

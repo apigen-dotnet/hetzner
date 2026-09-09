@@ -46,5 +46,5 @@ public partial class AddZoneRrsetRecordsRequest
   [Required]
   [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.Never)]
   [System.Text.Json.Serialization.JsonPropertyName("records")]
-  public List<object?>? Records { get; set; }
+  public List<CreateZoneRrsetRequestRecords>? Records { get; set; }
 }

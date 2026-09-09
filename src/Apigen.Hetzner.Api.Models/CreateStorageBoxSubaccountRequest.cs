@@ -53,7 +53,7 @@ public partial class CreateStorageBoxSubaccountRequest
 
   [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
   [System.Text.Json.Serialization.JsonPropertyName("access_settings")]
-  public object? AccessSettings { get; set; }
+  public CreateStorageBoxSubaccountRequestAccessSettings? AccessSettings { get; set; }
 
   /// <summary>
   /// Name of the [Storage Box Subaccount](#tag/storage-box-subaccounts).

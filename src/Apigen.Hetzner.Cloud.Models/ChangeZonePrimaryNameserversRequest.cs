@@ -32,5 +32,5 @@ public partial class ChangeZonePrimaryNameserversRequest
   [Required]
   [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.Never)]
   [System.Text.Json.Serialization.JsonPropertyName("primary_nameservers")]
-  public List<object?>? PrimaryNameservers { get; set; }
+  public List<ZonePrimaryPrimaryNameservers>? PrimaryNameservers { get; set; }
 }

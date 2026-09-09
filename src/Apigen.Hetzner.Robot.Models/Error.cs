@@ -27,5 +27,5 @@ namespace Apigen.Hetzner.Robot.Models;
 public partial class Error
 {
   [System.Text.Json.Serialization.JsonPropertyName("error")]
-  public object? ErrorValue { get; set; }
+  public ErrorError? ErrorValue { get; set; }
 }

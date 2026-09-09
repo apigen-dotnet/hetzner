@@ -37,5 +37,5 @@ public partial class SetFirewallRulesRequest
   [Required]
   [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.Never)]
   [System.Text.Json.Serialization.JsonPropertyName("rules")]
-  public List<object?>? Rules { get; set; }
+  public List<CreateFirewallRequestRules>? Rules { get; set; }
 }

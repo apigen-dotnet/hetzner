@@ -83,5 +83,5 @@ public partial class CreateStorageBoxRequest
   /// </summary>
   [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
   [System.Text.Json.Serialization.JsonPropertyName("access_settings")]
-  public object? AccessSettings { get; set; }
+  public CreateStorageBoxRequestAccessSettings? AccessSettings { get; set; }
 }

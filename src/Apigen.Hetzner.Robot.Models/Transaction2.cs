@@ -30,7 +30,7 @@ public partial class Transaction2
   public string? Id { get; set; }
 
   [System.Text.Json.Serialization.JsonPropertyName("date")]
-  public DateTime? Date { get; set; }
+  public DateTimeOffset? Date { get; set; }
 
   [System.Text.Json.Serialization.JsonPropertyName("status")]
   public string? Status { get; set; }

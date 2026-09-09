@@ -30,7 +30,7 @@ public partial class Snapshot2
   public string? Name { get; set; }
 
   [System.Text.Json.Serialization.JsonPropertyName("timestamp")]
-  public DateTime? Timestamp { get; set; }
+  public DateTimeOffset? Timestamp { get; set; }
 
   [System.Text.Json.Serialization.JsonPropertyName("size")]
   public int? Size { get; set; }

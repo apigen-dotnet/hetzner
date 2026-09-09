@@ -35,14 +35,14 @@ public partial class TargetTypeLabelSelector
   /// </summary>
   [Required]
   [System.Text.Json.Serialization.JsonPropertyName("label_selector")]
-  public object? LabelSelector { get; set; }
+  public TargetTypeLabelSelectorLabelSelector LabelSelector { get; set; } = null!;
 
   /// <summary>
   /// List of resolved label selector target Servers.
   /// </summary>
   [Required]
   [System.Text.Json.Serialization.JsonPropertyName("targets")]
-  public List<object?>? Targets { get; set; }
+  public List<TargetTypeLabelSelectorTargets>? Targets { get; set; }
 
   /// <summary>
   /// Use the private network IP instead of the public IP. Only present for target types &quot;server&quot; and &quot;label_selector&quot;.

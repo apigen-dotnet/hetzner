@@ -42,5 +42,5 @@ public partial class Key
   public string? Data { get; set; }
 
   [System.Text.Json.Serialization.JsonPropertyName("created_at")]
-  public DateTime? CreatedAt { get; set; }
+  public DateTimeOffset? CreatedAt { get; set; }
 }

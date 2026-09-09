@@ -50,7 +50,7 @@ public partial class CreateLoadBalancerRequest
   /// </summary>
   [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
   [System.Text.Json.Serialization.JsonPropertyName("algorithm")]
-  public object? Algorithm { get; set; }
+  public CreateLoadBalancerRequestAlgorithm? Algorithm { get; set; }
 
   /// <summary>
   /// Array of services.

@@ -54,7 +54,7 @@ public partial class Subaccount
   public bool? Readonly { get; set; }
 
   [System.Text.Json.Serialization.JsonPropertyName("createtime")]
-  public DateTime? Createtime { get; set; }
+  public DateTimeOffset? Createtime { get; set; }
 
   [System.Text.Json.Serialization.JsonPropertyName("comment")]
   public string? Comment { get; set; }

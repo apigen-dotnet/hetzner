@@ -41,19 +41,19 @@ public partial class RemoveLoadBalancerTargetRequest
   /// </summary>
   [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
   [System.Text.Json.Serialization.JsonPropertyName("server")]
-  public object? Server { get; set; }
+  public RemoveLoadBalancerTargetRequestServer? Server { get; set; }
 
   /// <summary>
   /// Configuration for label selector targets, only valid and required if type is label_selector.
   /// </summary>
   [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
   [System.Text.Json.Serialization.JsonPropertyName("label_selector")]
-  public object? LabelSelector { get; set; }
+  public TargetTypeLabelSelectorLabelSelector? LabelSelector { get; set; }
 
   /// <summary>
   /// Configuration for an IP target. It is only possible to use the (Public or vSwitch) IPs of Hetzner Online Root Servers belonging to the project owner. IPs belonging to other users are blocked. Additionally IPs belonging to services provided by Hetzner Cloud (Servers, Load Balancers, ...) are blocked as well. Only valid and required if type is ip.
   /// </summary>
   [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
   [System.Text.Json.Serialization.JsonPropertyName("ip")]
-  public object? Ip { get; set; }
+  public TargetTypeIpIp? Ip { get; set; }
 }

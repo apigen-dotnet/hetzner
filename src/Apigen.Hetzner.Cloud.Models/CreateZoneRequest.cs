@@ -87,7 +87,7 @@ public partial class CreateZoneRequest
   /// </summary>
   [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
   [System.Text.Json.Serialization.JsonPropertyName("primary_nameservers")]
-  public List<object?>? PrimaryNameservers { get; set; }
+  public List<ZonePrimaryPrimaryNameservers>? PrimaryNameservers { get; set; }
 
   /// <summary>
   /// [RRSets](#tag/zone-rrsets) to be added to the [Zone](#tag/zones).
@@ -98,7 +98,7 @@ public partial class CreateZoneRequest
   /// </summary>
   [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
   [System.Text.Json.Serialization.JsonPropertyName("rrsets")]
-  public List<object?>? Rrsets { get; set; }
+  public List<CreateZoneRequestRrsets>? Rrsets { get; set; }
 
   /// <summary>
   /// Zone file to import.

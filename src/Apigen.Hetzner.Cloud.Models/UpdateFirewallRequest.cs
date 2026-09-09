@@ -29,11 +29,11 @@ public partial class UpdateFirewallRequest
   /// <summary>
   /// Name of the [Firewall](#tag/firewalls).
   /// 
-  /// Limited to a maximum of 128 characters.
-  /// 
   /// Must be unique per Project.
   /// 
   /// </summary>
+  [MinLength(1)]
+  [MaxLength(128)]
   [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
   [System.Text.Json.Serialization.JsonPropertyName("name")]
   public string? Name { get; set; }

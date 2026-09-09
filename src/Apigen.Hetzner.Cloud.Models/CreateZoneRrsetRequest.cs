@@ -73,7 +73,7 @@ public partial class CreateZoneRrsetRequest
   [Required]
   [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.Never)]
   [System.Text.Json.Serialization.JsonPropertyName("records")]
-  public List<object?>? Records { get; set; }
+  public List<CreateZoneRrsetRequestRecords>? Records { get; set; }
 
   /// <summary>
   /// User-defined labels (key/value pairs) for the Resource.

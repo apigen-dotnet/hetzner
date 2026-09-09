@@ -1,3 +1,4 @@
+prune = true
 output_path = "src"
 target_framework = "net10.0"
 generate_nullable_reference_types = true

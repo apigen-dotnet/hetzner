@@ -30,6 +30,8 @@ public partial class CreateNetworkRequest
   /// Name of the [Network](#tag/networks).
   /// </summary>
   [Required]
+  [MinLength(1)]
+  [MaxLength(128)]
   [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.Never)]
   [System.Text.Json.Serialization.JsonPropertyName("name")]
   public string? Name { get; set; }
@@ -63,14 +65,14 @@ public partial class CreateNetworkRequest
   /// </summary>
   [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
   [System.Text.Json.Serialization.JsonPropertyName("subnets")]
-  public List<object?>? Subnets { get; set; }
+  public List<CreateNetworkRequestSubnets>? Subnets { get; set; }
 
   /// <summary>
   /// Array of routes set in this [Network](#tag/networks).
   /// </summary>
   [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
   [System.Text.Json.Serialization.JsonPropertyName("routes")]
-  public List<object?>? Routes { get; set; }
+  public List<CreateNetworkRequestRoutes>? Routes { get; set; }
 
   /// <summary>
   /// Toggle to expose routes to the [Networks](#tag/networks) vSwitch.
