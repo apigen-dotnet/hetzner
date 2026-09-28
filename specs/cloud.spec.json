@@ -38767,6 +38767,443 @@
         ]
       }
     },
+    "/networks/{id}/members": {
+      "get": {
+        "operationId": "list_network_members",
+        "summary": "List Members of a Network",
+        "description": "List the resources attached to a specific [Network](#tag/networks).\n\nUse the provided URI parameters to modify the result.\n",
+        "tags": [
+          "Networks"
+        ],
+        "parameters": [
+          {
+            "description": "ID of the Network.",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "description": "ID of the [Network](#tag/networks).",
+              "type": "integer",
+              "format": "int64",
+              "minimum": 1,
+              "maximum": 9007199254740991,
+              "example": 42
+            }
+          },
+          {
+            "description": "Filter members by type. May be used multiple times.\n\nThe response will only contain members matching the specified types.\n",
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "description": "Type of the resource attached to the [Network](#tag/networks).\n",
+                "type": "string",
+                "enum": [
+                  "server",
+                  "load_balancer"
+                ],
+                "x-enumDescriptions": {
+                  "server": "The member is a [Server](#tag/servers).",
+                  "load_balancer": "The member is a [Load Balancer](#tag/load-balancers)."
+                }
+              }
+            }
+          },
+          {
+            "description": "Filter members by the subnet they are attached to. May be used multiple times.\n\nThe response will only contain members attached to the subnets with the\nspecified IP ranges. Uses CIDR notation.\n",
+            "name": "subnet",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "example": "10.0.1.0/24"
+              }
+            }
+          },
+          {
+            "description": "Filter members by status. May be used multiple times.\n\nThe response will only contain members matching the specified statuses.\n",
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "description": "Status of the resource within the [Network](#tag/networks).\n",
+                "type": "string",
+                "enum": [
+                  "ok",
+                  "attaching",
+                  "detaching",
+                  "updating",
+                  "error"
+                ],
+                "x-enumDescriptions": {
+                  "ok": "The resource is attached and its network configuration is up to date.",
+                  "attaching": "The resource is being attached to the [Network](#tag/networks).",
+                  "detaching": "The resource is being detached from the [Network](#tag/networks).",
+                  "updating": "The resource network configuration is being updated.",
+                  "error": "The last operation on this member failed. Its network configuration might be out of date, and the resource might not be reachable within the [Network](#tag/networks) as expected."
+                }
+              }
+            }
+          },
+          {
+            "description": "Sort resources by field and direction. May be used multiple times.\n\nFor more information, see \"[Sorting](#description/sorting)\".\n",
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "id",
+                  "id:asc",
+                  "id:desc",
+                  "type",
+                  "type:asc",
+                  "type:desc",
+                  "status",
+                  "status:asc",
+                  "status:desc",
+                  "ip",
+                  "ip:asc",
+                  "ip:desc"
+                ]
+              }
+            }
+          },
+          {
+            "description": "Page number to return. For more information, see \"[Pagination](#description/pagination)\".",
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "default": 1,
+              "example": 1
+            }
+          },
+          {
+            "description": "Maximum number of entries returned per page. For more information, see \"[Pagination](#description/pagination)\".",
+            "name": "per_page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "default": 25,
+              "example": 25
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request succeeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "members": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "description": "Type of the resource attached to the [Network](#tag/networks).\n",
+                            "type": "string",
+                            "enum": [
+                              "server",
+                              "load_balancer"
+                            ],
+                            "x-enumDescriptions": {
+                              "server": "The member is a [Server](#tag/servers).",
+                              "load_balancer": "The member is a [Load Balancer](#tag/load-balancers)."
+                            }
+                          },
+                          "id": {
+                            "description": "ID of the attached resource.",
+                            "type": "integer",
+                            "format": "int64",
+                            "minimum": 1,
+                            "maximum": 9007199254740991,
+                            "example": 42
+                          },
+                          "ip": {
+                            "description": "IP address of the resource within the [Network](#tag/networks).",
+                            "type": "string",
+                            "format": "ipv4",
+                            "example": "10.0.1.2"
+                          },
+                          "status": {
+                            "description": "Status of the resource within the [Network](#tag/networks).\n",
+                            "type": "string",
+                            "enum": [
+                              "ok",
+                              "attaching",
+                              "detaching",
+                              "updating",
+                              "error"
+                            ],
+                            "x-enumDescriptions": {
+                              "ok": "The resource is attached and its network configuration is up to date.",
+                              "attaching": "The resource is being attached to the [Network](#tag/networks).",
+                              "detaching": "The resource is being detached from the [Network](#tag/networks).",
+                              "updating": "The resource network configuration is being updated.",
+                              "error": "The last operation on this member failed. Its network configuration might be out of date, and the resource might not be reachable within the [Network](#tag/networks) as expected."
+                            }
+                          },
+                          "alias_ips": {
+                            "description": "Additional IP addresses of the resource within the [Network](#tag/networks).",
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "format": "ipv4"
+                            },
+                            "example": [
+                              "10.0.1.20"
+                            ]
+                          },
+                          "subnet": {
+                            "description": "IP range of the subnet the resource is attached to.\n\nUses CIDR notation.\n",
+                            "type": "string",
+                            "example": "10.0.1.0/24"
+                          }
+                        },
+                        "additionalProperties": false,
+                        "required": [
+                          "type",
+                          "id",
+                          "ip",
+                          "status",
+                          "alias_ips",
+                          "subnet"
+                        ]
+                      }
+                    },
+                    "meta": {
+                      "title": "ListMeta",
+                      "type": "object",
+                      "properties": {
+                        "pagination": {
+                          "description": "See \"[Pagination](#description/pagination)\" for more information.",
+                          "type": "object",
+                          "properties": {
+                            "page": {
+                              "description": "Current page number.",
+                              "type": "integer",
+                              "format": "int64",
+                              "example": 3
+                            },
+                            "per_page": {
+                              "description": "Maximum number of entries returned per page.",
+                              "type": "integer",
+                              "format": "int64",
+                              "example": 25
+                            },
+                            "previous_page": {
+                              "description": "Page number of the previous page. Can be null if the current page is the first one.",
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
+                              "format": "int64",
+                              "example": 2
+                            },
+                            "next_page": {
+                              "description": "Page number of the next page. Can be null if the current page is the last one.",
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
+                              "format": "int64",
+                              "example": 4
+                            },
+                            "last_page": {
+                              "description": "Page number of the last page available. Can be null if the current page is the last one.",
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
+                              "format": "int64",
+                              "example": 4
+                            },
+                            "total_entries": {
+                              "description": "Total number of entries that exist for this query. Can be null if unknown.",
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
+                              "format": "int64",
+                              "example": 100
+                            }
+                          },
+                          "required": [
+                            "page",
+                            "per_page",
+                            "previous_page",
+                            "next_page",
+                            "last_page",
+                            "total_entries"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "pagination"
+                      ]
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "members",
+                    "meta"
+                  ]
+                },
+                "examples": {
+                  "default": {
+                    "value": {
+                      "members": [
+                        {
+                          "type": "server",
+                          "id": 123,
+                          "ip": "10.0.1.2",
+                          "status": "attaching",
+                          "alias_ips": [
+                            "10.0.1.20"
+                          ],
+                          "subnet": "10.0.1.0/24"
+                        },
+                        {
+                          "type": "load_balancer",
+                          "id": 43,
+                          "ip": "10.0.1.3",
+                          "status": "updating",
+                          "alias_ips": [],
+                          "subnet": "10.0.1.0/24"
+                        }
+                      ],
+                      "meta": {
+                        "pagination": {
+                          "page": 1,
+                          "per_page": 25,
+                          "previous_page": null,
+                          "next_page": 2,
+                          "last_page": 4,
+                          "total_entries": 100
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "4xx": {
+            "description": "Request failed with a user error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "description": "Error code for machines.",
+                          "type": "string"
+                        },
+                        "message": {
+                          "description": "Error message for humans.",
+                          "type": "string"
+                        },
+                        "details": {
+                          "description": "Details about the error.",
+                          "type": [
+                            "object",
+                            "null"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ],
+                  "example": {
+                    "error": {
+                      "code": "unauthorized",
+                      "message": "unable to authenticate",
+                      "details": null
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "5xx": {
+            "description": "Request failed with a server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "description": "Error code for machines.",
+                          "type": "string"
+                        },
+                        "message": {
+                          "description": "Error message for humans.",
+                          "type": "string"
+                        },
+                        "details": {
+                          "description": "Details about the error.",
+                          "type": [
+                            "object",
+                            "null"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ],
+                  "example": {
+                    "error": {
+                      "code": "timeout",
+                      "message": "request timeout",
+                      "details": null
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIToken": []
+          }
+        ]
+      }
+    },
     "/placement_groups": {
       "get": {
         "operationId": "list_placement_groups",
@@ -41104,10 +41541,11 @@
                             "example": true
                           },
                           "assignee_type": {
-                            "description": "Type of resource the [Primary IP](#tag/primary-ips) is assigned to.\n\nAs of 01 August 2026 `unassigned` will be returned if the [Primary IP](#tag/primary-ips) is not assigned.\n",
+                            "description": "Type of resource the [Primary IP](#tag/primary-ips) is assigned to.\n\nAs of 23 September 2026 `unassigned` is returned if the [Primary IP](#tag/primary-ips) is not assigned.\n",
                             "type": "string",
                             "enum": [
-                              "server"
+                              "server",
+                              "unassigned"
                             ],
                             "example": "server"
                           },
@@ -41402,7 +41840,8 @@
                     "description": "Type of resource to assign the [Primary IP](#tag/primary-ips) to.\n\nOmitted if the [Primary IP](#tag/primary-ips) should not get assigned.\n",
                     "type": "string",
                     "enum": [
-                      "server"
+                      "server",
+                      "unassigned"
                     ],
                     "example": "server"
                   },
@@ -41603,10 +42042,11 @@
                           "example": true
                         },
                         "assignee_type": {
-                          "description": "Type of resource the [Primary IP](#tag/primary-ips) is assigned to.\n\nAs of 01 August 2026 `unassigned` will be returned if the [Primary IP](#tag/primary-ips) is not assigned.\n",
+                          "description": "Type of resource the [Primary IP](#tag/primary-ips) is assigned to.\n\nAs of 23 September 2026 `unassigned` is returned if the [Primary IP](#tag/primary-ips) is not assigned.\n",
                           "type": "string",
                           "enum": [
-                            "server"
+                            "server",
+                            "unassigned"
                           ],
                           "example": "server"
                         },
@@ -43458,10 +43898,11 @@
                           "example": true
                         },
                         "assignee_type": {
-                          "description": "Type of resource the [Primary IP](#tag/primary-ips) is assigned to.\n\nAs of 01 August 2026 `unassigned` will be returned if the [Primary IP](#tag/primary-ips) is not assigned.\n",
+                          "description": "Type of resource the [Primary IP](#tag/primary-ips) is assigned to.\n\nAs of 23 September 2026 `unassigned` is returned if the [Primary IP](#tag/primary-ips) is not assigned.\n",
                           "type": "string",
                           "enum": [
-                            "server"
+                            "server",
+                            "unassigned"
                           ],
                           "example": "server"
                         },
@@ -43851,10 +44292,11 @@
                           "example": true
                         },
                         "assignee_type": {
-                          "description": "Type of resource the [Primary IP](#tag/primary-ips) is assigned to.\n\nAs of 01 August 2026 `unassigned` will be returned if the [Primary IP](#tag/primary-ips) is not assigned.\n",
+                          "description": "Type of resource the [Primary IP](#tag/primary-ips) is assigned to.\n\nAs of 23 September 2026 `unassigned` is returned if the [Primary IP](#tag/primary-ips) is not assigned.\n",
                           "type": "string",
                           "enum": [
-                            "server"
+                            "server",
+                            "unassigned"
                           ],
                           "example": "server"
                         },
@@ -46541,7 +46983,7 @@
                                     "example": "1.2.3.4"
                                   },
                                   "blocked": {
-                                    "description": "If the IP is blocked by our anti abuse dept.",
+                                    "description": "Whether the IP is blocked by our abuse department.",
                                     "type": "boolean",
                                     "example": false
                                   },
@@ -46578,7 +47020,7 @@
                                     "example": "2001:db8::/64"
                                   },
                                   "blocked": {
-                                    "description": "If the IP is blocked by our anti abuse dept.",
+                                    "description": "Whether the IP is blocked by our abuse department.",
                                     "type": "boolean",
                                     "example": false
                                   },
@@ -47969,7 +48411,7 @@
                                   "example": "1.2.3.4"
                                 },
                                 "blocked": {
-                                  "description": "If the IP is blocked by our anti abuse dept.",
+                                  "description": "Whether the IP is blocked by our abuse department.",
                                   "type": "boolean",
                                   "example": false
                                 },
@@ -48006,7 +48448,7 @@
                                   "example": "2001:db8::/64"
                                 },
                                 "blocked": {
-                                  "description": "If the IP is blocked by our anti abuse dept.",
+                                  "description": "Whether the IP is blocked by our abuse department.",
                                   "type": "boolean",
                                   "example": false
                                 },
@@ -50284,7 +50726,7 @@
                                   "example": "1.2.3.4"
                                 },
                                 "blocked": {
-                                  "description": "If the IP is blocked by our anti abuse dept.",
+                                  "description": "Whether the IP is blocked by our abuse department.",
                                   "type": "boolean",
                                   "example": false
                                 },
@@ -50321,7 +50763,7 @@
                                   "example": "2001:db8::/64"
                                 },
                                 "blocked": {
-                                  "description": "If the IP is blocked by our anti abuse dept.",
+                                  "description": "Whether the IP is blocked by our abuse department.",
                                   "type": "boolean",
                                   "example": false
                                 },
@@ -51524,7 +51966,7 @@
                                   "example": "1.2.3.4"
                                 },
                                 "blocked": {
-                                  "description": "If the IP is blocked by our anti abuse dept.",
+                                  "description": "Whether the IP is blocked by our abuse department.",
                                   "type": "boolean",
                                   "example": false
                                 },
@@ -51561,7 +52003,7 @@
                                   "example": "2001:db8::/64"
                                 },
                                 "blocked": {
-                                  "description": "If the IP is blocked by our anti abuse dept.",
+                                  "description": "Whether the IP is blocked by our abuse department.",
                                   "type": "boolean",
                                   "example": false
                                 },
